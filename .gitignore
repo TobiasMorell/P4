@@ -1,6 +1,7 @@
 *.class
 
 # Ignoring all Minecraft build - only push src dir
+gradle/
 .gradle/
 .idea/
 build/
@@ -9,6 +10,13 @@ eclipse/
 run/
 *.bat
 gradlew
+CREDITS-fml.txt
+LICENSE-fml.txt
+Minecraft*
+Paulscode*.txt
+build.gradle
+forge*.txt
+README.txt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
