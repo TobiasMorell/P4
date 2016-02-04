@@ -1,5 +1,15 @@
 *.class
 
+# Ignoring all Minecraft build - only push src dir
+.gradle/
+.idea/
+build/
+classes/
+eclipse/
+run/
+*.bat
+gradlew
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
