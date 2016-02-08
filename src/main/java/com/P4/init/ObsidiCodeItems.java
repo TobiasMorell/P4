@@ -7,6 +7,6 @@ import net.minecraft.item.Item;
  */
 public class ObsidiCodeItems {
     private static Item codebook;
-
+    private static Item Iron_Fork;
 
 }
