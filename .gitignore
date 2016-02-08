@@ -17,6 +17,9 @@ Minecraft*.txt
 README.txt
 forge-*-changelog.txt
 
+#Paulscode
+Paulscode *.txt
+
 # eclipse
 .settings
 .metadata
