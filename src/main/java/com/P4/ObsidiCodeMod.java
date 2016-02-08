@@ -10,17 +10,20 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class ObsidiCodeMod {
-    public static void preInit(FMLPreInitializationEvent)
+    @Mod.EventHandler
+    public static void preInit(FMLPreInitializationEvent event)
     {
 
     }
 
-    public static void init(FMLInitializationEvent)
+    @Mod.EventHandler
+    public static void init(FMLInitializationEvent event)
     {
 
     }
 
-    public  static  void postInit(FMLPostInitializationEvent)
+    @Mod.EventHandler
+    public  static  void postInit(FMLPostInitializationEvent event)
     {
 
     }
