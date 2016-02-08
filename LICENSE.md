@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2015 TobiasMorell and associatives
+Copyright (c) 2016 SW409F16 - Aalborg University
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
