@@ -1,10 +1,21 @@
 # gradle
 .gradle
 build
-gradle-app.setting
+build.gradle
+gradle-app.settinggradle/
+gradlew
+gradlew.bat
+gradle/
 
 # GMCP plugin
 /minecraft
+
+#forge
+CREDITS-fml.txt
+LICENSE-fml.txt
+Minecraft*.txt
+README.txt
+forge-*-changelog.txt
 
 # eclipse
 .settings
