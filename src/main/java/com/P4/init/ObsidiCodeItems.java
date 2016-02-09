@@ -8,20 +8,24 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ObsidiCodeItems {
     private static Item codebook;
+    private static Item magicwand;
 
     public static void init ()
     {
         codebook = new Item().setUnlocalizedName("CodeBook");
+        magicwand = new Item().setUnlocalizedName("MagicWand");
     }
 
     public  static void register()
     {
         GameRegistry.registerItem(codebook, codebook.getUnlocalizedName().substring(5));
+        GameRegistry.registerItem(magicwand, magicwand.getUnlocalizedName().substring(5));
     }
 
     public static void registerRenders()
     {
         registerRender(codebook);
+        registerRender(magicwand);
     }
 
     public static void registerRender(Item item)
