@@ -1,5 +1,6 @@
 package com.P4.init;
 
+import com.P4.ObsidiCodeItems.MagicWand;
 import com.P4.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -13,7 +14,7 @@ public class ObsidiCodeItems {
     public static void init ()
     {
         codebook = new Item().setUnlocalizedName("CodeBook");
-        magicwand = new Item().setUnlocalizedName("MagicWand");
+        magicwand = new MagicWand();
     }
 
     public  static void register()
