@@ -12,4 +12,23 @@ public class Token {
         BLOCK_LIT, ITEM_LIT, NPC_LIT
     }
 
+    public final type _type;
+    public final String value;
+
+    /**
+     *
+     * @param t The type of the Token
+     * @param val The string value of the Token
+     */
+    public Token(type t, String val){
+        _type = t;
+        value = val;
+    }
+
+    public Token(type t){
+        this(t, "");
+    }
+
+
+
 }
