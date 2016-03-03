@@ -11,4 +11,5 @@ public class Token {
         BOOL_LTE, BOOL_LIT, COORD_LIT, STRING_LIT, TYPE, CHEST_LIT,
         BLOCK_LIT, ITEM_LIT, NPC_LIT
     }
+
 }
