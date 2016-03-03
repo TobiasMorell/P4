@@ -14,8 +14,8 @@ public class ScannerCode {
     
     public Token GetToken ()
     {
-        String currentWord;  
-        Token.type tokenType;
+        String currentWord = "kurt";  
+        Token.type tokenType = Token.type.ASSIGN;
 
         return new Token(tokenType, currentWord);
     }
