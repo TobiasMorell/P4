@@ -1,6 +1,5 @@
-/**
- * Created by Arne K. Rasmussen on 29-02-2016.
- */
+package org.Scanner;
+
 public class Token {
 
     public enum type{
@@ -12,6 +11,4 @@ public class Token {
         BOOL_LTE, BOOL_LIT, COORD_LIT, STRING_LIT, TYPE, CHEST_LIT,
         BLOCK_LIT, ITEM_LIT, NPC_LIT
     }
-
-
 }
