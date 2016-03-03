@@ -1,9 +1,12 @@
 package org.Scanner;
 
+import java.util.regex.Pattern;
+
+
 public class Token {
 
-    public enum type{
-        EOF, Break, EOL, ROBOT_NAME, LOAD, NUM_DCL, ID,
+    public enum type {
+        EOF, Break, EOL, LOAD, NUM_DCL, ID,
         STRING_DCL, BOOL_DCL, COORD_DCL, VOID, END, HEAR,
         SIGNAL, START, IF, REPEAT, UNTIL, FOREVER, ELSE, VAL,
         PLUS, MINUS, TIMES, DIVIDE, ASSIGN, POWER, SQUARE_ROOT,
@@ -16,19 +19,24 @@ public class Token {
     public final String value;
 
     /**
-     *
-     * @param t The type of the Token
+     * @param t   The type of the Token
      * @param val The string value of the Token
      */
-    public Token(type t, String val){
+    public Token(type t, String val) {
         _type = t;
         value = val;
     }
 
-    public Token(type t){
+    public Token(type t) {
         this(t, "");
     }
 
+    public static class TokenPattern {
+        TokenPattern(type t, Pattern p){
 
+        }
+        type Tokentype;
+        Pattern pattern;
+    }
 
 }
