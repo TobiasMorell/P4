@@ -1,6 +1,5 @@
-/**
- * Created by Arne K. Rasmussen on 29-02-2016.
- */
+package org.Scanner;
+
 import java.lang.StringBuffer;
 import CharStream.java;
 import Token.java;
