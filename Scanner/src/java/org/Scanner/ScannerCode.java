@@ -3,7 +3,6 @@ package org.Scanner;
 import java.lang.StringBuffer;
 import CharStream.java;
 import Token.java;
-import
 
 public class ScannerCode {
 
