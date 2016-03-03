@@ -1,8 +1,5 @@
 package org.Scanner;
 
-/**
- * Created by Arne K. Rasmussen on 03-03-2016.
- */
 public class TokenStream {
     public Token CurrentToken;
 
