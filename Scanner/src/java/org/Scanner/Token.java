@@ -15,7 +15,7 @@ public class Token {
         SIGNAL, START, IF, REPEAT, UNTIL, FOREVER, ELSE, VAL,
         PLUS, MINUS, TIMES, DIVIDE, ASSIGN, POWER, SQUARE_ROOT,
         BOOL_AND, BOOL_OR, BOOL_EQ, BOOL_GT, BOOL_LT, BOOL_GTE,
-        BOOL_LTE, BOOL_LIT, STRING_LIT
+        BOOL_LTE, BOOL_LIT, COORD_LIT, STRING_LIT, DOT
     }
 
     public final type _type;
