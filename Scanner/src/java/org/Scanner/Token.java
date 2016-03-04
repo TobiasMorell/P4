@@ -15,7 +15,7 @@ public class Token {
         SIGNAL, START, IF, REPEAT, UNTIL, FOREVER, ELSE, VAL,
         PLUS, MINUS, TIMES, DIVIDE, ASSIGN, POWER, SQUARE_ROOT,
         BOOL_AND, BOOL_OR, BOOL_EQ, BOOL_GT, BOOL_LT, BOOL_GTE,
-        BOOL_LTE, BOOL_LIT, COORD_LIT, STRING_LIT
+        BOOL_LTE, BOOL_LIT, STRING_LIT
     }
 
     public final type _type;
@@ -38,9 +38,11 @@ public class Token {
         TokenPattern(type t, String p){
             tokenType = t;
             regex = p;
+            pattern = Pattern.compile(p);
         }
         public final type tokenType;
         public final String regex;
+        public final Pattern pattern;
     }
 
     public static final ArrayList<TokenPattern> patternList = new ArrayList<TokenPattern>(Arrays.asList(
@@ -50,7 +52,17 @@ public class Token {
             new TokenPattern(type.BOOL_EQ,"IS"),
             new TokenPattern(type.BOOL_GT,"GREATER_THAN"),
             new TokenPattern(type.BOOL_GTE,"GREATER_THAN_EQUAL"),
-            new TokenPattern(type.BOOL_LIT,"TRUE|FALSE")
+            new TokenPattern(type.BOOL_LIT,"(TRUE|FALSE)"),
+            new TokenPattern(type.BOOL_LT,"LESS_THAN"),
+            new TokenPattern(type.BOOL_LTE,"LESS_THAN_EQUAL"),
+            new TokenPattern(type.BOOL_OR,"OR"),
+            new TokenPattern(type.BREAK,"BREAK"),
+            new TokenPattern(type.COORD_DCL,"COORD"),
+            new TokenPattern(type.DIVIDE,"/"),
+            new TokenPattern(type.ELSE,"ELSE"),
+            new TokenPattern(type.END,"END"),
+            new TokenPattern(type.EOL,"\n"),
+            new TokenPattern(type.EOL,"\n")
     ));
 
 }
