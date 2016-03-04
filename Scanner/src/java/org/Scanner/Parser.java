@@ -20,14 +20,43 @@ public class Parser {
             //Insert error here
     }
 
+    private void expect(Token.type expectedTokenType, Token.type expectedFollowingToken){
+        if (ts.CurrentToken._type == expectedTokenType && ts.Peek()._type == expectedFollowingToken)
+            ts.CurrentToken = ts.PeekTwo();
+        else
+            System.out.println("u dun goofed");
+        //Insert error here
+    }
+
+    private void expect(Token.type expectedFirstToken, Token.type expectedSecondToken, Token.type expectedThirdToken){
+        if (ts.CurrentToken._type == expectedFirstToken && ts.Peek()._type == expectedSecondToken && ts.PeekTwo()._type == expectedThirdToken) {
+            ts.CurrentToken = ts.PeekTwo();
+            ts.CurrentToken = ts.Peek();
+        }
+        else
+            System.out.println("u dun goofed");
+        //Insert error here
+    }
+
     private void acceptIt(){
         ts.CurrentToken = ts.Peek();
     }
 
+    private boolean isDCL(type t){
+        if (t == type.BOOL_DCL || t == type.REF_DCL || t == type.NUM_DCL || t == type.COORD_DCL || t == type.STRING_DCL)
+            return true;
+        return false;
+    }
+
+    private boolean isSTMT(type t){
+        if (t == type.IF || t == type.REPEAT || t == type.FOREVER || t == type.SIGNAL)
+            return true;
+        return false;
+    }
+
     private void Program(){
         Robo();
-        if (ts.CurrentToken._type == type.LOAD)
-            Load();
+        Load();
         dcl();
         start_func();
         while(ts.CurrentToken._type != type.EOF)
@@ -43,7 +72,9 @@ public class Parser {
     }
 
     private void Load(){
-        //Parse Load WHAT DO?
+        /*while(ts.Peek()._type == type.LOAD || ts.Peek()._type == type.ID || ts.Peek()._type == type.EOL){
+            Do something
+        }*/
     }
 
     private void dcl(){
@@ -102,8 +133,11 @@ public class Parser {
     }
 
     private void start_func() {
-        if (ts.CurrentToken._type == type.VOID && ts.Peek()._type == type.START && ts.PeekTwo()._type == type.EOL)
+        if (ts.CurrentToken._type == type.VOID && ts.Peek()._type == type.START && ts.PeekTwo()._type == type.EOL){
+            ts.CurrentToken = ts.PeekTwo();
+            acceptIt();
             func_body();
+        }
         else
             System.out.println("u dun goofed");
             //Error
@@ -114,6 +148,8 @@ public class Parser {
 
     private void func() {
         if(ts.CurrentToken._type == type.TYPE && ts.Peek()._type == type.ID){
+            acceptIt();
+            acceptIt();
             params();
             expect(type.EOL);
             func_body();
@@ -122,28 +158,113 @@ public class Parser {
             expect(type.END);
             expect(type.ID);
         }
+        else if(ts.CurrentToken._type == type.HEAR && ts.Peek()._type == type.STRING_LIT){
+            acceptIt();
+            acceptIt();
+            params();
+            func_body();
+            expect(type.END);
+            expect(type.HEAR);
+        }
         else
             System.out.println("u dun goofed");
             //Throw error
     }
 
     private void func_body() {
-
+        while (ts.CurrentToken._type != type.END){
+            if(isDCL(ts.CurrentToken._type))
+                dcl();
+            else if (isSTMT(ts.CurrentToken._type))
+                stmt();
+            else
+                System.out.println("u dun goofed");
+                //Error
+            expect(type.EOL);
+        }
     }
 
     private void stmt() {
-
+        switch(ts.CurrentToken._type){
+            case IF:{
+                acceptIt();
+                if_stmt();
+                //Stuff it do
+            }
+            break;
+            case REPEAT:{
+                acceptIt();
+                loop_stmt();
+                //Stuff it do
+            }
+            break;
+            case FOREVER:{
+                acceptIt();
+                loop_stmt();
+            }
+            break;
+            case SIGNAL:{
+                acceptIt();
+                sig_stmt();
+            }
+            break;
+            case FUNC_CALL:{
+                acceptIt();
+                func_call();
+            }
+            break;
+            default:{
+                //Errors
+            }
+            break;
+        }
     }
 
     private void if_stmt() {
-
+        expect(type.IF);
+        cond();
+        expect(type.EOL);
+        func_body();
+        expect(type.END, type.IF);
+        while(ts.CurrentToken._type == type.ELSE && ts.Peek()._type == type.IF){
+            expect(type.ELSE, type.IF);
+            func_body();
+            expect(type.END, type.ELSE, type.IF);
+        }
+        if(ts.CurrentToken._type == type.ELSE){
+            expect(type.ELSE);
+            func_body();
+            expect(type.END, type.ELSE);
+        }
     }
 
     private void loop_stmt() {
-
+        if(ts.CurrentToken._type == type.REPEAT) {
+            expect(type.REPEAT, type.UNTIL);
+            cond();
+            expect(type.EOL);
+            func_body();
+            expect(type.END, type.REPEAT);
+        }
+        else if(ts.CurrentToken._type == type.FOREVER){
+            expect(type.FOREVER, type.EOL);
+            func_body();
+            expect(type.END, type.FOREVER);
+        }
+        else
+            System.out.println("u dun goofed");
+            //Error
     }
 
     private void func_call() {
+        expect(type.ID);
+        if(ts.CurrentToken._type == type.DOT){
+            expect(type.DOT, type.ID);
+            args();
+        }
+        else
+            args();
+        expect(type.EOL);
 
     }
 
