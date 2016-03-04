@@ -11,6 +11,8 @@ public class ScannerCode
 {    
     private List<Character> WhiteList = new ArrayList<Character> ();
     String _filePath;
+
+    /* Idéen her er, at FileReaderen er uafhængig af GetToken metoden */
     FileReader inputStream;
 
     public ScannerCode (String filePath)
@@ -29,6 +31,8 @@ public class ScannerCode
     {
         StringBuffer currentWord = new StringBuffer();  
         char currentChar = 'a';        
+
+        return new Token (Token.type.ASSIGN, "kage");
     }
 
     private void ScanForTokens (FileReader reader)
