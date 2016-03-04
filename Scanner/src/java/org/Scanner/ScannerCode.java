@@ -20,4 +20,20 @@ public class ScannerCode
     {
 
     }
+
+    private boolean isDigit(char c)
+    {
+        return '0' <= c && c <= '9';
+    }
+
+    private boolean isLetter(char c) {
+        return 'a' <= c && c <= 'z';
+    }
+
+
+    private boolean isAGraphicCharacter(char c)
+    {
+        if(isLetter(c) || isDigit(c) || c == ' ') return true;
+        else return false;
+    }
 }
