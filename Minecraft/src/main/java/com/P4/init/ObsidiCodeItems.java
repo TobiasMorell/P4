@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ObsidiCodeItems {
-    private static Item codebook;
-    private static Item magicwand;
+    public static Item codebook;
+    public static Item magicwand;
 
     public static void init ()
     {
@@ -31,6 +31,7 @@ public class ObsidiCodeItems {
 
     public static void registerRender(Item item)
     {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Reference.MOD_ID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
+                new ModelResourceLocation(Reference.MOD_ID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
     }
 }

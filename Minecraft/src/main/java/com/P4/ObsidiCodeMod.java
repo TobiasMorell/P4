@@ -19,17 +19,19 @@ public class ObsidiCodeMod {
     {
         ObsidiCodeItems.init();
         ObsidiCodeItems.register();
+        proxy.preInit(event);
     }
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event)
     {
         proxy.registerRenders();
+        proxy.init(event);
     }
 
     @Mod.EventHandler
     public  static  void postInit(FMLPostInitializationEvent event)
     {
-
+        proxy.postInit(event);
     }
 }
