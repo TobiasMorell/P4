@@ -15,8 +15,8 @@ public class Crafting {
     {
         GameRegistry.addRecipe(new ItemStack(ObsidiCodeItems.magicwand), " # ", " I ",
                 " I ", '#', Items.glowstone_dust, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(ObsidiCodeItems.codebook),
-                Items.paper, Items.paper, Items.paper, Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(ObsidiCodeItems.codebook),
+                new Object[] {Items.paper, Items.paper, Items.paper, Items.glowstone_dust } );
 
         //GameRegistry.addSmelting(Items.item, new ItemStack(Items.item), 1.0F);
         //1.0F is for diamond

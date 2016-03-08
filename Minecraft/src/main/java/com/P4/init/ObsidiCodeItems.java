@@ -5,16 +5,19 @@ import com.P4.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ObsidiCodeItems {
     public static Item codebook;
     public static Item magicwand;
+    public static Item.ToolMaterial MagicMaterial = EnumHelper.addToolMaterial("MagicMaterial", 3, 1, 12f, 7f, 30);
+    //.addToolMaterial(name, harvest lvl, durability, mining speed, dmg, enchantability)
 
     public static void init ()
     {
         codebook = new Item().setUnlocalizedName("CodeBook");
-        magicwand = new MagicWand();
+        magicwand = new MagicWand(MagicMaterial);
     }
 
     public  static void register()
