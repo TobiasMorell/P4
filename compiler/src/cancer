@@ -1,13 +1,19 @@
 Robot:
 
-LOAD (KAGE)
 
-NUM a = 5
+
+ 
+NUM a
+
+
+
+
+
+
+
+
 
 VOID START ()
-
-
-
 
 
 

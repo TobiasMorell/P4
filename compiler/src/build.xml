@@ -1,7 +1,7 @@
 <project name="java scanner" default="run">
 
-    <taskdef classname="jflex.anttask.JFlexTask" name="jflex" classpath="/Users/Lee/Downloads/jflex-1.6.1/examples/java/jflex.jar"/>
-  <taskdef classname="java_cup.anttask.CUPTask" name="cup" classpath ="/Users/Lee/Downloads/jflex-1.6.1/examples/java/cup.jar"/>
+  <taskdef classname="jflex.anttask.JFlexTask" name="jflex" classpath="jflex.jar"/>
+  <taskdef classname="java_cup.anttask.CUPTask" name="cup" classpath ="cup.jar"/>
 
   <target name="build" depends="realclean,compile" />
 

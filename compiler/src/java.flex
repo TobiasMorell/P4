@@ -11,6 +11,10 @@ import java_cup.runtime.*;
 %line
 %column
 
+%eofval{
+  return symbol(EOF);
+%eofval}
+
 %cup
 %cupdebug
 
@@ -18,12 +22,12 @@ import java_cup.runtime.*;
   StringBuilder string = new StringBuilder();
   
   private Symbol symbol(int type) {
-    return new JavaSymbol(type, yyline+1, yycolumn+1);
-  
+    return new Symbol(type, yyline+1, yycolumn+1);
+  }
 
   private Symbol symbol(int type, Object value) {
-    return new JavaSymbol(type, yyline+1, yycolumn+1, value);
-  
+    return new Symbol(type, yyline+1, yycolumn+1, value);
+  }
 
   /** 
    * assumes correct representation of a long value for 
@@ -49,6 +53,7 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 
 WhiteSpace = {LineTerminator} | [ \t\f]
+
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} | 
@@ -123,8 +128,7 @@ Identifier = [:jletter:][:jletterdigit:]*
    "*"                          { return symbol(asterix);}
    "/"                          { return symbol(slash); }
    "^" 			        { return symbol(hat);} 
-   "\n"     			{ return symbol(EOL);} 
-   ""                           { return symbol(lambda); } 
+   "\n"     			{ return symbol(EOL);}  
  /* Identifier */
     {Identifier}                { return symbol(IDENTIFIER, yytext()); }
 
@@ -159,4 +163,5 @@ Identifier = [:jletter:][:jletterdigit:]*
 /* error fallback */
 [^]                              { throw new RuntimeException("Illegal character \""+yytext()+
                                                               "\" at line "+yyline+", column "+yycolumn); }
-<<EOF>>                          { return symbol(EOF); }
+
+//<<EOF>>                          { return symbol(EOF); }

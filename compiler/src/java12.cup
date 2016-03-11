@@ -25,7 +25,7 @@ non terminal         Prog, robo, load, dcl,
     loop_stmt, func_call, sig_stmt, expr, term,
     factor, exp, cond, bool_op, bool_cnd, args,
     params, type, string_lit, else_if, else,
-    params_list, args_list;
+    params_list, args_list, EOL_list, init_dcl;
     
 //Optional non-terminals, used in stead of [] i EBNF
 non terminal        num_opt, ref_opt, string_opt, bool_opt, coord_opt,
@@ -57,70 +57,79 @@ terminal java.lang.Character CHARACTER_LITERAL;
 // Actual grammar
 //
 
-Prog ::=    robo load dcl start_func func End_Of_File;
-robo ::=    IDENTIFIER COLON EOL
-       |    robo EOL
+Prog ::=    robo load init_dcl start_func func;
+robo ::=    IDENTIFIER COLON EOL_list
        ;
 load ::=    LOAD lparen IDENTIFIER rparen EOL
-       |    load EOL
-       |    lambda
+       |    /* lambda */ 
+       ;
+init_dcl ::= dcl EOL_list
+       |    /* lambda */
        ;
 dcl  ::=    num_dcl dcl
-       |    string_dcl dcl EOL
-       |    bool_dcl dcl EOL
-       |    coord_dcl dcl EOL
-       |    lambda
+       |    string_dcl dcl
+       |    bool_dcl dcl
+       |    coord_dcl dcl
+       |    num_dcl
+       |    string_dcl
+       |    bool_dcl 
+       |    coord_dcl
        ;
-num_dcl::=  NUM IDENTIFIER num_opt EOL;
+num_dcl::=  NUM IDENTIFIER num_opt EOL
+       ;
 num_opt::=  ASSIGN expr
-       |    lambda
+       |    /* lambda */
        ;
 //ref_dcl::=  type IDENTIFIER ref_opt EOL;
 //ref_opt::=  ASSIGN AT coord_lit
-//       |    lambda
+//       |    /* lambda */
 //       ;
 string_dcl
-       ::=  STRING IDENTIFIER string_opt EOL;
+       ::=  STRING IDENTIFIER string_opt EOL
+       ;
 string_opt
        ::=  ASSIGN quote string_lit quote
-       |    lambda
+       |    /* lambda */
        ;
 bool_dcl
-       ::=  BOOL IDENTIFIER EOL;
+       ::=  BOOL IDENTIFIER bool_opt EOL
+       ;
 bool_opt
        ::=  ASSIGN TRUE
        |    ASSIGN FALSE
-       |    lambda
+       |    /* lambda */
        ;
 coord_dcl
-       ::=  COORD IDENTIFIER coord_opt EOL;
+       ::=  COORD IDENTIFIER coord_opt EOL
+       ;
 coord_opt
        ::=  ASSIGN coord_lit
-       |    lambda
+       |    /* lambda */
        ;
 start_func
        ::=  VOID START lparen rparen EOL func_body END START
        ;
 func   ::=  type IDENTIFIER lparen params rparen EOL func_body RETURN expr EOL END IDENTIFIER
-       |    lambda
-       |    EOL func
+       |    /* lambda */
+       |    EOL_list
        ;
 func_body
-       ::=  func_body dcl EOL
-       |    func_body stmt EOL
-       |    lambda
-       |    func_body EOL
+       ::=  func_body dcl EOL_list
+       |    func_body stmt EOL_list
+       |    dcl EOL_list
+       |    stmt EOL_list
+       |    EOL_list
        ;
 stmt   ::=  if_stmt
        |    loop_stmt
-       |    expr EOL
+       |    expr
        |    sig_stmt
        ;
 if_stmt
        ::=  IF cond EOL func_body END IF else_if else
        ;
 else_if::=  else_if ELSE IF cond EOL func_body END ELSE IF
-       |    lambda
+       |    /* lambda */
        ;
 else   ::=  ELSE EOL func_body END ELSE
        ;
@@ -192,4 +201,7 @@ string_lit
        |    num_lit
        |    char_lit
        ;
-
+EOL_list
+       ::= EOL_list EOL
+       |   EOL
+       ;
