@@ -1,0 +1,195 @@
+// Test CUP for P4
+import java_cup.*;
+
+parser code  {:
+  public void report_error(String message, Object info) {
+    StringBuilder m = new StringBuilder("Error ");
+ 
+    if (info instanceof java_cup.runtime.Symbol)
+      m.append( "("+info.toString()+")" );
+     
+    m.append(" : "+message);
+   
+    System.out.println(m);
+  }
+   
+  public void report_fatal_error(String message, Object info) {
+    report_error(message, info);
+    throw new RuntimeException("Fatal Syntax Error");
+  }
+:};
+
+non terminal         Prog, robo, load, dcl,
+    num_dcl, ref_dcl, string_dcl, bool_dcl, coord_dcl,
+    start_func, func, func_body, stmt, if_stmt,
+    loop_stmt, func_call, sig_stmt, expr, term,
+    factor, exp, cond, bool_op, bool_cnd, args,
+    params, type, string_lit, else_if, else,
+    params_list, args_list;
+    
+//Optional non-terminals, used in stead of [] i EBNF
+non terminal        num_opt, ref_opt, string_opt, bool_opt, coord_opt,
+    cond_opt;
+    
+//Symbol terminals and method keywords
+terminal        START, IDENTIFIER, COLON, LOAD, AT, End_Of_File,
+    EOL, END, RETURN, HEAR, lparen,
+    rparen, quote, dot, comma, ASSIGN;
+    
+//Statement-types
+terminal        IF, REPEAT, UNTIL, FOREVER,
+    ELSE, SIGNAL;
+    
+//Operators
+terminal        plus, minus, asterix, slash, hat,
+    SQRT, IS, NOT, GT, LT, GTE, LTE, AND, OR, lambda;
+    
+//Literals
+terminal        NUM, char_lit, STRING,
+    coord_lit, BOOL, TRUE, FALSE, COORD, VOID;
+
+// shit that needs to be added now
+terminal java.lang.String STRING_LITERAL;
+terminal java.lang.Double num_lit;
+terminal java.lang.Character CHARACTER_LITERAL;
+
+//
+// Actual grammar
+//
+
+Prog ::=    robo load dcl start_func func End_Of_File;
+robo ::=    IDENTIFIER COLON EOL
+       |    robo EOL
+       ;
+load ::=    LOAD lparen IDENTIFIER rparen EOL
+       |    load EOL
+       |    lambda
+       ;
+dcl  ::=    num_dcl dcl
+       |    string_dcl dcl EOL
+       |    bool_dcl dcl EOL
+       |    coord_dcl dcl EOL
+       |    lambda
+       ;
+num_dcl::=  NUM IDENTIFIER num_opt EOL;
+num_opt::=  ASSIGN expr
+       |    lambda
+       ;
+//ref_dcl::=  type IDENTIFIER ref_opt EOL;
+//ref_opt::=  ASSIGN AT coord_lit
+//       |    lambda
+//       ;
+string_dcl
+       ::=  STRING IDENTIFIER string_opt EOL;
+string_opt
+       ::=  ASSIGN quote string_lit quote
+       |    lambda
+       ;
+bool_dcl
+       ::=  BOOL IDENTIFIER EOL;
+bool_opt
+       ::=  ASSIGN TRUE
+       |    ASSIGN FALSE
+       |    lambda
+       ;
+coord_dcl
+       ::=  COORD IDENTIFIER coord_opt EOL;
+coord_opt
+       ::=  ASSIGN coord_lit
+       |    lambda
+       ;
+start_func
+       ::=  VOID START lparen rparen EOL func_body END START
+       ;
+func   ::=  type IDENTIFIER lparen params rparen EOL func_body RETURN expr EOL END IDENTIFIER
+       |    lambda
+       |    EOL func
+       ;
+func_body
+       ::=  func_body dcl EOL
+       |    func_body stmt EOL
+       |    lambda
+       |    func_body EOL
+       ;
+stmt   ::=  if_stmt
+       |    loop_stmt
+       |    expr EOL
+       |    sig_stmt
+       ;
+if_stmt
+       ::=  IF cond EOL func_body END IF else_if else
+       ;
+else_if::=  else_if ELSE IF cond EOL func_body END ELSE IF
+       |    lambda
+       ;
+else   ::=  ELSE EOL func_body END ELSE
+       ;
+loop_stmt
+       ::=  REPEAT UNTIL cond EOL func_body END REPEAT
+       |    FOREVER EOL func_body END FOREVER
+       ;
+func_call
+       ::=  IDENTIFIER lparen args rparen EOL
+       |    type dot IDENTIFIER lparen args rparen EOL
+       ;
+sig_stmt
+       ::=  SIGNAL IDENTIFIER lparen args rparen EOL;
+expr   ::=  term plus term
+       |    term minus term
+       |    term
+       ;
+term   ::=  factor asterix factor
+       |    factor slash factor
+       |    factor
+       ;
+factor ::=  exp hat exp
+       |    exp SQRT exp
+       |    exp
+       ;
+exp    ::=  lparen expr rparen
+       |    IDENTIFIER
+       |    num_lit
+       |    func_call
+       ;
+cond   ::=  TRUE
+       |    FALSE
+       |    expr bool_op expr cond_opt
+       ;
+cond_opt
+       ::=  bool_cnd cond
+       |    lambda
+       ;
+bool_op::=  IS
+       |    NOT
+       |    GT
+       |    LT
+       |    GTE
+       |    LTE
+       ;
+bool_cnd
+       ::=  AND
+       |    OR
+       ;
+args   ::=  args_list
+       |    lambda
+       ;
+args_list
+       ::=  expr
+       |    args_list comma expr
+       ;
+params ::=  params_list
+       |    lambda
+       ;
+params_list
+       ::=  params_list comma type IDENTIFIER
+       |    type IDENTIFIER
+       ;
+type   ::=  NUM | BOOL | COORD | STRING | VOID
+       ;
+string_lit
+       ::=  string_lit num_lit
+       |    string_lit char_lit
+       |    num_lit
+       |    char_lit
+       ;
+

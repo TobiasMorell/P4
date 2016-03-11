@@ -1,0 +1,15 @@
+Robot:
+
+LOAD (KAGE)
+
+NUM a = 5
+
+VOID START ()
+
+
+
+
+
+
+
+END START
