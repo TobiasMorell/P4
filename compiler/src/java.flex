@@ -67,14 +67,13 @@ FLit2    = \. [0-9]+
 FLit3    = [0-9]+ 
 Exponent = [eE] [+-]? [0-9]+
 
-coordLiteral = (numLiteral, numLiteral, numLiteral)
-
 /* string and character literals */
 StringCharacter = [^\r\n\"\\]
 SingleCharacter = [^\r\n\'\\]
 
 %state STRING, CHARLITERAL
 
+coordLiteral = (numLiteral, numLiteral, numLiteral)
 Identifier = [:jletter:][:jletterdigit:]*
 
 %%
@@ -104,11 +103,13 @@ Identifier = [:jletter:][:jletterdigit:]*
  /* Literals */
  "TRUE"         { return symbol(TRUE); }
  "FALSE"        { return symbol(FALSE); }
+ {coordLiteral}     { return symbol(CoordLit); }
  "VOID"         { return symbol(VOID); }
 
  /* seperators */
    "("          { return symbol(LPAREN); }
    ")"          { return symbol(RPAREN); }
+   ":"          { return symbol(COLON); }
    "."          { return symbol(DOT); }
    ","          { return symbol(COMMA); }
 
@@ -120,10 +121,9 @@ Identifier = [:jletter:][:jletterdigit:]*
    "-"                  { return symbol(MINUS);}
    "*"                  { return symbol(MULT);}
    "/"                  { return symbol(DIV);}
-   "^"                  { return symbol(PWR);}
 
   /* Identifier */
-    {Identifier}                { return symbol(IDENTIFIER, yytext()); }
+    {Identifier}                { return symbol(Identifier, yytext()); }
 
   /* string literal */
     \"                             { yybegin(STRING); string.setLength(0); }
@@ -142,12 +142,8 @@ Identifier = [:jletter:][:jletterdigit:]*
 }
 
 <STRING> {
-    \"                             { yybegin(YYINITIAL); return symbol(STRING_LITERAL, string.toString()); }
+    \"                             { yybegin(YYINITIAL); return symbol(StringLit, string.toString()); }
     {StringCharacter}+             { string.append( yytext() ); }
-    }
-
-<CHARLITERAL> {
-    {SingleCharacter}\'            { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, yytext().charAt(0)); }
     }
 
 /* error fallback */

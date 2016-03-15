@@ -3,7 +3,6 @@
  */
 
 import java_cup.*;
-
 import java.io.FileReader;
 
 public class Main {

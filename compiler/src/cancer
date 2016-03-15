@@ -1,21 +1,6 @@
 Robot:
+LOAD(kage)
 
-
-
- 
-NUM a
-
-
-
-
-
-
-
-
-
-VOID START ()
-
-
-
+VOID START()
 
 END START

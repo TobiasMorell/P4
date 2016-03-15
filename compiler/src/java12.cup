@@ -19,28 +19,45 @@ parser code  {:
   }
 :};
 
-non terminal         Type, ReferenceType, PrimitiveType, TypeName, MethodName, Program, Load, RoboDecl,
+non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load, RoboDecl,
     MemberDcl, RoboBodyDcl, FieldDcl, MethodDcl, VariableDclList, VariableDcl, VariableInitializer,
-    ListInitializer, Expression, NumList, AssignmentExpression, ConditionalExpression, Assignment,
+    ListInitializer, Expression, Literal, LitList, AssignmentExpression, ConditionalExpression, Assignment,
     LeftHandSide, ListAccess, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
     EqualityExpressionEnd, RelationalExpression, RelationalExpressionEnd, AdditiveExpression, MultiExpr,
-    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList, FieldAccess
-    ParamsList, Param, MethodHeader, HearDecl, MethodBody, ReturnType, MethodDeclarator, FormalParams, Block
-    BlockStmtList, BlockStmt, LocalVariableDcl, Statement, VariableDclList, StmtNoSubstmt, IfStmt, LoopStmt,
+    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList, FieldAccess,
+    ParamsList, Param, MethodHeader, HearDecl, MethodBody, ReturnType, MethodDeclarator, FormalParams, Block,
+    BlockStmtList, BlockStmt, LocalVariableDcl, Statement, StmtNoSubstmt, IfStmt, LoopStmt,
     EmptyStmt, SignalStmt, ExprStmt, BreakStmt, ReturnStmt, StmtExpr, ElseIfStmt, ElseStmt, RepeatStmt,
-    ForeverStmt;
+    ForeverStmt, BoolLit;
 
 //Types and id's
 terminal            Identifier, NUM, BOOL, STRING, COORD, LIST, NumLit, VOID;
 
 //Symbols
-terminal            DOT, COMMA, LPAREN, RPAREN, EOL, EOF, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN;
+terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN;
 
 //Boolean Operators
-terminal            AND, OR, IS, NOT, LT, GT, LTE, GTE;
+terminal            AND, OR, IS, NOT, LT, GT, LTE, GTE, TRUE, FALSE, StringLit, CoordLit;
 
 //Keywords
-terminal            LOAD, END, HEAR, SIGNAL, BREAK, RETURN, REPEAT, FOREVER, UNTIL;
+terminal            LOAD, END, HEAR, SIGNAL, BREAK, RETURN, IF, ELSE, ELSEIF, REPEAT, FOREVER, UNTIL;
+
+// Program start
+Program
+::=	RoboDecl Load RoboBodyDcl
+;
+
+Literal
+::= NumLit
+|   BoolLit
+|   StringLit
+|   CoordLit
+;
+
+BoolLit
+::= TRUE
+| FALSE
+;
 
 Type
 ::=	ReferenceType
@@ -61,14 +78,7 @@ TypeName
 ::=	Identifier
 |	TypeName DOT Identifier
 ;
-MethodName
-::=	TypeName
-;
 
-// Program start
-Program
-	::=	RoboDecl Load RoboBodyDcl EOF
-	;
 Load
 ::=	LOAD LPAREN Identifier RPAREN  EOL
 |	Load LOAD LPAREN Identifier RPAREN EOL
@@ -95,7 +105,7 @@ VariableDclList
 |	VariableDclList COMMA VariableDcl
 ;
 VariableDcl
-::=	Identifier VariableInitializer
+::= VariableInitializer
 |	Identifier ListInitializer
 ;
 VariableInitializer
@@ -103,12 +113,12 @@ VariableInitializer
 |	lambda
 ;
 ListInitializer
-::=	NumList END Identifier
+::=	LitList END Identifier
 | 	lambda
 ;
-NumList
-::=	NumList COMMA NumLit
-|	NumLit
+LitList
+::=	LitList COMMA Primary
+|	Primary
 ;
 
 // Expressions
@@ -124,10 +134,10 @@ Assignment
 ;
 LeftHandSide
 ::=	TypeName
-|	ListAcces
+|	ListAccess
 ;
-ListAcces
-::=	Identifier DOT id LPAREN Identifier RPAREN
+ListAccess
+::=	TypeName LPAREN NumLit RPAREN
 ;
 ConditionalExpression
 ::=	ConditionOrExpression
@@ -136,21 +146,21 @@ ConditionOrExpression
 ::=	ConditionAndExpression
 | 	ConditionOrExpression OR ConditionAndExpression
 ;
-CondtionAndExpression
+ConditionAndExpression
 ::=	XORExpression
-| 	ConditionalAndExpression AND XORExpression
+| 	ConditionAndExpression AND XORExpression
 ;
 XORExpression
 ::=	EqualityExpression
 | 	XORExpression XOR EqualityExpression
 ;
 EqualityExpression
-::=	RelationExpression
+::=	RelationalExpression
 | 	EqualityExpression EqualityExpressionEnd
 ;
 EqualityExpressionEnd
-	::=	IS RelationExpression
-	|	NOT RelationExpression
+	::=	IS RelationalExpression
+	|	NOT RelationalExpression
 	;
 RelationalExpression
  ::=	AdditiveExpression
@@ -193,7 +203,7 @@ Primary
 	| 	FieldAccess
 	;
 MethodInvocation
-	::=	MethodName LPAREN FormalArgs RPAREN
+	::=	TypeName LPAREN FormalArgs RPAREN
 	;
 FormalArgs
 ::=	ArgsList
@@ -236,10 +246,10 @@ MethodDeclarator
 	::=	Identifier LPAREN FormalParams RPAREN
 	;
 MethodBody
-	::=	Block END id
+	::=	Block END Identifier
 	;
 HearDecl
-	::=	HEAR id LPAREN Formal Params RPAREN Block END Hear
+	::=	HEAR Identifier LPAREN FormalParams RPAREN Block END HEAR
 	;
 
 //If, loop and statements
@@ -254,7 +264,7 @@ BlockStmt
 	::=	LocalVariableDcl
 	| 	Statement
 	;
-LocalVariable
+LocalVariableDcl
 	::=	Type VariableDclList EOL
 	;
 
@@ -264,8 +274,7 @@ Statement
 	| 	LoopStmt
 	;
 StmtNoSubstmt
-	::=	Block
-	|	EmptyStmt
+	::=	EmptyStmt
 	|	SignalStmt
 	|	ExprStmt
 	|	BreakStmt
@@ -275,7 +284,8 @@ EmptyStmt
 	::=	EOL
 	;
 SignalStmt
-	::=	SIGNAL id LPAREN ArgsList RPAREN EOL
+	::=	SIGNAL Identifier LPAREN ArgsList RPAREN EOL
+        ;
 ExprStmt
 	::=	StmtExpr EOL
 	;
@@ -286,7 +296,7 @@ StmtExpr
 BreakStmt
 	::=	BREAK EOL
 	;
-Return
+ReturnStmt
 	::=	RETURN Expression EOL
 	;
 
@@ -308,6 +318,6 @@ LoopStmt
 RepeatStmt
 	::=	REPEAT UNTIL LPAREN Expression RPAREN EOL Block END REPEAT
 	;
-Forever
+ForeverStmt
 	::=	FOREVER EOL Block END FOREVER
 	;
