@@ -19,22 +19,295 @@ parser code  {:
   }
 :};
 
-non terminal         Statement, IfStmt, IfElseStmt;
-terminal            IF, ELSE, END, LPAREN, RPAREN, EOL, lambda, Expression;
+non terminal         Type, ReferenceType, PrimitiveType, TypeName, MethodName, Program, Load, RoboDecl,
+    MemberDcl, RoboBodyDcl, FieldDcl, MethodDcl, VariableDclList, VariableDcl, VariableInitializer,
+    ListInitializer, Expression, NumList, AssignmentExpression, ConditionalExpression, Assignment,
+    LeftHandSide, ListAccess, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
+    EqualityExpressionEnd, RelationalExpression, RelationalExpressionEnd, AdditiveExpression, MultiExpr,
+    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList, FieldAccess
+    ParamsList, Param, MethodHeader, HearDecl, MethodBody, ReturnType, MethodDeclarator, FormalParams, Block
+    BlockStmtList, BlockStmt, LocalVariableDcl, Statement, VariableDclList, StmtNoSubstmt, IfStmt, LoopStmt,
+    EmptyStmt, SignalStmt, ExprStmt, BreakStmt, ReturnStmt, StmtExpr, ElseIfStmt, ElseStmt, RepeatStmt,
+    ForeverStmt;
+
+//Types and id's
+terminal            Identifier, NUM, BOOL, STRING, COORD, LIST, NumLit, VOID;
+
+//Symbols
+terminal            DOT, COMMA, LPAREN, RPAREN, EOL, EOF, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN;
+
+//Boolean Operators
+terminal            AND, OR, IS, NOT, LT, GT, LTE, GTE;
+
+//Keywords
+terminal            LOAD, END, HEAR, SIGNAL, BREAK, RETURN, REPEAT, FOREVER, UNTIL;
+
+Type
+::=	ReferenceType
+|	PrimitiveType
+;
+PrimitiveType
+::=	NUM
+|	BOOL
+;
+ReferenceType
+::=	STRING
+|	COORD
+|	LIST
+;
+
+// Names
+TypeName
+::=	Identifier
+|	TypeName DOT Identifier
+;
+MethodName
+::=	TypeName
+;
+
+// Program start
+Program
+	::=	RoboDecl Load RoboBodyDcl EOF
+	;
+Load
+::=	LOAD LPAREN Identifier RPAREN  EOL
+|	Load LOAD LPAREN Identifier RPAREN EOL
+;
+RoboDecl
+::=	Identifier COLON EOL
+;
+
+// Declarations
+RoboBodyDcl
+::=	RoboBodyDcl MemberDcl
+|	MemberDcl
+;
+MemberDcl
+::=	FieldDcl
+|	MethodDcl
+|	EOL
+;
+FieldDcl
+::=	Type VariableDclList EOL
+	;
+VariableDclList
+::=	VariableDcl
+|	VariableDclList COMMA VariableDcl
+;
+VariableDcl
+::=	Identifier VariableInitializer
+|	Identifier ListInitializer
+;
+VariableInitializer
+::=	Expression
+|	lambda
+;
+ListInitializer
+::=	NumList END Identifier
+| 	lambda
+;
+NumList
+::=	NumList COMMA NumLit
+|	NumLit
+;
+
+// Expressions
+Expression
+::=	AssignmentExpression
+;
+AssignmentExpression
+::=	ConditionalExpression
+|	Assignment
+;
+Assignment
+::=	LeftHandSide ASSIGN Expression
+;
+LeftHandSide
+::=	TypeName
+|	ListAcces
+;
+ListAcces
+::=	Identifier DOT id LPAREN Identifier RPAREN
+;
+ConditionalExpression
+::=	ConditionOrExpression
+;
+ConditionOrExpression
+::=	ConditionAndExpression
+| 	ConditionOrExpression OR ConditionAndExpression
+;
+CondtionAndExpression
+::=	XORExpression
+| 	ConditionalAndExpression AND XORExpression
+;
+XORExpression
+::=	EqualityExpression
+| 	XORExpression XOR EqualityExpression
+;
+EqualityExpression
+::=	RelationExpression
+| 	EqualityExpression EqualityExpressionEnd
+;
+EqualityExpressionEnd
+	::=	IS RelationExpression
+	|	NOT RelationExpression
+	;
+RelationalExpression
+ ::=	AdditiveExpression
+ | 	    RelationalExpression RelationalExpressionEnd
+;
+RelationalExpressionEnd
+	::=	LT AdditiveExpression
+	|	GT AdditiveExpression
+	|	LTE AdditiveExpression
+	|	GTE AdditiveExpression
+	;
+AdditiveExpression
+::=	MultiExpr
+ 	| 	AdditiveExpression AdditiveExpressionEnd
+;
+AdditiveExpressionEnd
+	::=	PLUS MultiExpr
+	|	MINUS MultiExpr
+	;
+MultiExpr
+::=	UnaryExpr
+	 | 	MultiExpr MultiExprEnd
+;
+MultiExprEnd
+	::=	MULT UnaryExpr
+	|	DIV UnaryExpr
+	;
+UnaryExpr
+	::=	PLUS UnaryExpr
+	|	MINUS UnaryExpr
+	| 	Primary
+	;
+
+// Values and ID’s
+Primary
+	::=	Literal
+	| 	LPAREN Expression RPAREN
+	| 	ListAccess
+	| 	MethodInvocation
+	| 	FieldAccess
+	;
+MethodInvocation
+	::=	MethodName LPAREN FormalArgs RPAREN
+	;
+FormalArgs
+::=	ArgsList
+| 	lambda
+;
+FieldAccess
+	::=	TypeName
+	;
+
+// Methods (params, args and declarations)
+ArgsList
+	::=	ArgsList COMMA Expression
+|	Expression
+;
+
+FormalParams
+	::=	ParamsList
+	| 	lambda
+	;
+ParamsList
+::=	ParamsList COMMA Param
+	|	Param
+	;
+Param
+	::=	Type Identifier
+	;
+
+MethodDcl
+	::=	MethodHeader MethodBody
+	|	HearDecl
+	;
+MethodHeader
+	::=	ReturnType MethodDeclarator
+	;
+ReturnType
+	::=	Type
+	| 	VOID
+	;
+MethodDeclarator
+	::=	Identifier LPAREN FormalParams RPAREN
+	;
+MethodBody
+	::=	Block END id
+	;
+HearDecl
+	::=	HEAR id LPAREN Formal Params RPAREN Block END Hear
+	;
+
+//If, loop and statements
+Block
+	::=	BlockStmtList
+	| 	lambda
+	;
+BlockStmtList
+	::=	BlockStmtList BlockStmt
+	;
+BlockStmt
+	::=	LocalVariableDcl
+	| 	Statement
+	;
+LocalVariable
+	::=	Type VariableDclList EOL
+	;
 
 Statement
-    ::= IfStmt
-     |  IfElseStmt
-     |  lambda
-     ;
+	::=	StmtNoSubstmt
+	| 	IfStmt
+	| 	LoopStmt
+	;
+StmtNoSubstmt
+	::=	Block
+	|	EmptyStmt
+	|	SignalStmt
+	|	ExprStmt
+	|	BreakStmt
+	|	ReturnStmt
+	;
+EmptyStmt
+	::=	EOL
+	;
+SignalStmt
+	::=	SIGNAL id LPAREN ArgsList RPAREN EOL
+ExprStmt
+	::=	StmtExpr EOL
+	;
+StmtExpr
+	::=	Assignment
+	|	MethodInvocation
+	;
+BreakStmt
+	::=	BREAK EOL
+	;
+Return
+	::=	RETURN Expression EOL
+	;
+
 IfStmt
-    ::= IF LPAREN Expresstion RPAREN EOL
-        Statement
-        END IF
-     |  IF LPAREN Expression RPAREN EOL
-        Statement
-        END IF
-        ELSE
-        Statement
-        END ELSE
-    ;
+	::=	IF LPAREN Expression RPAREN EOL Block END IF ElseIfStmt ElseStmt
+	;
+ElseIfStmt
+::=	ElseIfStmt ELSE IF LPAREN Expression RPAREN EOL Block END ELSEIF
+| 	lambda
+;
+ElseStmt
+::=	ELSE EOL Block END ELSE
+| 	lambda
+;
+LoopStmt
+	::=	RepeatStmt
+	|	ForeverStmt
+	;
+RepeatStmt
+	::=	REPEAT UNTIL LPAREN Expression RPAREN EOL Block END REPEAT
+	;
+Forever
+	::=	FOREVER EOL Block END FOREVER
+	;

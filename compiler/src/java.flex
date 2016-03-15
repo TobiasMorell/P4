@@ -54,15 +54,26 @@ InputCharacter = [^\r\n]
 
 WhiteSpace = {LineTerminator} | [ \t\f]
 
+/*Comments*/
+Comment = {TraditionalComment}|{EndOfLineComment}|{DocumentationComment}
+TraditionalComment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
+DocumentationComment = "/*" "*"+ [^/*] ~"*/"
+
+numLiteral = ({FLit1}|{FLit2}|{FLit3}) {Exponent}?
+
 FLit1    = [0-9]+ \. [0-9]* 
 FLit2    = \. [0-9]+ 
 FLit3    = [0-9]+ 
 Exponent = [eE] [+-]? [0-9]+
 
+coordLiteral = (numLiteral, numLiteral, numLiteral)
+
 /* string and character literals */
 StringCharacter = [^\r\n\"\\]
 SingleCharacter = [^\r\n\'\\]
 
+%state STRING, CHARLITERAL
 
 Identifier = [:jletter:][:jletterdigit:]*
 
@@ -73,22 +84,74 @@ Identifier = [:jletter:][:jletterdigit:]*
     "IF"        { return symbol(IF); }
     "END"       { return symbol(END); }
     "ELSE"      { return symbol(ELSE); }
+    "LOAD"      { return symbol(LOAD); }
+    "HEAR"      { return symbol(HEAR); }
+    "SIGNAL"    { return symbol(SIGNAL); }
+    "BREAK"     { return symbol(BREAK); }
+    "RETURN"    { return symbol(RETURN); }
+    "REPEAT"    { return symbol(REPEAT); }
+    "FOREVER"   { return symbol(FOREVER); }
+    "UNTIL"     { return symbol(UNTIL); }
+    "AND"       { return symbol(AND); }
+    "OR"        { return symbol(OR); }
+    "IS"        { return symbol(IS); }
+    "NOT"       { return symbol(NOT); }
+    "LESS_THAN" { return symbol(LT); }
+    "GREATER_THAN" { return symbol(GT); }
+    "LESS_THAN_OR_EQUAL_TO" { return symbol(LTE); }
+    "GREATER_THAN_OR_EQUAL_TO" { return symbol(GTE); }
 
- 
+ /* Literals */
+ "TRUE"         { return symbol(TRUE); }
+ "FALSE"        { return symbol(FALSE); }
+ "VOID"         { return symbol(VOID); }
+
  /* seperators */
    "("          { return symbol(LPAREN); }
    ")"          { return symbol(RPAREN); }
+   "."          { return symbol(DOT); }
+   ","          { return symbol(COMMA); }
 
  /* operators */
+   "XOR"                { return symbol(XOR); }
+   "="                  { return symbol(ASSIGN); }
    "\n"     			{ return symbol(EOL);}
+   "+"                  { return symbol(PLUS);}
+   "-"                  { return symbol(MINUS);}
+   "*"                  { return symbol(MULT);}
+   "/"                  { return symbol(DIV);}
+   "^"                  { return symbol(PWR);}
+
+  /* Identifier */
+    {Identifier}                { return symbol(IDENTIFIER, yytext()); }
+
+  /* string literal */
+    \"                             { yybegin(STRING); string.setLength(0); }
+
+  /* character literal */
+    \'                             { yybegin(CHARLITERAL); }
+
+  /* numeric literals */
+    {numLiteral}            			 { return symbol(NumLit, new Double(yytext())); }
+
+ /* comments */
+    {Comment}                      { /* ignore */ }
 
   /* whitespace */
-  {WhiteSpace}                   { /* ignore */ }
-
+    {WhiteSpace}                   { /*Ignore*/ }
 }
 
+<STRING> {
+    \"                             { yybegin(YYINITIAL); return symbol(STRING_LITERAL, string.toString()); }
+    {StringCharacter}+             { string.append( yytext() ); }
+    }
+
+<CHARLITERAL> {
+    {SingleCharacter}\'            { yybegin(YYINITIAL); return symbol(CHARACTER_LITERAL, yytext().charAt(0)); }
+    }
+
 /* error fallback */
-[^]                              { throw new RuntimeException("Illegal character \""+yytext()+
+[~]                              { throw new RuntimeException("Illegal character \""+yytext()+
                                                               "\" at line "+yyline+", column "+yycolumn); }
 
 //<<EOF>>                          { return symbol(EOF); }
