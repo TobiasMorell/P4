@@ -1,6 +1,9 @@
 // Test CUP for P4
 import java_cup.*;
 
+//Den er ikke glad for EOL på nuværende tidspunkt
+//TypeName produktionen virker ikke
+
 parser code  {:
   public void report_error(String message, Object info) {
     StringBuilder m = new StringBuilder("Error ");
@@ -22,10 +25,10 @@ parser code  {:
 non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load, RoboDecl,
     MemberDcl, RoboBodyDcl, FieldDcl, MethodDcl, VariableDclList, VariableDcl, VariableInitializer,
     ListInitializer, Expression, Literal, LitList, AssignmentExpression, ConditionalExpression, Assignment,
-    LeftHandSide, ListAccess, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
+    LeftHandSide, ListOpt, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
     EqualityExpressionEnd, RelationalExpression, RelationalExpressionEnd, AdditiveExpression, MultiExpr,
-    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList, FieldAccess,
-    ParamsList, Param, MethodHeader, HearDecl, MethodBody, ReturnType, MethodDeclarator, FormalParams, Block,
+    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList,
+    ParamsList, Param, MethodHeader, HearDecl, MethodBody, MethodDeclarator, FormalParams, Block,
     BlockStmtList, BlockStmt, LocalVariableDcl, Statement, StmtNoSubstmt, IfStmt, LoopStmt,
     EmptyStmt, SignalStmt, ExprStmt, BreakStmt, ReturnStmt, StmtExpr, ElseIfStmt, ElseStmt, RepeatStmt,
     ForeverStmt, BoolLit;
@@ -34,7 +37,8 @@ non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load
 terminal            Identifier, NUM, BOOL, STRING, COORD, LIST, NumLit, VOID;
 
 //Symbols
-terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN;
+terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN,
+                    SQUARE_LEFT, SQUARE_RIGHT;
 
 //Boolean Operators
 terminal            AND, OR, IS, NOT, LT, GT, LTE, GTE, TRUE, FALSE, StringLit, CoordLit;
@@ -73,18 +77,18 @@ ReferenceType
 |	LIST
 ;
 
-// Names
-TypeName
-::=	Identifier
-|	TypeName DOT Identifier
-;
+// Name
+//TypeName
+//::=	Identifier
+//|	TypeName DOT Identifier
+//;
 
 Load
-::=	LOAD LPAREN Identifier RPAREN  EOL
-|	Load LOAD LPAREN Identifier RPAREN EOL
+::=	LOAD LPAREN StringLit RPAREN  EOL
+|	Load LOAD LPAREN StringLit RPAREN EOL
 ;
 RoboDecl
-::=	Identifier COLON EOL
+::=	Identifier COLON
 ;
 
 // Declarations
@@ -133,11 +137,11 @@ Assignment
 ::=	LeftHandSide ASSIGN Expression
 ;
 LeftHandSide
-::=	TypeName
-|	ListAccess
+::=	TypeName ListOpt
 ;
-ListAccess
-::=	TypeName LPAREN NumLit RPAREN
+ListOpt
+::=	SQUARE_LEFT Expression SQUARE_RIGHT
+|   lambda
 ;
 ConditionalExpression
 ::=	ConditionOrExpression
@@ -198,9 +202,8 @@ UnaryExpr
 Primary
 	::=	Literal
 	| 	LPAREN Expression RPAREN
-	| 	ListAccess
 	| 	MethodInvocation
-	| 	FieldAccess
+	| 	TypeName ListOpt
 	;
 MethodInvocation
 	::=	TypeName LPAREN FormalArgs RPAREN
@@ -209,9 +212,6 @@ FormalArgs
 ::=	ArgsList
 | 	lambda
 ;
-FieldAccess
-	::=	TypeName
-	;
 
 // Methods (params, args and declarations)
 ArgsList
@@ -236,11 +236,8 @@ MethodDcl
 	|	HearDecl
 	;
 MethodHeader
-	::=	ReturnType MethodDeclarator
-	;
-ReturnType
-	::=	Type
-	| 	VOID
+	::= Type MethodDeclarator
+	|   VOID MethodDeclarator
 	;
 MethodDeclarator
 	::=	Identifier LPAREN FormalParams RPAREN

@@ -1,5 +1,7 @@
 Robot:
-LOAD(kage)
+LOAD("kage")
+
+NUM a = 5
 
 VOID START()
 
