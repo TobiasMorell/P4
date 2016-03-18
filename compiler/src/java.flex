@@ -106,6 +106,13 @@ Identifier = [:jletter:][:jletterdigit:]*
  {coordLiteral}     { return symbol(CoordLit); }
  "VOID"         { return symbol(VOID); }
 
+ /* types and ID's */
+ "NUM"          { return symbol(NUM); }
+ "BOOL"         { return symbol(BOOL); }
+ "STRING"       { return symbol(STRING); }
+ "COORD"        { return symbol(COORD); }
+ "LIST"         { return symbol(LIST); }
+
  /* seperators */
    "("          { return symbol(LPAREN); }
    ")"          { return symbol(RPAREN); }

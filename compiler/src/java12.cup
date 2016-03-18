@@ -22,7 +22,7 @@ parser code  {:
   }
 :};
 
-non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load, RoboDecl,
+non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load, RoboDcl,
     MemberDcl, RoboBodyDcl, FieldDcl, MethodDcl, VariableDclList, VariableDcl, VariableInitializer,
     ListInitializer, Expression, Literal, LitList, AssignmentExpression, ConditionalExpression, Assignment,
     LeftHandSide, ListOpt, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
@@ -37,7 +37,7 @@ non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load
 terminal            Identifier, NUM, BOOL, STRING, COORD, LIST, NumLit, VOID;
 
 //Symbols
-terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, lambda, XOR, PLUS, MINUS, MULT, DIV, ASSIGN,
+terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, XOR, PLUS, MINUS, MULT, DIV, ASSIGN,
                     SQUARE_LEFT, SQUARE_RIGHT;
 
 //Boolean Operators
@@ -48,7 +48,7 @@ terminal            LOAD, END, HEAR, SIGNAL, BREAK, RETURN, IF, ELSE, ELSEIF, RE
 
 // Program start
 Program
-::=	RoboDecl Load RoboBodyDcl
+::=	RoboDcl Load RoboBodyDcl
 ;
 
 Literal
@@ -77,18 +77,18 @@ ReferenceType
 |	LIST
 ;
 
-// Name
-//TypeName
-//::=	Identifier
-//|	TypeName DOT Identifier
-//;
+//Name
+TypeName
+::=	Identifier
+|	TypeName DOT Identifier
+;
 
 Load
 ::=	LOAD LPAREN StringLit RPAREN  EOL
 |	Load LOAD LPAREN StringLit RPAREN EOL
 ;
-RoboDecl
-::=	Identifier COLON
+RoboDcl
+::=	Identifier COLON EOL
 ;
 
 // Declarations
@@ -109,16 +109,16 @@ VariableDclList
 |	VariableDclList COMMA VariableDcl
 ;
 VariableDcl
-::= VariableInitializer
+::=     VariableInitializer
 |	Identifier ListInitializer
+|       TypeName
 ;
 VariableInitializer
 ::=	Expression
-|	lambda
 ;
 ListInitializer
 ::=	LitList END Identifier
-| 	lambda
+//| 	// lambda
 ;
 LitList
 ::=	LitList COMMA Primary
@@ -141,7 +141,7 @@ LeftHandSide
 ;
 ListOpt
 ::=	SQUARE_LEFT Expression SQUARE_RIGHT
-|   lambda
+|   //lambda
 ;
 ConditionalExpression
 ::=	ConditionOrExpression
@@ -210,7 +210,7 @@ MethodInvocation
 	;
 FormalArgs
 ::=	ArgsList
-| 	lambda
+| 	//lambda
 ;
 
 // Methods (params, args and declarations)
@@ -221,7 +221,7 @@ ArgsList
 
 FormalParams
 	::=	ParamsList
-	| 	lambda
+	| 	// lambda
 	;
 ParamsList
 ::=	ParamsList COMMA Param
@@ -252,7 +252,7 @@ HearDecl
 //If, loop and statements
 Block
 	::=	BlockStmtList
-	| 	lambda
+	| 	// lambda
 	;
 BlockStmtList
 	::=	BlockStmtList BlockStmt
@@ -302,11 +302,11 @@ IfStmt
 	;
 ElseIfStmt
 ::=	ElseIfStmt ELSE IF LPAREN Expression RPAREN EOL Block END ELSEIF
-| 	lambda
+| 	// lambda
 ;
 ElseStmt
 ::=	ELSE EOL Block END ELSE
-| 	lambda
+| 	// lambda
 ;
 LoopStmt
 	::=	RepeatStmt
