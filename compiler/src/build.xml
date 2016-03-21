@@ -5,13 +5,21 @@
 
   <target name="build" depends="realclean,compile" />
 
-  <target name="run" depends="compile">
+  <target name="run" depends="compile, states">
     <java classname="JavaParser"> 
       <arg line="JavaParser.java"/> 
       <arg line="JavaSymbol.java"/> 
       <arg line="UnicodeEscapes.java"/> 
       <arg line="parser."/> 
     </java>
+  </target>
+
+
+  <target name="states">
+      <java jar="cup.jar" fork="true" failonerror="false" output="parser.states">
+        <arg value="-dump_states"/>
+        <arg value="java12.cup"/>
+      </java>
   </target>
 
   <target name="compile" depends="scanner,unicode,cup">

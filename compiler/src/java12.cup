@@ -201,7 +201,7 @@ UnaryExpr
 Primary
 	::=	Literal
 	| 	LPAREN Expression RPAREN
-//	| 	MethodInvocation
+	| 	MethodInvocation
 	| 	TypeName ListOpt
 	;
 MethodInvocation
