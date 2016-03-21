@@ -111,7 +111,6 @@ VariableDclList
 VariableDcl
 ::=     VariableInitializer
 |	Identifier ListInitializer
-|       TypeName
 ;
 VariableInitializer
 ::=	Expression
@@ -202,11 +201,11 @@ UnaryExpr
 Primary
 	::=	Literal
 	| 	LPAREN Expression RPAREN
-	| 	MethodInvocation
+//	| 	MethodInvocation
 	| 	TypeName ListOpt
 	;
 MethodInvocation
-	::=	TypeName LPAREN FormalArgs RPAREN
+	::=	TypeName LPAREN FormalArgs RPAREN       
 	;
 FormalArgs
 ::=	ArgsList
@@ -256,6 +255,7 @@ Block
 	;
 BlockStmtList
 	::=	BlockStmtList BlockStmt
+        |       BlockStmt
 	;
 BlockStmt
 	::=	LocalVariableDcl
