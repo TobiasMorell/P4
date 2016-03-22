@@ -1,33 +1,210 @@
 grammar ObsidiCode;
 
+//Fragment rules for lexer
+fragment NameStartChar
+        :       'A'..'Z' | 'a'..'z';
+fragment NameChar
+        :       NameStartChar
+        |       '0'..'9'
+        |       '_'
+        ;
+fragment Num
+        :       '0'..'9';
+
 //Regex for the scanner:
 Identifier
-	:	[A-z][0-z]*;
+	:	NameStartChar NameChar*;
+
 NumLit
-	:	[0-9]+([\.][0-9]+)?;
+	:	Num+ ('.'Num+)?;
 CoordLit
-	:	[\(][0-9][,] [0-9][,] [0-9][\)];
+	:	'('Num+',' Num+','Num+')';
 StringLit
-	:	[^"]+;
+	:	'"'~('"')*'"';
 
-//Skip blank-space
-WS 
-	: [ \t\r\n]+ -> skip; //<--- newline added for tests!
+WS
+	:	[\t\r' ']+ -> skip;
 
-//Start rule:
-expression
-	:	assignmentExpression;
+//Comments
+COMMENT
+	:	'/*' .*? '*/' -> skip
+	;
+EOLCOMMENT
+	:	'//' .*? '\n' -> skip
+	; 
 
+prog
+	:	roboDcl loads roboBodyDcl;
+//Types and literals:
 literal
 	:	NumLit
 	|	'TRUE'
 	|	'FALSE'
 	|	CoordLit
-	|	'"' StringLit '=';
+	|	StringLit
+	;
 typeName
 	:	Identifier
 	|	typeName '.' Identifier
 	;
+
+type
+	:	referenceType
+	|	primitiveType
+	;
+primitiveType
+	:	'NUM'
+	|	'BOOL'
+	;
+referenceType
+	:	'STRING'
+	|	'COORD'
+	|	'LIST'
+	;
+
+loads
+	:	loads 'LOAD' '(' StringLit ')' '\n'
+	|	//lambda
+	;
+
+//Declarations
+roboDcl
+	:	Identifier':''\n'
+	;
+roboBodyDcl
+	:	roboBodyDcl memberDcl
+	|	memberDcl	
+	;
+
+memberDcl
+	:	fieldDcl
+	|	methodDcl
+	|	'\n'
+	;
+
+fieldDcl
+	:	type variableDclList '\n';
+variableDclList
+	:	variableDcl
+	|	variableDclList ',' variableDcl
+	;
+variableDcl
+	:	Identifier variableInitializer
+	|	Identifier listInitializer
+	;
+variableInitializer
+	:	assignmentExpression
+	|	//lambda
+	;
+listInitializer
+	:	litList 'END' Identifier
+	|	//lambda
+	;
+litList
+	:	litList ',' primary
+	|	primary
+	;
+
+//method stuff
+methodDcl
+	:	methodHeader methodBody
+	|	hearDcl
+	;
+methodHeader
+	:	type methodDeclarator
+	|	'VOID' methodDeclarator
+	;
+methodDeclarator
+	:	Identifier '(' formalParams ')' '\n'
+	;
+methodBody
+	:	block 'END' Identifier
+	;
+hearDcl
+	:	'HEAR' Identifier '(' formalParams ')' '\n' block 'END HEAR'
+	;
+
+//Statements
+block
+	:	blockStmtList
+	|	//lambda
+	;
+blockStmtList
+	:	blockStmtList statement '\n'
+	|	statement '\n'
+	;
+statement
+	:	type variableDclList
+	|	stmtNoSub
+	|	ifStmt
+	|	loopStmt
+	;
+stmtNoSub
+	:	//lambda
+	|	signalStmt
+	|	exprStmt
+	|	'BREAK'
+	|	'RETURN' expression
+	;
+signalStmt
+	:	'SIGNAL' Identifier '(' argsList ')'
+	;
+exprStmt
+	:	assignmentExpression
+	|	methodInvocation
+	;
+
+methodInvocation
+	:	typeName '(' formalArgs ')'
+	;
+
+ifStmt
+	:	'IF' '(' expression ')' '\n' block 'END IF' 'elseIfOpt' 'elseOpt'
+	;
+elseIfOpt
+	:	elseIfOpt 'ELSE IF' '(' expression ')' '\n' block 'END ELSEIF'
+	|	//lambda
+	;
+elseOpt
+	:	'ELSE' '\n' block 'END Else'
+	|	//lambda
+	;
+
+loopStmt
+	:	repeatStmt
+	|	foreverStmt
+	;
+repeatStmt
+	:	'REPEAT UNTIL' '(' expression ')' '\n' block 'END REPEAT'
+	;
+foreverStmt
+	:	'FOREVER' '\n' block 'END FOREVER'
+	;
+
+//Args and params
+formalArgs
+	:	argsList
+	|	//lambda
+	;
+argsList
+	:	argsList ',' expression
+	|	expression
+	;
+formalParams
+	:	paramsList
+	|	//lambda
+	;
+paramsList
+	:	paramsList ',' param
+	|	param
+	;
+param
+	:	type Identifier
+	;
+
+//Expression part
+expression
+	:	assignmentExpression;
 
 assignmentExpression
 	:	conditionalExpression
