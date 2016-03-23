@@ -58,10 +58,10 @@ public class ObsidiCodeParser extends Parser {
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "'TRUE'", "'FALSE'", "'.'", "'NUM'", "'BOOL'", "'STRING'", "'COORD'", 
-		"'LIST'", "'LOAD'", "'('", "')'", "'\n'", "':'", "','", "'END'", "'VOID'", 
-		"'HEAR'", "'END HEAR'", "'BREAK'", "'RETURN'", "'SIGNAL'", "'IF'", "'END IF'", 
-		"'elseIfOpt'", "'elseOpt'", "'ELSE IF'", "'END ELSEIF'", "'ELSE'", "'END Else'", 
-		"'REPEAT UNTIL'", "'END REPEAT'", "'FOREVER'", "'END FOREVER'", "'='", 
+		"'LIST'", "'LOAD'", "'('", "')'", "'\n'", "':'", "','", "'='", "'END'", 
+		"'VOID'", "'HEAR'", "'END HEAR'", "'BREAK'", "'RETURN'", "'SIGNAL'", "'IF'", 
+		"'END IF'", "'elseIfOpt'", "'elseOpt'", "'ELSE IF'", "'END ELSEIF'", "'ELSE'", 
+		"'END Else'", "'REPEAT UNTIL'", "'END REPEAT'", "'FOREVER'", "'END FOREVER'", 
 		"'['", "']'", "'OR'", "'AND'", "'XOR'", "'IS'", "'NOT'", "'LESS_THAN'", 
 		"'GREATER_THAN'", "'LESS_THAN_EQUAL'", "'GREATER_THAN_EQUAL'", "'+'", 
 		"'-'", "'*'", "'/'"
@@ -819,10 +819,10 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class VariableDclContext extends ParserRuleContext {
-		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public VariableInitializerContext variableInitializer() {
 			return getRuleContext(VariableInitializerContext.class,0);
 		}
+		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public ListInitializerContext listInitializer() {
 			return getRuleContext(ListInitializerContext.class,0);
 		}
@@ -850,16 +850,16 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(187);
-				match(Identifier);
-				setState(188);
 				variableInitializer();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(189);
+				setState(188);
 				match(Identifier);
+				setState(189);
+				match(T__14);
 				setState(190);
 				listInitializer();
 				}
@@ -881,6 +881,7 @@ public class ObsidiCodeParser extends Parser {
 		public AssignmentExpressionContext assignmentExpression() {
 			return getRuleContext(AssignmentExpressionContext.class,0);
 		}
+		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public VariableInitializerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -911,6 +912,8 @@ public class ObsidiCodeParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
+				setState(194);
+				match(Identifier);
 				}
 				break;
 			}
@@ -957,7 +960,7 @@ public class ObsidiCodeParser extends Parser {
 				setState(197);
 				litList(0);
 				setState(198);
-				match(T__14);
+				match(T__15);
 				setState(199);
 				match(Identifier);
 				}
@@ -1093,7 +1096,7 @@ public class ObsidiCodeParser extends Parser {
 			case T__5:
 			case T__6:
 			case T__7:
-			case T__15:
+			case T__16:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(215);
@@ -1102,7 +1105,7 @@ public class ObsidiCodeParser extends Parser {
 				methodBody();
 				}
 				break;
-			case T__16:
+			case T__17:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(218);
@@ -1164,11 +1167,11 @@ public class ObsidiCodeParser extends Parser {
 				methodDeclarator();
 				}
 				break;
-			case T__15:
+			case T__16:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(224);
-				match(T__15);
+				match(T__16);
 				setState(225);
 				methodDeclarator();
 				}
@@ -1264,7 +1267,7 @@ public class ObsidiCodeParser extends Parser {
 			setState(234);
 			block();
 			setState(235);
-			match(T__14);
+			match(T__15);
 			setState(236);
 			match(Identifier);
 			}
@@ -1309,7 +1312,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(238);
-			match(T__16);
+			match(T__17);
 			setState(239);
 			match(Identifier);
 			setState(240);
@@ -1323,7 +1326,7 @@ public class ObsidiCodeParser extends Parser {
 			setState(244);
 			block();
 			setState(245);
-			match(T__17);
+			match(T__18);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1370,12 +1373,12 @@ public class ObsidiCodeParser extends Parser {
 			case T__7:
 			case T__9:
 			case T__11:
-			case T__18:
 			case T__19:
 			case T__20:
 			case T__21:
-			case T__29:
-			case T__31:
+			case T__22:
+			case T__30:
+			case T__32:
 			case T__45:
 			case T__46:
 			case Identifier:
@@ -1388,13 +1391,13 @@ public class ObsidiCodeParser extends Parser {
 				blockStmtList(0);
 				}
 				break;
-			case T__14:
-			case T__17:
-			case T__22:
-			case T__26:
-			case T__28:
-			case T__30:
-			case T__32:
+			case T__15:
+			case T__18:
+			case T__23:
+			case T__27:
+			case T__29:
+			case T__31:
+			case T__33:
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -1547,9 +1550,9 @@ public class ObsidiCodeParser extends Parser {
 			case T__1:
 			case T__9:
 			case T__11:
-			case T__18:
 			case T__19:
 			case T__20:
+			case T__21:
 			case T__45:
 			case T__46:
 			case Identifier:
@@ -1562,15 +1565,15 @@ public class ObsidiCodeParser extends Parser {
 				stmtNoSub();
 				}
 				break;
-			case T__21:
+			case T__22:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(268);
 				ifStmt();
 				}
 				break;
-			case T__29:
-			case T__31:
+			case T__30:
+			case T__32:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(269);
@@ -1627,7 +1630,7 @@ public class ObsidiCodeParser extends Parser {
 				{
 				}
 				break;
-			case T__20:
+			case T__21:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(273);
@@ -1649,18 +1652,18 @@ public class ObsidiCodeParser extends Parser {
 				exprStmt();
 				}
 				break;
-			case T__18:
+			case T__19:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(275);
-				match(T__18);
+				match(T__19);
 				}
 				break;
-			case T__19:
+			case T__20:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(276);
-				match(T__19);
+				match(T__20);
 				setState(277);
 				expression();
 				}
@@ -1706,7 +1709,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(280);
-			match(T__20);
+			match(T__21);
 			setState(281);
 			match(Identifier);
 			setState(282);
@@ -1858,7 +1861,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(295);
-			match(T__21);
+			match(T__22);
 			setState(296);
 			match(T__9);
 			setState(297);
@@ -1870,11 +1873,11 @@ public class ObsidiCodeParser extends Parser {
 			setState(300);
 			block();
 			setState(301);
-			match(T__22);
-			setState(302);
 			match(T__23);
-			setState(303);
+			setState(302);
 			match(T__24);
+			setState(303);
+			match(T__25);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1944,7 +1947,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(306);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(307);
-					match(T__25);
+					match(T__26);
 					setState(308);
 					match(T__9);
 					setState(309);
@@ -1956,7 +1959,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(312);
 					block();
 					setState(313);
-					match(T__26);
+					match(T__27);
 					}
 					} 
 				}
@@ -2001,17 +2004,17 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(326);
 			switch (_input.LA(1)) {
-			case T__27:
+			case T__28:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(320);
-				match(T__27);
+				match(T__28);
 				setState(321);
 				match(T__11);
 				setState(322);
 				block();
 				setState(323);
-				match(T__28);
+				match(T__29);
 				}
 				break;
 			case EOF:
@@ -2061,14 +2064,14 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(330);
 			switch (_input.LA(1)) {
-			case T__29:
+			case T__30:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(328);
 				repeatStmt();
 				}
 				break;
-			case T__31:
+			case T__32:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(329);
@@ -2118,7 +2121,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(332);
-			match(T__29);
+			match(T__30);
 			setState(333);
 			match(T__9);
 			setState(334);
@@ -2130,7 +2133,7 @@ public class ObsidiCodeParser extends Parser {
 			setState(337);
 			block();
 			setState(338);
-			match(T__30);
+			match(T__31);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2169,13 +2172,13 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(340);
-			match(T__31);
+			match(T__32);
 			setState(341);
 			match(T__11);
 			setState(342);
 			block();
 			setState(343);
-			match(T__32);
+			match(T__33);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2624,7 +2627,7 @@ public class ObsidiCodeParser extends Parser {
 			setState(384);
 			leftHandSide();
 			setState(385);
-			match(T__33);
+			match(T__14);
 			setState(386);
 			expression();
 			}
@@ -3948,11 +3951,11 @@ public class ObsidiCodeParser extends Parser {
 		"\1\2\u00b3\u00b4\5\32\16\2\u00b4\u00ba\3\2\2\2\u00b5\u00b6\f\3\2\2\u00b6"+
 		"\u00b7\7\20\2\2\u00b7\u00b9\5\32\16\2\u00b8\u00b5\3\2\2\2\u00b9\u00bc"+
 		"\3\2\2\2\u00ba\u00b8\3\2\2\2\u00ba\u00bb\3\2\2\2\u00bb\31\3\2\2\2\u00bc"+
-		"\u00ba\3\2\2\2\u00bd\u00be\7\64\2\2\u00be\u00c2\5\34\17\2\u00bf\u00c0"+
-		"\7\64\2\2\u00c0\u00c2\5\36\20\2\u00c1\u00bd\3\2\2\2\u00c1\u00bf\3\2\2"+
-		"\2\u00c2\33\3\2\2\2\u00c3\u00c6\5R*\2\u00c4\u00c6\3\2\2\2\u00c5\u00c3"+
+		"\u00ba\3\2\2\2\u00bd\u00c2\5\34\17\2\u00be\u00bf\7\64\2\2\u00bf\u00c0"+
+		"\7\21\2\2\u00c0\u00c2\5\36\20\2\u00c1\u00bd\3\2\2\2\u00c1\u00be\3\2\2"+
+		"\2\u00c2\33\3\2\2\2\u00c3\u00c6\5R*\2\u00c4\u00c6\7\64\2\2\u00c5\u00c3"+
 		"\3\2\2\2\u00c5\u00c4\3\2\2\2\u00c6\35\3\2\2\2\u00c7\u00c8\5 \21\2\u00c8"+
-		"\u00c9\7\21\2\2\u00c9\u00ca\7\64\2\2\u00ca\u00cd\3\2\2\2\u00cb\u00cd\3"+
+		"\u00c9\7\22\2\2\u00c9\u00ca\7\64\2\2\u00ca\u00cd\3\2\2\2\u00cb\u00cd\3"+
 		"\2\2\2\u00cc\u00c7\3\2\2\2\u00cc\u00cb\3\2\2\2\u00cd\37\3\2\2\2\u00ce"+
 		"\u00cf\b\21\1\2\u00cf\u00d0\5t;\2\u00d0\u00d6\3\2\2\2\u00d1\u00d2\f\4"+
 		"\2\2\u00d2\u00d3\7\20\2\2\u00d3\u00d5\5t;\2\u00d4\u00d1\3\2\2\2\u00d5"+
@@ -3960,13 +3963,13 @@ public class ObsidiCodeParser extends Parser {
 		"\u00d8\u00d6\3\2\2\2\u00d9\u00da\5$\23\2\u00da\u00db\5(\25\2\u00db\u00de"+
 		"\3\2\2\2\u00dc\u00de\5*\26\2\u00dd\u00d9\3\2\2\2\u00dd\u00dc\3\2\2\2\u00de"+
 		"#\3\2\2\2\u00df\u00e0\5\b\5\2\u00e0\u00e1\5&\24\2\u00e1\u00e5\3\2\2\2"+
-		"\u00e2\u00e3\7\22\2\2\u00e3\u00e5\5&\24\2\u00e4\u00df\3\2\2\2\u00e4\u00e2"+
+		"\u00e2\u00e3\7\23\2\2\u00e3\u00e5\5&\24\2\u00e4\u00df\3\2\2\2\u00e4\u00e2"+
 		"\3\2\2\2\u00e5%\3\2\2\2\u00e6\u00e7\7\64\2\2\u00e7\u00e8\7\f\2\2\u00e8"+
 		"\u00e9\5J&\2\u00e9\u00ea\7\r\2\2\u00ea\u00eb\7\16\2\2\u00eb\'\3\2\2\2"+
-		"\u00ec\u00ed\5,\27\2\u00ed\u00ee\7\21\2\2\u00ee\u00ef\7\64\2\2\u00ef)"+
-		"\3\2\2\2\u00f0\u00f1\7\23\2\2\u00f1\u00f2\7\64\2\2\u00f2\u00f3\7\f\2\2"+
+		"\u00ec\u00ed\5,\27\2\u00ed\u00ee\7\22\2\2\u00ee\u00ef\7\64\2\2\u00ef)"+
+		"\3\2\2\2\u00f0\u00f1\7\24\2\2\u00f1\u00f2\7\64\2\2\u00f2\u00f3\7\f\2\2"+
 		"\u00f3\u00f4\5J&\2\u00f4\u00f5\7\r\2\2\u00f5\u00f6\7\16\2\2\u00f6\u00f7"+
-		"\5,\27\2\u00f7\u00f8\7\24\2\2\u00f8+\3\2\2\2\u00f9\u00fc\5.\30\2\u00fa"+
+		"\5,\27\2\u00f7\u00f8\7\25\2\2\u00f8+\3\2\2\2\u00f9\u00fc\5.\30\2\u00fa"+
 		"\u00fc\3\2\2\2\u00fb\u00f9\3\2\2\2\u00fb\u00fa\3\2\2\2\u00fc-\3\2\2\2"+
 		"\u00fd\u00fe\b\30\1\2\u00fe\u00ff\5\60\31\2\u00ff\u0100\7\16\2\2\u0100"+
 		"\u0107\3\2\2\2\u0101\u0102\f\4\2\2\u0102\u0103\5\60\31\2\u0103\u0104\7"+
@@ -3976,28 +3979,28 @@ public class ObsidiCodeParser extends Parser {
 		"\5\62\32\2\u010e\u0111\5:\36\2\u010f\u0111\5@!\2\u0110\u010a\3\2\2\2\u0110"+
 		"\u010d\3\2\2\2\u0110\u010e\3\2\2\2\u0110\u010f\3\2\2\2\u0111\61\3\2\2"+
 		"\2\u0112\u0119\3\2\2\2\u0113\u0119\5\64\33\2\u0114\u0119\5\66\34\2\u0115"+
-		"\u0119\7\25\2\2\u0116\u0117\7\26\2\2\u0117\u0119\5P)\2\u0118\u0112\3\2"+
+		"\u0119\7\26\2\2\u0116\u0117\7\27\2\2\u0117\u0119\5P)\2\u0118\u0112\3\2"+
 		"\2\2\u0118\u0113\3\2\2\2\u0118\u0114\3\2\2\2\u0118\u0115\3\2\2\2\u0118"+
-		"\u0116\3\2\2\2\u0119\63\3\2\2\2\u011a\u011b\7\27\2\2\u011b\u011c\7\64"+
+		"\u0116\3\2\2\2\u0119\63\3\2\2\2\u011a\u011b\7\30\2\2\u011b\u011c\7\64"+
 		"\2\2\u011c\u011d\7\f\2\2\u011d\u011e\5H%\2\u011e\u011f\7\r\2\2\u011f\65"+
 		"\3\2\2\2\u0120\u0123\5R*\2\u0121\u0123\58\35\2\u0122\u0120\3\2\2\2\u0122"+
 		"\u0121\3\2\2\2\u0123\67\3\2\2\2\u0124\u0125\5\6\4\2\u0125\u0126\7\f\2"+
 		"\2\u0126\u0127\5F$\2\u0127\u0128\7\r\2\2\u01289\3\2\2\2\u0129\u012a\7"+
-		"\30\2\2\u012a\u012b\7\f\2\2\u012b\u012c\5P)\2\u012c\u012d\7\r\2\2\u012d"+
-		"\u012e\7\16\2\2\u012e\u012f\5,\27\2\u012f\u0130\7\31\2\2\u0130\u0131\7"+
-		"\32\2\2\u0131\u0132\7\33\2\2\u0132;\3\2\2\2\u0133\u013f\b\37\1\2\u0134"+
-		"\u0135\f\4\2\2\u0135\u0136\7\34\2\2\u0136\u0137\7\f\2\2\u0137\u0138\5"+
+		"\31\2\2\u012a\u012b\7\f\2\2\u012b\u012c\5P)\2\u012c\u012d\7\r\2\2\u012d"+
+		"\u012e\7\16\2\2\u012e\u012f\5,\27\2\u012f\u0130\7\32\2\2\u0130\u0131\7"+
+		"\33\2\2\u0131\u0132\7\34\2\2\u0132;\3\2\2\2\u0133\u013f\b\37\1\2\u0134"+
+		"\u0135\f\4\2\2\u0135\u0136\7\35\2\2\u0136\u0137\7\f\2\2\u0137\u0138\5"+
 		"P)\2\u0138\u0139\7\r\2\2\u0139\u013a\7\16\2\2\u013a\u013b\5,\27\2\u013b"+
-		"\u013c\7\35\2\2\u013c\u013e\3\2\2\2\u013d\u0134\3\2\2\2\u013e\u0141\3"+
+		"\u013c\7\36\2\2\u013c\u013e\3\2\2\2\u013d\u0134\3\2\2\2\u013e\u0141\3"+
 		"\2\2\2\u013f\u013d\3\2\2\2\u013f\u0140\3\2\2\2\u0140=\3\2\2\2\u0141\u013f"+
-		"\3\2\2\2\u0142\u0143\7\36\2\2\u0143\u0144\7\16\2\2\u0144\u0145\5,\27\2"+
-		"\u0145\u0146\7\37\2\2\u0146\u0149\3\2\2\2\u0147\u0149\3\2\2\2\u0148\u0142"+
+		"\3\2\2\2\u0142\u0143\7\37\2\2\u0143\u0144\7\16\2\2\u0144\u0145\5,\27\2"+
+		"\u0145\u0146\7 \2\2\u0146\u0149\3\2\2\2\u0147\u0149\3\2\2\2\u0148\u0142"+
 		"\3\2\2\2\u0148\u0147\3\2\2\2\u0149?\3\2\2\2\u014a\u014d\5B\"\2\u014b\u014d"+
 		"\5D#\2\u014c\u014a\3\2\2\2\u014c\u014b\3\2\2\2\u014dA\3\2\2\2\u014e\u014f"+
-		"\7 \2\2\u014f\u0150\7\f\2\2\u0150\u0151\5P)\2\u0151\u0152\7\r\2\2\u0152"+
-		"\u0153\7\16\2\2\u0153\u0154\5,\27\2\u0154\u0155\7!\2\2\u0155C\3\2\2\2"+
-		"\u0156\u0157\7\"\2\2\u0157\u0158\7\16\2\2\u0158\u0159\5,\27\2\u0159\u015a"+
-		"\7#\2\2\u015aE\3\2\2\2\u015b\u015e\5H%\2\u015c\u015e\3\2\2\2\u015d\u015b"+
+		"\7!\2\2\u014f\u0150\7\f\2\2\u0150\u0151\5P)\2\u0151\u0152\7\r\2\2\u0152"+
+		"\u0153\7\16\2\2\u0153\u0154\5,\27\2\u0154\u0155\7\"\2\2\u0155C\3\2\2\2"+
+		"\u0156\u0157\7#\2\2\u0157\u0158\7\16\2\2\u0158\u0159\5,\27\2\u0159\u015a"+
+		"\7$\2\2\u015aE\3\2\2\2\u015b\u015e\5H%\2\u015c\u015e\3\2\2\2\u015d\u015b"+
 		"\3\2\2\2\u015d\u015c\3\2\2\2\u015eG\3\2\2\2\u015f\u0160\b%\1\2\u0160\u0161"+
 		"\5P)\2\u0161\u0167\3\2\2\2\u0162\u0163\f\4\2\2\u0163\u0164\7\20\2\2\u0164"+
 		"\u0166\5P)\2\u0165\u0162\3\2\2\2\u0166\u0169\3\2\2\2\u0167\u0165\3\2\2"+
@@ -4009,7 +4012,7 @@ public class ObsidiCodeParser extends Parser {
 		"M\3\2\2\2\u0178\u0176\3\2\2\2\u0179\u017a\5\b\5\2\u017a\u017b\7\64\2\2"+
 		"\u017bO\3\2\2\2\u017c\u017d\5R*\2\u017dQ\3\2\2\2\u017e\u0181\5Z.\2\u017f"+
 		"\u0181\5T+\2\u0180\u017e\3\2\2\2\u0180\u017f\3\2\2\2\u0181S\3\2\2\2\u0182"+
-		"\u0183\5V,\2\u0183\u0184\7$\2\2\u0184\u0185\5P)\2\u0185U\3\2\2\2\u0186"+
+		"\u0183\5V,\2\u0183\u0184\7\21\2\2\u0184\u0185\5P)\2\u0185U\3\2\2\2\u0186"+
 		"\u0187\5\6\4\2\u0187\u0188\5X-\2\u0188W\3\2\2\2\u0189\u018a\7%\2\2\u018a"+
 		"\u018b\5P)\2\u018b\u018c\7&\2\2\u018c\u018f\3\2\2\2\u018d\u018f\3\2\2"+
 		"\2\u018e\u0189\3\2\2\2\u018e\u018d\3\2\2\2\u018fY\3\2\2\2\u0190\u0191"+

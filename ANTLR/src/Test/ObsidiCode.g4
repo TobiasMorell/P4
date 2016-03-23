@@ -89,12 +89,12 @@ variableDclList
 	|	variableDclList ',' variableDcl
 	;
 variableDcl
-	:	Identifier variableInitializer
-	|	Identifier listInitializer
+	:	variableInitializer
+	|	Identifier '=' listInitializer
 	;
 variableInitializer
 	:	assignmentExpression
-	|	//lambda
+	|	Identifier
 	;
 listInitializer
 	:	litList 'END' Identifier
