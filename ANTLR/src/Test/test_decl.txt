@@ -1,0 +1,21 @@
+Test_robo:
+LOAD("Attack-bot")
+LOAD("Bow-bot")
+
+//This be le tests con many!
+/*Whattup maite!?*/
+
+NUM a = 5.2, b = 2
+STRING string
+BOOL bool
+COORD chest = (5,1,23)
+
+VOID Start()
+  NUM c = 10
+  //a = b + c <--- not allowed in this grammar, needs expression part!
+  SIGNAL guardian (a, b)
+END Start
+
+NUM TestNumMethod(NUM x, STRING s)
+  RETURN s + x
+END TestNumMethod
