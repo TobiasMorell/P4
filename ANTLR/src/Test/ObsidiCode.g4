@@ -159,14 +159,14 @@ methodInvocation
 	;
 
 ifStmt
-	:	'IF' '(' expression ')' '\n' block 'END IF' 'elseIfOpt' 'elseOpt'
+	:	'IF' '(' expression ')' '\n' block 'END IF' elseIfOpt elseOpt
 	;
 elseIfOpt
-	:	elseIfOpt 'ELSE IF' '(' expression ')' '\n' block 'END ELSEIF'
+	:	elseIfOpt '\n' 'ELSE IF' '(' expression ')' '\n' block 'END ELSEIF'
 	|	//lambda
 	;
 elseOpt
-	:	'ELSE' '\n' block 'END Else'
+	:	'\n' 'ELSE' '\n' block 'END ELSE'
 	|	//lambda
 	;
 
