@@ -1,4 +1,7 @@
-import ASTNodes.Node;
+import ASTNodes.Declarations.*;
+import ASTNodes.GeneralNodes.*;
+import ASTNodes.Operators.*;
+import ASTNodes.SyntaxNodes.*;
 
 //The generic type must be the super class of the returned node, in this case Node.
 public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{

@@ -7,6 +7,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/morell/workspace/ObsidiCode/antlr-4.5-complete.jar"/>
+	<classpathentry kind="lib" path="/home/morell/Documents/GitHub/P4/ObsidiCode/antlr-4.5-complete.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
