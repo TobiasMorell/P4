@@ -1,5 +1,8 @@
 Test_robo:
 LOAD("Attack-bot")
+LOAD("Bow-bot")
+
+BOOL works = true
 
 //This be le tests con many!
 /*Whattup maite!?*/
@@ -24,5 +27,5 @@ VOID AnotherTestMethod(BOOL atHome)
     ELSE IF (atHome)
       //Something to find chest mayby
     END ELSEIF
-  END FOREVERi
+  END FOREVER
 END AnotherTestMethod

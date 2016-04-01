@@ -37,7 +37,7 @@ prog
 	:	roboDcl loads roboBodyDcl;
 //Types and literals:
 literal
-	:	NumLit
+	:	NumLit 
 	|	'TRUE'
 	|	'FALSE'
 	|	CoordLit
@@ -63,7 +63,7 @@ referenceType
 	;
 
 loads
-	:	loads 'LOAD' '(' StringLit ')' '\n'
+	:	loads 'LOAD' '(' StringLit ')' '\n' 
 	|	//lambda
 	;
 
@@ -94,7 +94,7 @@ variableDcl
 	;
 variableInitializer
 	:	assignmentExpression
-	|	Identifier
+	|	Identifier 
 	;
 listInitializer
 	:	litList 'END' Identifier
@@ -260,4 +260,6 @@ unaryExpr
 primary
 	:	literal
 	|	'(' expression ')'
-	|	typeName listOpt;
+	|	typeName listOpt
+	|	methodInvocation
+;
