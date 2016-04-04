@@ -48,26 +48,6 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitType(ObsidiCodeParser.TypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#primitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrimitiveType(ObsidiCodeParser.PrimitiveTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#primitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrimitiveType(ObsidiCodeParser.PrimitiveTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#referenceType}.
-	 * @param ctx the parse tree
-	 */
-	void enterReferenceType(ObsidiCodeParser.ReferenceTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#referenceType}.
-	 * @param ctx the parse tree
-	 */
-	void exitReferenceType(ObsidiCodeParser.ReferenceTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
 	 */

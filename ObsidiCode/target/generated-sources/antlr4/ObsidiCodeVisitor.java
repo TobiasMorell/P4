@@ -35,18 +35,6 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitType(ObsidiCodeParser.TypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#primitiveType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrimitiveType(ObsidiCodeParser.PrimitiveTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#referenceType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReferenceType(ObsidiCodeParser.ReferenceTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

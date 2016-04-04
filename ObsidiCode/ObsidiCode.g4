@@ -32,6 +32,12 @@ COMMENT
 EOLCOMMENT
 	:	'//' .*? '\n' -> skip
 	; 
+	
+TYPE_KEY_NUM: 'NUM';
+TYPE_KEY_STRING: 'STRING';
+TYPE_KEY_COORD: 'COORD';
+TYPE_KEY_BOOL: 'BOOL';
+TYPE_KEY_VOID: 'VOID';
 
 prog
 	:	roboDcl loads roboBodyDcl;
@@ -49,17 +55,7 @@ typeName
 	;
 
 type
-	:	referenceType
-	|	primitiveType
-	;
-primitiveType
-	:	'NUM'
-	|	'BOOL'
-	;
-referenceType
-	:	'STRING'
-	|	'COORD'
-	|	'LIST'
+	:	type_key=('NUM' | 'BOOL'|'STRING'|'COORD'|'LIST')
 	;
 
 loads
@@ -94,7 +90,6 @@ variableDcl
 	;
 variableInitializer
 	:	assignmentExpression
-	|	Identifier 
 	;
 listInitializer
 	:	litList 'END' Identifier
@@ -111,8 +106,7 @@ methodDcl
 	|	hearDcl
 	;
 methodHeader
-	:	type methodDeclarator
-	|	'VOID' methodDeclarator
+	:	('VOID'|t=type) methodDeclarator
 	;
 methodDeclarator
 	:	Identifier '(' formalParams ')' '\n'
@@ -199,7 +193,7 @@ paramsList
 	|	param
 	;
 param
-	:	type Identifier
+	:	t=type id=Identifier
 	;
 
 //Expression part

@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Token;
+
 import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
@@ -8,8 +13,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitProg(ObsidiCodeParser.ProgContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitProg(ctx);
+		ProgNode pn = (ProgNode) visit(ctx.roboDcl());
+		pn.AddNode(visit(ctx.loads()));
+		
+		return pn;
 	}
 
 	@Override
@@ -44,80 +51,193 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitLoads(ObsidiCodeParser.LoadsContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitLoads(ctx);
+		LoadNode ln;
+		if(ctx.getChild(1) != null)
+			ln = (LoadNode) visit(ctx.getChild(0));
+		else
+			ln = new LoadNode();
+		
+		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.getChild(3).getText()));
+		return ln;
 	}
 
 	@Override
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitRoboDcl(ctx);
+		String robotName = ctx.getChild(0).getText();
+		System.out.println("The name of the program is: " + robotName); //<------- for TESTING 
+		
+		return new ProgNode(new ArrayList<Node>(), robotName);
 	}
 
 	@Override
 	public Node visitRoboBodyDcl(ObsidiCodeParser.RoboBodyDclContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitRoboBodyDcl(ctx);
+		BlockNode bn;
+		
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.RoboBodyDclContext){
+			//There are still more global-scope declarations to be processed
+			bn = (BlockNode) visit(ctx.getChild(0));
+		}
+		else
+		{
+			//The last node is being processed, create new list
+			bn = new BlockNode(new ArrayList<Node>());
+		}
+		
+		//Add both nodes of the given context, if they're not empty statements
+		Node n = visit(ctx.getChild(0));
+		if(n != null)
+			bn.AddNode(n);
+		
+		n = visit(ctx.getChild(1));
+		if(n != null)
+			bn.AddNode(n);
+		
+		return bn;
 	}
 
 	@Override
 	public Node visitMemberDcl(ObsidiCodeParser.MemberDclContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitMemberDcl(ctx);
+		//Find out if it's an empty statement
+		if(ctx.getChild(0).getText().equals("\n"))
+			return null;
+		
+		//Not an empty statement - parse it!
+		return visit(ctx.getChild(0));
 	}
 
 	@Override
 	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {
-		// TODO Auto-generated method stub
+		String type = ctx.getChild(0).getChild(0).getText();
+		
+		//Find the identifier and value of given declaration
+		BlockNode bn = (BlockNode) visit(ctx.getChild(1));
+		
+		/*switch(type) {
+		case "NUM":
+			
+			break;
+		case "STRING":
+			
+			break;
+		case "COORD":
+			
+			break;
+		case "BOOL":
+			
+			break;
+		default:
+			ctx.addErrorNode((Token) ctx.getChild(0).getChild(0));
+			break;
+		}*/
+		
 		return super.visitFieldDcl(ctx);
 	}
 
 	@Override
 	public Node visitVariableDclList(ObsidiCodeParser.VariableDclListContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitVariableDclList(ctx);
+		BlockNode declarations;
+		// Recurse through all the declarations
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableDclContext)
+		{
+			//Only one declaration left
+			declarations = new BlockNode();
+			declarations.AddNode(visit(ctx.getChild(0)));
+		}
+		else {
+			//still more declarations to process
+			declarations = (BlockNode) visit(ctx.getChild(0));
+			declarations.AddNode(visit(ctx.getChild(1)));
+		}
+			
+		return declarations;
 	}
 
 	@Override
 	public Node visitVariableDcl(ObsidiCodeParser.VariableDclContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitVariableDcl(ctx);
+		return visit(ctx.getChild(0));
 	}
 
 	@Override
 	public Node visitVariableInitializer(ObsidiCodeParser.VariableInitializerContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitVariableInitializer(ctx);
+		return visit(ctx.getChild(0));
 	}
 
 	@Override
 	public Node visitListInitializer(ObsidiCodeParser.ListInitializerContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitListInitializer(ctx);
+		return visit(ctx.getChild(0));
 	}
 
 	@Override
 	public Node visitLitList(ObsidiCodeParser.LitListContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitLitList(ctx);
+		BlockNode bn;
+		
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.PrimaryContext)
+		{
+			//Last variable of the list
+			bn = new BlockNode();
+			bn.AddNode(visit(ctx.getChild(0)));
+		}
+		else
+		{
+			bn = (BlockNode) visit(ctx.getChild(0));
+			//Omit the comma
+			bn.AddNode(visit(ctx.getChild(2)));
+		}
+		
+		return bn;
 	}
 
 	@Override
 	public Node visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitMethodDcl(ctx);
+		return new MethodDcl(visit(ctx.getChild(0)), visit(ctx.getChild(1)));
 	}
 
 	@Override
 	public Node visitMethodHeader(ObsidiCodeParser.MethodHeaderContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitMethodHeader(ctx);
+		Node declIdentifier;
+		BlockNode bn = (BlockNode) visit(ctx.getChild(1)); //Stores identifier and params
+		Node id = bn.GetLeftChild();
+		Node params = new BlockNode(bn.GetStatements());
+		
+		if(ctx.getChild(0).getText().equals("VOID"))
+			declIdentifier = new DeclarationNode(id, params);
+		else {
+			switch(ctx.t.type_key.getType()){
+			case ObsidiCodeParser.TYPE_KEY_NUM:
+				declIdentifier = new NumDcl(id, params);
+				break;
+			case ObsidiCodeParser.TYPE_KEY_STRING:
+				declIdentifier = new StringDcl(id, params);
+				break;
+			case ObsidiCodeParser.TYPE_KEY_COORD:
+				declIdentifier = new CoordDcl(id, params);
+				break;
+			case ObsidiCodeParser.TYPE_KEY_BOOL:
+				declIdentifier = new BoolDcl(id, params);
+				break;
+			default :
+				declIdentifier = new IDNode("Couldn't parse the node!"); //Really bad error handling, should be fixed
+			}
+		}
+			
+		return declIdentifier;
 	}
 
 	@Override
 	public Node visitMethodDeclarator(ObsidiCodeParser.MethodDeclaratorContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitMethodDeclarator(ctx);
+		//Instantiate block node with method id as left child
+		BlockNode bn = new BlockNode(ctx.getChild(0).getText(), new ArrayList<Node>());
+		
+		//Find the params
+		if(ctx.getChild(2) instanceof ObsidiCodeParser.FormalParamsContext)
+		{
+			//Get all method params in a new BlockNode and add them to the bn variable
+			BlockNode tempParams = (BlockNode) visit(ctx.getChild(2));
+			for (Node n : tempParams.GetStatements())
+				bn.AddNode(n);
+		}
+		
+		return bn;
 	}
 
 	@Override
@@ -224,20 +344,47 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitFormalParams(ObsidiCodeParser.FormalParamsContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFormalParams(ctx);
+		return visit(ctx.getChild(0));
 	}
 
 	@Override
 	public Node visitParamsList(ObsidiCodeParser.ParamsListContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitParamsList(ctx);
+		BlockNode bn;
+		
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.ParamContext)
+		{
+			//Only one param, instantiate list and add parameter
+			bn = new BlockNode();
+			bn.AddNode(visit(ctx.getChild(0)));
+		}
+		else
+		{
+			//Recurse to find all params and add the current
+			bn = (BlockNode) visit(ctx.getChild(0));
+			bn.AddNode(visit(ctx.getChild(1)));
+		}
+		
+		return bn;
 	}
 
 	@Override
 	public Node visitParam(ObsidiCodeParser.ParamContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitParam(ctx);
+		Node decl = new DeclarationNode(null, null);
+		switch(ctx.t.type_key.getType()){
+		case ObsidiCodeParser.TYPE_KEY_NUM:
+			decl = new NumDcl(ctx.id.getText(), null);
+			break;
+		case ObsidiCodeParser.TYPE_KEY_COORD:
+			decl = new CoordDcl(ctx.id.getText(), null);
+			break;
+		case ObsidiCodeParser.TYPE_KEY_BOOL:
+			decl = new BoolDcl(ctx.id.getText(), null);
+			break;
+		case ObsidiCodeParser.TYPE_KEY_STRING:
+			decl = new StringDcl(ctx.id.getText(), null);
+			break;
+		}
+		return decl;
 	}
 
 	@Override
