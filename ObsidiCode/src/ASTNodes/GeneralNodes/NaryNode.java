@@ -1,7 +1,7 @@
 package ASTNodes.GeneralNodes;
 
-import ASTNodes.SyntaxNodes.*;
 import java.util.ArrayList;
+import ASTNodes.GeneralNodes.Node;
 
 /**
  * Created by Nete on 08-03-2016.

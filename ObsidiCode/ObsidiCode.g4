@@ -50,8 +50,8 @@ literal
 	|	StringLit
 	;
 typeName
-	:	Identifier
-	|	typeName '.' Identifier
+	:	id=Identifier
+	|	typeName '.' id=Identifier
 	;
 
 type
@@ -79,43 +79,43 @@ memberDcl
 	;
 
 fieldDcl
-	:	type variableDclList '\n';
+	:	t=type variableDclList '\n';
 variableDclList
-	:	variableDcl
-	|	variableDclList ',' variableDcl
+	:	single=variableDcl
+	|	list=variableDclList ',' single=variableDcl
 	;
 variableDcl
-	:	variableInitializer
-	|	Identifier '=' listInitializer
+	:	var_init=variableInitializer
+	|	id=Identifier '=' list_init=listInitializer
 	;
-variableInitializer
-	:	assignmentExpression
+variableInitializer 
+	:	expr=assignmentExpression
 	;
 listInitializer
-	:	litList 'END' Identifier
+	:	list=litList 'END' Identifier
 	|	//lambda
 	;
 litList
-	:	litList ',' primary
-	|	primary
+	:	list=litList ',' single=primary
+	|	single=primary
 	;
 
 //method stuff
 methodDcl
-	:	methodHeader methodBody
+	:	header=methodHeader body=methodBody
 	|	hearDcl
 	;
 methodHeader
-	:	('VOID'|t=type) methodDeclarator
+	:	('VOID'|t=type) declarator=methodDeclarator
 	;
 methodDeclarator
-	:	Identifier '(' formalParams ')' '\n'
+	:	id=Identifier '(' params=formalParams ')' '\n'
 	;
 methodBody
-	:	block 'END' Identifier
+	:	body=block 'END' ?Identifier
 	;
 hearDcl
-	:	'HEAR' Identifier '(' formalParams ')' '\n' block 'END HEAR'
+	:	'HEAR' id=Identifier '(' formalParams ')' '\n' block 'END HEAR'
 	;
 
 //Statements
@@ -185,12 +185,12 @@ argsList
 	|	expression
 	;
 formalParams
-	:	paramsList
+	:	list=paramsList
 	|	//lambda
 	;
 paramsList
-	:	paramsList ',' param
-	|	param
+	:	list=paramsList ',' p=param		
+	|	p=param						
 	;
 param
 	:	t=type id=Identifier

@@ -1,7 +1,5 @@
 package ASTNodes.GeneralNodes;
 
-import Visitors.Visitor;
-
 /**
  * Created by Nete on 08-03-2016.
  */
