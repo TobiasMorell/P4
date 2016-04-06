@@ -226,6 +226,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class TypeNameContext extends ParserRuleContext {
+		public TypeNameContext parent;
 		public Token id;
 		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public TypeNameContext typeName() {
@@ -280,6 +281,8 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new TypeNameContext(_parentctx, _parentState);
+					_localctx.parent = _prevctx;
+					_localctx.parent = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_typeName);
 					setState(121);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
@@ -357,6 +360,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class LoadsContext extends ParserRuleContext {
+		public LoadsContext recursion;
+		public Token load_id;
 		public LoadsContext loads() {
 			return getRuleContext(LoadsContext.class,0);
 		}
@@ -408,6 +413,8 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new LoadsContext(_parentctx, _parentState);
+					_localctx.recursion = _prevctx;
+					_localctx.recursion = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_loads);
 					setState(132);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
@@ -416,7 +423,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(134);
 					match(T__5);
 					setState(135);
-					match(StringLit);
+					((LoadsContext)_localctx).load_id = match(StringLit);
 					setState(136);
 					match(T__6);
 					setState(137);
@@ -442,6 +449,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class RoboDclContext extends ParserRuleContext {
+		public Token id;
 		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public RoboDclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -469,7 +477,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(143);
-			match(Identifier);
+			((RoboDclContext)_localctx).id = match(Identifier);
 			setState(144);
 			match(T__8);
 			setState(145);
@@ -488,6 +496,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class RoboBodyDclContext extends ParserRuleContext {
+		public RoboBodyDclContext recursion;
+		public MemberDclContext dcl;
 		public MemberDclContext memberDcl() {
 			return getRuleContext(MemberDclContext.class,0);
 		}
@@ -530,7 +540,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(148);
-			memberDcl();
+			((RoboBodyDclContext)_localctx).dcl = memberDcl();
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(154);
@@ -543,11 +553,13 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new RoboBodyDclContext(_parentctx, _parentState);
+					_localctx.recursion = _prevctx;
+					_localctx.recursion = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_roboBodyDcl);
 					setState(150);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(151);
-					memberDcl();
+					((RoboBodyDclContext)_localctx).dcl = memberDcl();
 					}
 					} 
 				}
@@ -569,6 +581,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MemberDclContext extends ParserRuleContext {
+		public FieldDclContext dcl;
 		public FieldDclContext fieldDcl() {
 			return getRuleContext(FieldDclContext.class,0);
 		}
@@ -604,14 +617,14 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(157);
-				fieldDcl();
+				((MemberDclContext)_localctx).dcl = fieldDcl();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(158);
-				methodDcl();
+				((MemberDclContext)_localctx).dcl = methodDcl();
 				}
 				break;
 			case 3:
@@ -636,11 +649,12 @@ public class ObsidiCodeParser extends Parser {
 
 	public static class FieldDclContext extends ParserRuleContext {
 		public TypeContext t;
-		public VariableDclListContext variableDclList() {
-			return getRuleContext(VariableDclListContext.class,0);
-		}
+		public VariableDclListContext dcl_list;
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
+		}
+		public VariableDclListContext variableDclList() {
+			return getRuleContext(VariableDclListContext.class,0);
 		}
 		public FieldDclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -670,7 +684,7 @@ public class ObsidiCodeParser extends Parser {
 			setState(162);
 			((FieldDclContext)_localctx).t = type();
 			setState(163);
-			variableDclList(0);
+			((FieldDclContext)_localctx).dcl_list = variableDclList(0);
 			setState(164);
 			match(T__7);
 			}

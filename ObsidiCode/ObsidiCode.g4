@@ -51,7 +51,7 @@ literal
 	;
 typeName
 	:	id=Identifier
-	|	typeName '.' id=Identifier
+	|	parent=typeName '.' id=Identifier
 	;
 
 type
@@ -59,27 +59,27 @@ type
 	;
 
 loads
-	:	loads 'LOAD' '(' StringLit ')' '\n' 
+	:	recursion=loads 'LOAD' '(' load_id=StringLit ')' '\n' 
 	|	//lambda
 	;
 
 //Declarations
 roboDcl
-	:	Identifier':''\n'
+	:	id=Identifier':''\n'
 	;
 roboBodyDcl
-	:	roboBodyDcl memberDcl
-	|	memberDcl	
+	:	recursion=roboBodyDcl dcl=memberDcl
+	|	dcl=memberDcl	
 	;
 
 memberDcl
-	:	fieldDcl
-	|	methodDcl
+	:	dcl=fieldDcl
+	|	dcl=methodDcl
 	|	'\n'
 	;
 
 fieldDcl
-	:	t=type variableDclList '\n';
+	:	t=type dcl_list=variableDclList '\n';
 variableDclList
 	:	single=variableDcl
 	|	list=variableDclList ',' single=variableDcl

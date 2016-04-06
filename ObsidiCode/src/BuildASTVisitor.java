@@ -32,7 +32,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.TypeNameContext)
 		{
-			visit(ctx.getChild(0));
+			visit(ctx.parent);
 		}
 		else {
 			ref = new ReferenceNode( ctx.id.getText() );
@@ -51,17 +51,17 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitLoads(ObsidiCodeParser.LoadsContext ctx) {
 		LoadNode ln;
 		if(ctx.getChild(1) != null)
-			ln = (LoadNode) visit(ctx.getChild(0));
+			ln = (LoadNode) visit(ctx.recursion);
 		else
 			ln = new LoadNode();
 		
-		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.getChild(3).getText()));
+		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.load_id.getText()));
 		return ln;
 	}
 
 	@Override
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
-		String robotName = ctx.getChild(0).getText();
+		String robotName = ctx.id.getText();
 		System.out.println("The name of the program is: " + robotName); //<------- for TESTING 
 		
 		return new ProgNode(new ArrayList<Node>(), robotName);
@@ -73,7 +73,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.RoboBodyDclContext){
 			//There are still more global-scope declarations to be processed
-			bn = (BlockNode) visit(ctx.getChild(0));
+			bn = (BlockNode) visit(ctx.recursion);
 		}
 		else
 		{
@@ -82,11 +82,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		}
 		
 		//Add both nodes of the given context, if they're not empty statements
-		Node n = visit(ctx.getChild(0));
-		if(n != null)
-			bn.AddNode(n);
-		
-		n = visit(ctx.getChild(1));
+		Node n = visit(ctx.dcl);
 		if(n != null)
 			bn.AddNode(n);
 		
@@ -100,13 +96,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			return null;
 		
 		//Not an empty statement - parse it!
-		return visit(ctx.getChild(0));
+		return visit(ctx.dcl);
 	}
 
 	@Override
 	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {		
 		//Find the identifier and value of given declaration
-		BlockNode bn = (BlockNode) visit(ctx.getChild(1));
+		BlockNode bn = (BlockNode) visit(ctx.dcl_list);
 		
 		//This switch could be implemented a lot better with generics, give it a go!
 		switch(ctx.t.type_key.getType()) {
