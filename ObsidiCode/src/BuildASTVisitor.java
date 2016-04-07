@@ -1,13 +1,11 @@
 import java.util.ArrayList;
 
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 
 import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
-import ObsidiCodeParser.VariableInitializerContext;
 
 //The generic type must be the super class of the returned node, in this case Node.
 public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
@@ -191,6 +189,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			return visit(ctx.var_init);
 		else {
 			//Still needs code to initialize lists!!!
+			return null; //Actually some list!
 		}
 	}
 
