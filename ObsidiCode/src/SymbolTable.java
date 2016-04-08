@@ -24,7 +24,7 @@ public class SymbolTable {
         }else if(node instanceof ReferenceNode){
             //Symbol = Symboltable.retrieveSymbol(node.name)
             //if(Symbol == null) error
-            elseerror
+            //elseerror
         }
     }
 
