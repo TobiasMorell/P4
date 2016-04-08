@@ -7,4 +7,5 @@ public class IDNode extends LeafNode{
     public IDNode(String identifier){
         this._id = identifier;
     }
+    public String GetID(){return _id;}
 }

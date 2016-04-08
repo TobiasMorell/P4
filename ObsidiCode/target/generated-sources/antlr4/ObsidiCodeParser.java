@@ -1,4 +1,4 @@
-// Generated from ObsidiCode.g4 by ANTLR 4.5
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ObsidiCodeParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -624,7 +624,7 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(158);
-				((MemberDclContext)_localctx).dcl = methodDcl();
+				//((MemberDclContext)_localctx).dcl = methodDcl();
 				}
 				break;
 			case 3:

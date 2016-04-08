@@ -9,5 +9,10 @@ import ASTNodes.GeneralNodes.Node;
 public class DclNode extends BinaryNode{
     public DclNode(Type type, IDNode id, Node rigtHandSide){
         super(id, rigtHandSide);
+        t = type;
+
+    }
+    public Type GetType(){
+        return t;
     }
 }

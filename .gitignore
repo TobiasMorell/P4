@@ -1,6 +1,10 @@
 *.class
 .metadata/
 .recommenders/
+.idea
+.classpath
+.project
+.iml
 ObsidiCode/build/
 
 # Mobile Tools for Java (J2ME)
