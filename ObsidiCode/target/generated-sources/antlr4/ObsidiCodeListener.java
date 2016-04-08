@@ -37,15 +37,15 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitTypeName(ObsidiCodeParser.TypeNameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#type}.
+	 * Enter a parse tree produced by {@link ObsidiCodeParser#typePrefix}.
 	 * @param ctx the parse tree
 	 */
-	void enterType(ObsidiCodeParser.TypeContext ctx);
+	void enterTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#type}.
+	 * Exit a parse tree produced by {@link ObsidiCodeParser#typePrefix}.
 	 * @param ctx the parse tree
 	 */
-	void exitType(ObsidiCodeParser.TypeContext ctx);
+	void exitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
@@ -217,25 +217,77 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#statement}.
+	 * Enter a parse tree produced by the {@code stmtDeclaration}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(ObsidiCodeParser.StatementContext ctx);
+	void enterStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#statement}.
+	 * Exit a parse tree produced by the {@code stmtDeclaration}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(ObsidiCodeParser.StatementContext ctx);
+	void exitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#stmtNoSub}.
+	 * Enter a parse tree produced by the {@code stmtSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStmtNoSub(ObsidiCodeParser.StmtNoSubContext ctx);
+	void enterStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#stmtNoSub}.
+	 * Exit a parse tree produced by the {@code stmtSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStmtNoSub(ObsidiCodeParser.StmtNoSubContext ctx);
+	void exitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code noSubLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void enterNoSubLambda(ObsidiCodeParser.NoSubLambdaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code noSubLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void exitNoSubLambda(ObsidiCodeParser.NoSubLambdaContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code noSubSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void enterNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code noSubSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void exitNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code noSubBrk}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void enterNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code noSubBrk}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void exitNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code noSubRet}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void enterNoSubRet(ObsidiCodeParser.NoSubRetContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code noSubRet}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 */
+	void exitNoSubRet(ObsidiCodeParser.NoSubRetContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#signalStmt}.
 	 * @param ctx the parse tree
@@ -277,25 +329,53 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitIfStmt(ObsidiCodeParser.IfStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#elseIfOpt}.
+	 * Enter a parse tree produced by the {@code elseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 */
-	void enterElseIfOpt(ObsidiCodeParser.ElseIfOptContext ctx);
+	void enterElseIf(ObsidiCodeParser.ElseIfContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#elseIfOpt}.
+	 * Exit a parse tree produced by the {@code elseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 */
-	void exitElseIfOpt(ObsidiCodeParser.ElseIfOptContext ctx);
+	void exitElseIf(ObsidiCodeParser.ElseIfContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#elseOpt}.
+	 * Enter a parse tree produced by the {@code noElseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 */
-	void enterElseOpt(ObsidiCodeParser.ElseOptContext ctx);
+	void enterNoElseIf(ObsidiCodeParser.NoElseIfContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#elseOpt}.
+	 * Exit a parse tree produced by the {@code noElseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 */
-	void exitElseOpt(ObsidiCodeParser.ElseOptContext ctx);
+	void exitNoElseIf(ObsidiCodeParser.NoElseIfContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code else}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 */
+	void enterElse(ObsidiCodeParser.ElseContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code else}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 */
+	void exitElse(ObsidiCodeParser.ElseContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code noElse}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 */
+	void enterNoElse(ObsidiCodeParser.NoElseContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code noElse}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 */
+	void exitNoElse(ObsidiCodeParser.NoElseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#loopStmt}.
 	 * @param ctx the parse tree
@@ -557,13 +637,51 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpr(ObsidiCodeParser.UnaryExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#primary}.
+	 * Enter a parse tree produced by the {@code primaryLiteral}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrimary(ObsidiCodeParser.PrimaryContext ctx);
+	void enterPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#primary}.
+	 * Exit a parse tree produced by the {@code primaryLiteral}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrimary(ObsidiCodeParser.PrimaryContext ctx);
+	void exitPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parenExpr}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenExpr(ObsidiCodeParser.ParenExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parenExpr}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenExpr(ObsidiCodeParser.ParenExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code primaryIdRef}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primaryIdRef}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code primaryMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primaryMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx);
 }

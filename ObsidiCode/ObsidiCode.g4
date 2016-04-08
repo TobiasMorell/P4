@@ -32,12 +32,6 @@ COMMENT
 EOLCOMMENT
 	:	'//' .*? '\n' -> skip
 	; 
-	
-TYPE_KEY_NUM: 'NUM';
-TYPE_KEY_STRING: 'STRING';
-TYPE_KEY_COORD: 'COORD';
-TYPE_KEY_BOOL: 'BOOL';
-TYPE_KEY_VOID: 'VOID';
 
 prog
 	:	roboDcl loads roboBodyDcl;
@@ -54,8 +48,8 @@ typeName
 	|	parent=typeName '.' id=Identifier
 	;
 
-type
-	:	type_key=('NUM' | 'BOOL'|'STRING'|'COORD'|'LIST')
+typePrefix
+	:	type=('NUM' | 'BOOL' | 'STRING' | 'COORD' | 'LIST')
 	;
 
 loads
@@ -74,12 +68,12 @@ roboBodyDcl
 
 memberDcl
 	:	dcl=fieldDcl
-	|	dcl=methodDcl
+	|	met_dcl=methodDcl
 	|	'\n'
 	;
 
 fieldDcl
-	:	t=type dcl_list=variableDclList '\n';
+	:	t=typePrefix dcl_list=variableDclList '\n';
 variableDclList
 	:	single=variableDcl
 	|	list=variableDclList ',' single=variableDcl
@@ -106,7 +100,7 @@ methodDcl
 	|	hearDcl
 	;
 methodHeader
-	:	('VOID'|t=type) declarator=methodDeclarator
+	:	(t=typePrefix | 'VOID') declarator=methodDeclarator
 	;
 methodDeclarator
 	:	id=Identifier '(' params=formalParams ')' '\n'
@@ -115,69 +109,69 @@ methodBody
 	:	body=block 'END' ?Identifier
 	;
 hearDcl
-	:	'HEAR' id=Identifier '(' formalParams ')' '\n' block 'END HEAR'
+	:	'HEAR' id=Identifier '(' params=formalParams ')' '\n' body=block 'END HEAR'
 	;
 
 //Statements
 block
-	:	blockStmtList
+	:	list=blockStmtList
 	|	//lambda
 	;
 blockStmtList
-	:	blockStmtList statement '\n'
-	|	statement '\n'
+	:	list=blockStmtList stmt=statement '\n'
+	|	stmt=statement '\n'
 	;
 statement
-	:	type variableDclList
-	|	stmtNoSub
-	|	ifStmt
-	|	loopStmt
+	:	t=typePrefix dcl=variableDclList		#stmtDeclaration
+	|	skipNoSub=stmtNoSub				#stmtSkip
+	|	skipIf=ifStmt					#stmtSkip
+	|	skipLoop=loopStmt				#stmtSkip
 	;
 stmtNoSub
-	:	//lambda
-	|	signalStmt
-	|	exprStmt
-	|	'BREAK'
-	|	'RETURN' expression
+	:	/*lambda*/						#noSubLambda
+	|	skipSignal=signalStmt			#noSubSkip
+	|	skipExpr=exprStmt					#noSubSkip
+	|	'BREAK'							#noSubBrk
+	|	'RETURN' expr=expression		#noSubRet
 	;
 signalStmt
-	:	'SIGNAL' Identifier '(' argsList ')'
+	:	'SIGNAL' id=Identifier '(' arguments=argsList ')'
 	;
 exprStmt
-	:	assignmentExpression
-	|	methodInvocation
+	:	assExpr=assignmentExpression
+	|	meth_invoc=methodInvocation
 	;
 
 methodInvocation
-	:	typeName '(' formalArgs ')'
+	:	id=typeName '(' args=formalArgs ')'
 	;
 
 ifStmt
-	:	'IF' '(' expression ')' '\n' block 'END IF' elseIfOpt elseOpt
+	:	'IF' '(' expr=expression ')' '\n' body=block 'END IF' elseIfStmt=elseIfOpt elseStmt=elseOpt
 	;
 elseIfOpt
-	:	elseIfOpt '\n' 'ELSE IF' '(' expression ')' '\n' block 'END ELSEIF'
-	|	//lambda
+	:	recursion=elseIfOpt '\n' 'ELSE IF' '(' expr=expression ')' '\n' body=block 'END ELSEIF'	#elseIf
+	|	/*lambda*/																				#noElseIf
 	;
 elseOpt
-	:	'\n' 'ELSE' '\n' block 'END ELSE'
-	|	//lambda
+	:	'\n' 'ELSE' '\n' body=block 'END ELSE'													#else
+	|	/*lambda*/																				#noElse
 	;
 
 loopStmt
-	:	repeatStmt
-	|	foreverStmt
+	:	rep=repeatStmt
+	|	ever=foreverStmt
 	;
 repeatStmt
-	:	'REPEAT UNTIL' '(' expression ')' '\n' block 'END REPEAT'
+	:	'REPEAT UNTIL' '(' expr=expression ')' '\n' body=block 'END REPEAT'
 	;
 foreverStmt
-	:	'FOREVER' '\n' block 'END FOREVER'
+	:	'FOREVER' '\n' body=block 'END FOREVER'
 	;
 
 //Args and params
 formalArgs
-	:	argsList
+	:	list=argsList
 	|	//lambda
 	;
 argsList
@@ -193,7 +187,7 @@ paramsList
 	|	p=param						
 	;
 param
-	:	t=type id=Identifier
+	:	t=typePrefix id=Identifier
 	;
 
 //Expression part
@@ -201,61 +195,82 @@ expression
 	:	assignmentExpression;
 
 assignmentExpression
-	:	conditionalExpression
-	|	assignment;
+	:	skipCond=conditionalExpression
+	|	skipAss=assignment
+	;
 assignment
-	:	leftHandSide '=' expression;
+	:	lhs=leftHandSide '=' expr=expression;
 leftHandSide
-	:	typeName listOpt;
+	:	tn=typeName ext=listOpt;
 listOpt
-	:	'[' expression ']'
-	|	//lambda
+	:	'[' expr=expression ']'		
+	|	/*lambda*/
 	;
 
 conditionalExpression
-	:	conditionOrExpression;
+	:	or=conditionOrExpression;
 conditionOrExpression
-	:	conditionAndExpression
-	|	conditionOrExpression 'OR' conditionAndExpression;
+	:	and=conditionAndExpression
+	|	or=conditionOrExpression 'OR' and=conditionAndExpression;
 conditionAndExpression
-	:	xOrExpression
-	|	conditionAndExpression 'AND' xOrExpression;
+	:	xor=xOrExpression
+	|	and=conditionAndExpression 'AND' xor=xOrExpression;
 xOrExpression
-	:	equalityExpression
-	|	xOrExpression 'XOR' equalityExpression;
+	:	eq=equalityExpression
+	|	xor=xOrExpression 'XOR' eq=equalityExpression;
 equalityExpression
-	:	relationalExpression
-	|	equalityExpression equalityExpressionEnd;
+	:	rel=relationalExpression
+	|	eq=equalityExpression eq_end=equalityExpressionEnd;
 equalityExpressionEnd
-	:	'IS' relationalExpression
-	|	'NOT' relationalExpression;
+	:	eq_mod='IS' rel=relationalExpression
+	|	eq_mod='NOT' rel=relationalExpression
+	;
 relationalExpression
-	:	additiveExpression
-	|	relationalExpression relationalExpressionEnd;
+	:	add=additiveExpression
+	|	rel=relationalExpression rel_end=relationalExpressionEnd;
 relationalExpressionEnd
-	:	'LESS_THAN' additiveExpression
-	|	'GREATER_THAN' additiveExpression
-	|	'LESS_THAN_EQUAL' additiveExpression
-	|	'GREATER_THAN_EQUAL' additiveExpression;
+	:	relational_key='LESS_THAN' add=additiveExpression
+	|	relational_key='GREATER_THAN' add=additiveExpression
+	|	relational_key='LESS_THAN_EQUAL' add=additiveExpression
+	|	relational_key='GREATER_THAN_EQUAL' add=additiveExpression;
 additiveExpression
-	:	multiExpr
-	|	additiveExpression additiveExpressionEnd;
+	:	mult=multiExpr
+	|	add=additiveExpression add_end=additiveExpressionEnd;
 additiveExpressionEnd
-	:	'+' multiExpr
-	|	'-' multiExpr;
+	:	op='+' mult=multiExpr
+	|	op='-' mult=multiExpr;
 multiExpr
-	:	unaryExpr
-	|	multiExpr multiExprEnd;
+	:	un=unaryExpr
+	|	mult=multiExpr mult_end=multiExprEnd;
 multiExprEnd
-	:	'*' unaryExpr
-	|	'/' unaryExpr;
+	:	op='*' un=unaryExpr
+	|	op='/' un=unaryExpr;
 unaryExpr
-	:	'+' unaryExpr
-	|	'-' unaryExpr
-	|	primary;
+	:   op='-' un=unaryExpr
+	|	prim=primary;
 primary
-	:	literal
-	|	'(' expression ')'
-	|	typeName listOpt
-	|	methodInvocation
+	:	literal					#primaryLiteral
+	|	'(' expression ')'		#parenExpr
+	|	lhs=leftHandSide			#primaryIdRef
+	|	methodInvocation		#primaryMethodInvoc
 ;
+
+TYPE_NUM: 'NUM';
+TYPE_STRING: 'STRING';
+TYPE_COORD: 'COORD';
+TYPE_BOOL: 'BOOL';
+TYPE_VOID: 'VOID';
+TYPE_LIST: 'LIST';
+
+EQ_MOD_IS: 'IS';
+EQ_MOD_NOT: 'NOT';
+
+RELATIONAL_KEY_LT: 'LESS_THAN';
+RELATIONAL_KEY_GT: 'GREATER_THAN';
+RELATIONAL_KEY_LTE: 'LESS_THAN_EQUAL';
+RELATIONAL_KEY_GTE: 'GREATHER_THAN_EQUAL';
+
+OP_PLUS: '+';
+OP_MINUS: '-';
+OP_MULT: '*';
+OP_DIV: '/';

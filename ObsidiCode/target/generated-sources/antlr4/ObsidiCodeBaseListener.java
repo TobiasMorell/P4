@@ -51,13 +51,13 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(ObsidiCodeParser.TypeContext ctx) { }
+	@Override public void enterTypePrefix(ObsidiCodeParser.TypePrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(ObsidiCodeParser.TypeContext ctx) { }
+	@Override public void exitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -267,25 +267,73 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatement(ObsidiCodeParser.StatementContext ctx) { }
+	@Override public void enterStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatement(ObsidiCodeParser.StatementContext ctx) { }
+	@Override public void exitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStmtNoSub(ObsidiCodeParser.StmtNoSubContext ctx) { }
+	@Override public void enterStmtSkip(ObsidiCodeParser.StmtSkipContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStmtNoSub(ObsidiCodeParser.StmtNoSubContext ctx) { }
+	@Override public void exitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoSubLambda(ObsidiCodeParser.NoSubLambdaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoSubLambda(ObsidiCodeParser.NoSubLambdaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoSubRet(ObsidiCodeParser.NoSubRetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoSubRet(ObsidiCodeParser.NoSubRetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -339,25 +387,49 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElseIfOpt(ObsidiCodeParser.ElseIfOptContext ctx) { }
+	@Override public void enterElseIf(ObsidiCodeParser.ElseIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitElseIfOpt(ObsidiCodeParser.ElseIfOptContext ctx) { }
+	@Override public void exitElseIf(ObsidiCodeParser.ElseIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElseOpt(ObsidiCodeParser.ElseOptContext ctx) { }
+	@Override public void enterNoElseIf(ObsidiCodeParser.NoElseIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitElseOpt(ObsidiCodeParser.ElseOptContext ctx) { }
+	@Override public void exitNoElseIf(ObsidiCodeParser.NoElseIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElse(ObsidiCodeParser.ElseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElse(ObsidiCodeParser.ElseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoElse(ObsidiCodeParser.NoElseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoElse(ObsidiCodeParser.NoElseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -675,13 +747,49 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimary(ObsidiCodeParser.PrimaryContext ctx) { }
+	@Override public void enterPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimary(ObsidiCodeParser.PrimaryContext ctx) { }
+	@Override public void exitPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParenExpr(ObsidiCodeParser.ParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParenExpr(ObsidiCodeParser.ParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

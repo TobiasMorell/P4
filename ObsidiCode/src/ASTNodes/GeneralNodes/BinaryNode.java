@@ -11,6 +11,11 @@ public abstract class BinaryNode extends Node {
     {
         return rightChild;
     }
+    
+    public void SetLeftmostNode(Node n)
+    {
+    	this._leftmostChild = n;
+    }
 
     public BinaryNode (Node leftChild, Node rightChild){
         this._leftmostChild = leftChild;

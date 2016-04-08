@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.*;
 
+import ASTNodes.SyntaxNodes.ProgNode;
+
 public class Compiler {
 	public static void main( String[] args) throws Exception 
     {
@@ -27,6 +29,9 @@ public class Compiler {
 
         ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
         ParseTree tree = parser.prog();// begin parsing at rule 'r'
-        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        
+        BuildASTVisitor bASTv = new BuildASTVisitor();
+        ProgNode pn = (ProgNode) bASTv.visit(tree);
     }
 }

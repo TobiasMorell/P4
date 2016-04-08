@@ -6,6 +6,11 @@ import ASTNodes.SyntaxNodes.IDNode;
 
 public class ReferenceNode extends UnaryNode {
 
+	public IDNode GetId()
+	{
+		return (IDNode) this._leftmostChild;
+	}
+	
 	public ReferenceNode(String id) {
 		super(new IDNode(id));
 		// TODO Auto-generated constructor stub
