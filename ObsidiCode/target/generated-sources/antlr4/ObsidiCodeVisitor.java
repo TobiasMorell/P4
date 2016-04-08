@@ -29,11 +29,11 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeName(ObsidiCodeParser.TypeNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#type}.
+	 * Visit a parse tree produced by {@link ObsidiCodeParser#typePrefix}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitType(ObsidiCodeParser.TypeContext ctx);
+	T visitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
@@ -137,17 +137,47 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#statement}.
+	 * Visit a parse tree produced by the {@code stmtDeclaration}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatement(ObsidiCodeParser.StatementContext ctx);
+	T visitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#stmtNoSub}.
+	 * Visit a parse tree produced by the {@code stmtSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStmtNoSub(ObsidiCodeParser.StmtNoSubContext ctx);
+	T visitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code noSubLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNoSubLambda(ObsidiCodeParser.NoSubLambdaContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code noSubSkip}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code noSubBrk}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code noSubRet}
+	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNoSubRet(ObsidiCodeParser.NoSubRetContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#signalStmt}.
 	 * @param ctx the parse tree
@@ -173,17 +203,33 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfStmt(ObsidiCodeParser.IfStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#elseIfOpt}.
+	 * Visit a parse tree produced by the {@code elseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitElseIfOpt(ObsidiCodeParser.ElseIfOptContext ctx);
+	T visitElseIf(ObsidiCodeParser.ElseIfContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#elseOpt}.
+	 * Visit a parse tree produced by the {@code noElseIf}
+	 * labeled alternative in {@link ObsidiCodeParser#elseIfOpt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitElseOpt(ObsidiCodeParser.ElseOptContext ctx);
+	T visitNoElseIf(ObsidiCodeParser.NoElseIfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code else}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElse(ObsidiCodeParser.ElseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code noElse}
+	 * labeled alternative in {@link ObsidiCodeParser#elseOpt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNoElse(ObsidiCodeParser.NoElseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#loopStmt}.
 	 * @param ctx the parse tree
@@ -341,9 +387,31 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryExpr(ObsidiCodeParser.UnaryExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#primary}.
+	 * Visit a parse tree produced by the {@code primaryLiteral}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimary(ObsidiCodeParser.PrimaryContext ctx);
+	T visitPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parenExpr}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenExpr(ObsidiCodeParser.ParenExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code primaryIdRef}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code primaryMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx);
 }

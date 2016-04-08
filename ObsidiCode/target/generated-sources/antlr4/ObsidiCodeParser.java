@@ -20,14 +20,15 @@ public class ObsidiCodeParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
-		T__38=39, T__39=40, T__40=41, T__41=42, Identifier=43, NumLit=44, CoordLit=45, 
-		StringLit=46, WS=47, COMMENT=48, EOLCOMMENT=49, TYPE_KEY_NUM=50, TYPE_KEY_STRING=51, 
-		TYPE_KEY_COORD=52, TYPE_KEY_BOOL=53, TYPE_KEY_VOID=54;
+		T__31=32, Identifier=33, NumLit=34, CoordLit=35, StringLit=36, WS=37, 
+		COMMENT=38, EOLCOMMENT=39, TYPE_NUM=40, TYPE_STRING=41, TYPE_COORD=42, 
+		TYPE_BOOL=43, TYPE_VOID=44, TYPE_LIST=45, EQ_MOD_IS=46, EQ_MOD_NOT=47, 
+		RELATIONAL_KEY_LT=48, RELATIONAL_KEY_GT=49, RELATIONAL_KEY_LTE=50, RELATIONAL_KEY_GTE=51, 
+		OP_PLUS=52, OP_MINUS=53, OP_MULT=54, OP_DIV=55;
 	public static final int
-		RULE_prog = 0, RULE_literal = 1, RULE_typeName = 2, RULE_type = 3, RULE_loads = 4, 
-		RULE_roboDcl = 5, RULE_roboBodyDcl = 6, RULE_memberDcl = 7, RULE_fieldDcl = 8, 
-		RULE_variableDclList = 9, RULE_variableDcl = 10, RULE_variableInitializer = 11, 
+		RULE_prog = 0, RULE_literal = 1, RULE_typeName = 2, RULE_typePrefix = 3, 
+		RULE_loads = 4, RULE_roboDcl = 5, RULE_roboBodyDcl = 6, RULE_memberDcl = 7, 
+		RULE_fieldDcl = 8, RULE_variableDclList = 9, RULE_variableDcl = 10, RULE_variableInitializer = 11, 
 		RULE_listInitializer = 12, RULE_litList = 13, RULE_methodDcl = 14, RULE_methodHeader = 15, 
 		RULE_methodDeclarator = 16, RULE_methodBody = 17, RULE_hearDcl = 18, RULE_block = 19, 
 		RULE_blockStmtList = 20, RULE_statement = 21, RULE_stmtNoSub = 22, RULE_signalStmt = 23, 
@@ -41,7 +42,7 @@ public class ObsidiCodeParser extends Parser {
 		RULE_relationalExpressionEnd = 49, RULE_additiveExpression = 50, RULE_additiveExpressionEnd = 51, 
 		RULE_multiExpr = 52, RULE_multiExprEnd = 53, RULE_unaryExpr = 54, RULE_primary = 55;
 	public static final String[] ruleNames = {
-		"prog", "literal", "typeName", "type", "loads", "roboDcl", "roboBodyDcl", 
+		"prog", "literal", "typeName", "typePrefix", "loads", "roboDcl", "roboBodyDcl", 
 		"memberDcl", "fieldDcl", "variableDclList", "variableDcl", "variableInitializer", 
 		"listInitializer", "litList", "methodDcl", "methodHeader", "methodDeclarator", 
 		"methodBody", "hearDcl", "block", "blockStmtList", "statement", "stmtNoSub", 
@@ -55,22 +56,23 @@ public class ObsidiCodeParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'TRUE'", "'FALSE'", "'.'", "'LIST'", "'LOAD'", "'('", "')'", "'\n'", 
-		"':'", "','", "'='", "'END'", "'HEAR'", "'END HEAR'", "'BREAK'", "'RETURN'", 
+		null, "'TRUE'", "'FALSE'", "'.'", "'LOAD'", "'('", "')'", "'\n'", "':'", 
+		"','", "'='", "'END'", "'HEAR'", "'END HEAR'", "'BREAK'", "'RETURN'", 
 		"'SIGNAL'", "'IF'", "'END IF'", "'ELSE IF'", "'END ELSEIF'", "'ELSE'", 
 		"'END ELSE'", "'REPEAT UNTIL'", "'END REPEAT'", "'FOREVER'", "'END FOREVER'", 
-		"'['", "']'", "'OR'", "'AND'", "'XOR'", "'IS'", "'NOT'", "'LESS_THAN'", 
-		"'GREATER_THAN'", "'LESS_THAN_EQUAL'", "'GREATER_THAN_EQUAL'", "'+'", 
-		"'-'", "'*'", "'/'", null, null, null, null, null, null, null, "'NUM'", 
-		"'STRING'", "'COORD'", "'BOOL'", "'VOID'"
+		"'['", "']'", "'OR'", "'AND'", "'XOR'", "'GREATER_THAN_EQUAL'", null, 
+		null, null, null, null, null, null, "'NUM'", "'STRING'", "'COORD'", "'BOOL'", 
+		"'VOID'", "'LIST'", "'IS'", "'NOT'", "'LESS_THAN'", "'GREATER_THAN'", 
+		"'LESS_THAN_EQUAL'", "'GREATHER_THAN_EQUAL'", "'+'", "'-'", "'*'", "'/'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, "Identifier", "NumLit", "CoordLit", 
-		"StringLit", "WS", "COMMENT", "EOLCOMMENT", "TYPE_KEY_NUM", "TYPE_KEY_STRING", 
-		"TYPE_KEY_COORD", "TYPE_KEY_BOOL", "TYPE_KEY_VOID"
+		null, null, null, null, null, null, null, null, null, "Identifier", "NumLit", 
+		"CoordLit", "StringLit", "WS", "COMMENT", "EOLCOMMENT", "TYPE_NUM", "TYPE_STRING", 
+		"TYPE_COORD", "TYPE_BOOL", "TYPE_VOID", "TYPE_LIST", "EQ_MOD_IS", "EQ_MOD_NOT", 
+		"RELATIONAL_KEY_LT", "RELATIONAL_KEY_GT", "RELATIONAL_KEY_LTE", "RELATIONAL_KEY_GTE", 
+		"OP_PLUS", "OP_MINUS", "OP_MULT", "OP_DIV"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -310,39 +312,39 @@ public class ObsidiCodeParser extends Parser {
 		return _localctx;
 	}
 
-	public static class TypeContext extends ParserRuleContext {
-		public Token type_key;
-		public TypeContext(ParserRuleContext parent, int invokingState) {
+	public static class TypePrefixContext extends ParserRuleContext {
+		public Token type;
+		public TypePrefixContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_type; }
+		@Override public int getRuleIndex() { return RULE_typePrefix; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterType(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterTypePrefix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitType(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitTypePrefix(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitType(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitTypePrefix(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final TypeContext type() throws RecognitionException {
-		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_type);
+	public final TypePrefixContext typePrefix() throws RecognitionException {
+		TypePrefixContext _localctx = new TypePrefixContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_typePrefix);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(129);
-			((TypeContext)_localctx).type_key = _input.LT(1);
+			((TypePrefixContext)_localctx).type = _input.LT(1);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << TYPE_KEY_NUM) | (1L << TYPE_KEY_STRING) | (1L << TYPE_KEY_COORD) | (1L << TYPE_KEY_BOOL))) != 0)) ) {
-				((TypeContext)_localctx).type_key = (Token)_errHandler.recoverInline(this);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE_NUM) | (1L << TYPE_STRING) | (1L << TYPE_COORD) | (1L << TYPE_BOOL) | (1L << TYPE_LIST))) != 0)) ) {
+				((TypePrefixContext)_localctx).type = (Token)_errHandler.recoverInline(this);
 			} else {
 				consume();
 			}
@@ -419,15 +421,15 @@ public class ObsidiCodeParser extends Parser {
 					setState(132);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(133);
-					match(T__4);
+					match(T__3);
 					setState(134);
-					match(T__5);
+					match(T__4);
 					setState(135);
 					((LoadsContext)_localctx).load_id = match(StringLit);
 					setState(136);
-					match(T__6);
+					match(T__5);
 					setState(137);
-					match(T__7);
+					match(T__6);
 					}
 					} 
 				}
@@ -479,9 +481,9 @@ public class ObsidiCodeParser extends Parser {
 			setState(143);
 			((RoboDclContext)_localctx).id = match(Identifier);
 			setState(144);
-			match(T__8);
-			setState(145);
 			match(T__7);
+			setState(145);
+			match(T__6);
 			}
 		}
 		catch (RecognitionException re) {
@@ -582,6 +584,7 @@ public class ObsidiCodeParser extends Parser {
 
 	public static class MemberDclContext extends ParserRuleContext {
 		public FieldDclContext dcl;
+		public MethodDclContext met_dcl;
 		public FieldDclContext fieldDcl() {
 			return getRuleContext(FieldDclContext.class,0);
 		}
@@ -624,14 +627,14 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(158);
-				((MemberDclContext)_localctx).dcl = methodDcl();
+				((MemberDclContext)_localctx).met_dcl = methodDcl();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(159);
-				match(T__7);
+				match(T__6);
 				}
 				break;
 			}
@@ -648,10 +651,10 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class FieldDclContext extends ParserRuleContext {
-		public TypeContext t;
+		public TypePrefixContext t;
 		public VariableDclListContext dcl_list;
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
+		public TypePrefixContext typePrefix() {
+			return getRuleContext(TypePrefixContext.class,0);
 		}
 		public VariableDclListContext variableDclList() {
 			return getRuleContext(VariableDclListContext.class,0);
@@ -682,11 +685,11 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(162);
-			((FieldDclContext)_localctx).t = type();
+			((FieldDclContext)_localctx).t = typePrefix();
 			setState(163);
 			((FieldDclContext)_localctx).dcl_list = variableDclList(0);
 			setState(164);
-			match(T__7);
+			match(T__6);
 			}
 		}
 		catch (RecognitionException re) {
@@ -764,7 +767,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(169);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(170);
-					match(T__9);
+					match(T__8);
 					setState(171);
 					((VariableDclListContext)_localctx).single = variableDcl();
 					}
@@ -836,7 +839,7 @@ public class ObsidiCodeParser extends Parser {
 				setState(178);
 				((VariableDclContext)_localctx).id = match(Identifier);
 				setState(179);
-				match(T__10);
+				match(T__9);
 				setState(180);
 				((VariableDclContext)_localctx).list_init = listInitializer();
 				}
@@ -936,7 +939,7 @@ public class ObsidiCodeParser extends Parser {
 				setState(185);
 				((ListInitializerContext)_localctx).list = litList(0);
 				setState(186);
-				match(T__11);
+				match(T__10);
 				setState(187);
 				match(Identifier);
 				}
@@ -1023,7 +1026,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(195);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(196);
-					match(T__9);
+					match(T__8);
 					setState(197);
 					((LitListContext)_localctx).single = primary();
 					}
@@ -1083,12 +1086,12 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(207);
 			switch (_input.LA(1)) {
-			case T__3:
-			case TYPE_KEY_NUM:
-			case TYPE_KEY_STRING:
-			case TYPE_KEY_COORD:
-			case TYPE_KEY_BOOL:
-			case TYPE_KEY_VOID:
+			case TYPE_NUM:
+			case TYPE_STRING:
+			case TYPE_COORD:
+			case TYPE_BOOL:
+			case TYPE_VOID:
+			case TYPE_LIST:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(203);
@@ -1097,7 +1100,7 @@ public class ObsidiCodeParser extends Parser {
 				((MethodDclContext)_localctx).body = methodBody();
 				}
 				break;
-			case T__12:
+			case T__11:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(206);
@@ -1120,13 +1123,13 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MethodHeaderContext extends ParserRuleContext {
-		public TypeContext t;
+		public TypePrefixContext t;
 		public MethodDeclaratorContext declarator;
 		public MethodDeclaratorContext methodDeclarator() {
 			return getRuleContext(MethodDeclaratorContext.class,0);
 		}
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
+		public TypePrefixContext typePrefix() {
+			return getRuleContext(TypePrefixContext.class,0);
 		}
 		public MethodHeaderContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1155,20 +1158,20 @@ public class ObsidiCodeParser extends Parser {
 			{
 			setState(211);
 			switch (_input.LA(1)) {
-			case TYPE_KEY_VOID:
+			case TYPE_NUM:
+			case TYPE_STRING:
+			case TYPE_COORD:
+			case TYPE_BOOL:
+			case TYPE_LIST:
 				{
 				setState(209);
-				match(TYPE_KEY_VOID);
+				((MethodHeaderContext)_localctx).t = typePrefix();
 				}
 				break;
-			case T__3:
-			case TYPE_KEY_NUM:
-			case TYPE_KEY_STRING:
-			case TYPE_KEY_COORD:
-			case TYPE_KEY_BOOL:
+			case TYPE_VOID:
 				{
 				setState(210);
-				((MethodHeaderContext)_localctx).t = type();
+				match(TYPE_VOID);
 				}
 				break;
 			default:
@@ -1224,13 +1227,13 @@ public class ObsidiCodeParser extends Parser {
 			setState(215);
 			((MethodDeclaratorContext)_localctx).id = match(Identifier);
 			setState(216);
-			match(T__5);
+			match(T__4);
 			setState(217);
 			((MethodDeclaratorContext)_localctx).params = formalParams();
 			setState(218);
-			match(T__6);
+			match(T__5);
 			setState(219);
-			match(T__7);
+			match(T__6);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1280,10 +1283,10 @@ public class ObsidiCodeParser extends Parser {
 			((MethodBodyContext)_localctx).body = block();
 			setState(223);
 			_la = _input.LA(1);
-			if (_la==T__11) {
+			if (_la==T__10) {
 				{
 				setState(222);
-				match(T__11);
+				match(T__10);
 				}
 			}
 
@@ -1304,13 +1307,15 @@ public class ObsidiCodeParser extends Parser {
 
 	public static class HearDclContext extends ParserRuleContext {
 		public Token id;
+		public FormalParamsContext params;
+		public BlockContext body;
+		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public FormalParamsContext formalParams() {
 			return getRuleContext(FormalParamsContext.class,0);
 		}
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
-		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public HearDclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1337,21 +1342,21 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(227);
-			match(T__12);
+			match(T__11);
 			setState(228);
 			((HearDclContext)_localctx).id = match(Identifier);
 			setState(229);
-			match(T__5);
+			match(T__4);
 			setState(230);
-			formalParams();
+			((HearDclContext)_localctx).params = formalParams();
 			setState(231);
-			match(T__6);
+			match(T__5);
 			setState(232);
-			match(T__7);
+			match(T__6);
 			setState(233);
-			block();
+			((HearDclContext)_localctx).body = block();
 			setState(234);
-			match(T__13);
+			match(T__12);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1366,6 +1371,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
+		public BlockStmtListContext list;
 		public BlockStmtListContext blockStmtList() {
 			return getRuleContext(BlockStmtListContext.class,0);
 		}
@@ -1398,7 +1404,7 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(236);
-				blockStmtList(0);
+				((BlockContext)_localctx).list = blockStmtList(0);
 				}
 				break;
 			case 2:
@@ -1420,6 +1426,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class BlockStmtListContext extends ParserRuleContext {
+		public BlockStmtListContext list;
+		public StatementContext stmt;
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1462,9 +1470,9 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(241);
-			statement();
+			((BlockStmtListContext)_localctx).stmt = statement();
 			setState(242);
-			match(T__7);
+			match(T__6);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(250);
@@ -1477,13 +1485,15 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new BlockStmtListContext(_parentctx, _parentState);
+					_localctx.list = _prevctx;
+					_localctx.list = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_blockStmtList);
 					setState(244);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(245);
-					statement();
+					((BlockStmtListContext)_localctx).stmt = statement();
 					setState(246);
-					match(T__7);
+					match(T__6);
 					}
 					} 
 				}
@@ -1505,12 +1515,20 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
+		public StatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
-		public VariableDclListContext variableDclList() {
-			return getRuleContext(VariableDclListContext.class,0);
+		@Override public int getRuleIndex() { return RULE_statement; }
+	 
+		public StatementContext() { }
+		public void copyFrom(StatementContext ctx) {
+			super.copyFrom(ctx);
 		}
+	}
+	public static class StmtSkipContext extends StatementContext {
+		public StmtNoSubContext skipNoSub;
+		public IfStmtContext skipIf;
+		public LoopStmtContext skipLoop;
 		public StmtNoSubContext stmtNoSub() {
 			return getRuleContext(StmtNoSubContext.class,0);
 		}
@@ -1520,21 +1538,42 @@ public class ObsidiCodeParser extends Parser {
 		public LoopStmtContext loopStmt() {
 			return getRuleContext(LoopStmtContext.class,0);
 		}
-		public StatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_statement; }
+		public StmtSkipContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStatement(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStmtSkip(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStatement(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStmtSkip(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStatement(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStmtSkip(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class StmtDeclarationContext extends StatementContext {
+		public TypePrefixContext t;
+		public VariableDclListContext dcl;
+		public TypePrefixContext typePrefix() {
+			return getRuleContext(TypePrefixContext.class,0);
+		}
+		public VariableDclListContext variableDclList() {
+			return getRuleContext(VariableDclListContext.class,0);
+		}
+		public StmtDeclarationContext(StatementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStmtDeclaration(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStmtDeclaration(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStmtDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1545,51 +1584,54 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(259);
 			switch (_input.LA(1)) {
-			case T__3:
-			case TYPE_KEY_NUM:
-			case TYPE_KEY_STRING:
-			case TYPE_KEY_COORD:
-			case TYPE_KEY_BOOL:
+			case TYPE_NUM:
+			case TYPE_STRING:
+			case TYPE_COORD:
+			case TYPE_BOOL:
+			case TYPE_LIST:
+				_localctx = new StmtDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(253);
-				type();
+				((StmtDeclarationContext)_localctx).t = typePrefix();
 				setState(254);
-				variableDclList(0);
+				((StmtDeclarationContext)_localctx).dcl = variableDclList(0);
 				}
 				break;
 			case T__0:
 			case T__1:
-			case T__5:
-			case T__7:
+			case T__4:
+			case T__6:
+			case T__13:
 			case T__14:
 			case T__15:
-			case T__16:
-			case T__38:
-			case T__39:
 			case Identifier:
 			case NumLit:
 			case CoordLit:
 			case StringLit:
+			case OP_MINUS:
+				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(256);
-				stmtNoSub();
+				((StmtSkipContext)_localctx).skipNoSub = stmtNoSub();
 				}
 				break;
-			case T__17:
+			case T__16:
+				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(257);
-				ifStmt();
+				((StmtSkipContext)_localctx).skipIf = ifStmt();
 				}
 				break;
-			case T__23:
-			case T__25:
+			case T__22:
+			case T__24:
+				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(258);
-				loopStmt();
+				((StmtSkipContext)_localctx).skipLoop = loopStmt();
 				}
 				break;
 			default:
@@ -1608,30 +1650,89 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class StmtNoSubContext extends ParserRuleContext {
+		public StmtNoSubContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_stmtNoSub; }
+	 
+		public StmtNoSubContext() { }
+		public void copyFrom(StmtNoSubContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class NoSubBrkContext extends StmtNoSubContext {
+		public NoSubBrkContext(StmtNoSubContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoSubBrk(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoSubBrk(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoSubBrk(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NoSubSkipContext extends StmtNoSubContext {
+		public SignalStmtContext skipSignal;
+		public ExprStmtContext skipExpr;
 		public SignalStmtContext signalStmt() {
 			return getRuleContext(SignalStmtContext.class,0);
 		}
 		public ExprStmtContext exprStmt() {
 			return getRuleContext(ExprStmtContext.class,0);
 		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public StmtNoSubContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_stmtNoSub; }
+		public NoSubSkipContext(StmtNoSubContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStmtNoSub(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoSubSkip(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStmtNoSub(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoSubSkip(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStmtNoSub(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoSubSkip(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NoSubLambdaContext extends StmtNoSubContext {
+		public NoSubLambdaContext(StmtNoSubContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoSubLambda(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoSubLambda(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoSubLambda(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NoSubRetContext extends StmtNoSubContext {
+		public ExpressionContext expr;
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public NoSubRetContext(StmtNoSubContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoSubRet(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoSubRet(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoSubRet(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1642,47 +1743,51 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(267);
 			switch (_input.LA(1)) {
-			case T__7:
+			case T__6:
+				_localctx = new NoSubLambdaContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				}
 				break;
-			case T__16:
+			case T__15:
+				_localctx = new NoSubSkipContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(262);
-				signalStmt();
+				((NoSubSkipContext)_localctx).skipSignal = signalStmt();
 				}
 				break;
 			case T__0:
 			case T__1:
-			case T__5:
-			case T__38:
-			case T__39:
+			case T__4:
 			case Identifier:
 			case NumLit:
 			case CoordLit:
 			case StringLit:
+			case OP_MINUS:
+				_localctx = new NoSubSkipContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(263);
-				exprStmt();
+				((NoSubSkipContext)_localctx).skipExpr = exprStmt();
 				}
 				break;
-			case T__14:
+			case T__13:
+				_localctx = new NoSubBrkContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(264);
-				match(T__14);
+				match(T__13);
 				}
 				break;
-			case T__15:
+			case T__14:
+				_localctx = new NoSubRetContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(265);
-				match(T__15);
+				match(T__14);
 				setState(266);
-				expression();
+				((NoSubRetContext)_localctx).expr = expression();
 				}
 				break;
 			default:
@@ -1701,6 +1806,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class SignalStmtContext extends ParserRuleContext {
+		public Token id;
+		public ArgsListContext arguments;
 		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public ArgsListContext argsList() {
 			return getRuleContext(ArgsListContext.class,0);
@@ -1731,15 +1838,15 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(269);
-			match(T__16);
+			match(T__15);
 			setState(270);
-			match(Identifier);
+			((SignalStmtContext)_localctx).id = match(Identifier);
 			setState(271);
-			match(T__5);
+			match(T__4);
 			setState(272);
-			argsList(0);
+			((SignalStmtContext)_localctx).arguments = argsList(0);
 			setState(273);
-			match(T__6);
+			match(T__5);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1754,6 +1861,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ExprStmtContext extends ParserRuleContext {
+		public AssignmentExpressionContext assExpr;
+		public MethodInvocationContext meth_invoc;
 		public AssignmentExpressionContext assignmentExpression() {
 			return getRuleContext(AssignmentExpressionContext.class,0);
 		}
@@ -1789,14 +1898,14 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(275);
-				assignmentExpression();
+				((ExprStmtContext)_localctx).assExpr = assignmentExpression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(276);
-				methodInvocation();
+				((ExprStmtContext)_localctx).meth_invoc = methodInvocation();
 				}
 				break;
 			}
@@ -1813,6 +1922,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MethodInvocationContext extends ParserRuleContext {
+		public TypeNameContext id;
+		public FormalArgsContext args;
 		public TypeNameContext typeName() {
 			return getRuleContext(TypeNameContext.class,0);
 		}
@@ -1845,13 +1956,13 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(279);
-			typeName(0);
+			((MethodInvocationContext)_localctx).id = typeName(0);
 			setState(280);
-			match(T__5);
+			match(T__4);
 			setState(281);
-			formalArgs();
+			((MethodInvocationContext)_localctx).args = formalArgs();
 			setState(282);
-			match(T__6);
+			match(T__5);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1866,6 +1977,10 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class IfStmtContext extends ParserRuleContext {
+		public ExpressionContext expr;
+		public BlockContext body;
+		public ElseIfOptContext elseIfStmt;
+		public ElseOptContext elseStmt;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -1904,23 +2019,23 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(284);
-			match(T__17);
+			match(T__16);
 			setState(285);
-			match(T__5);
+			match(T__4);
 			setState(286);
-			expression();
+			((IfStmtContext)_localctx).expr = expression();
 			setState(287);
-			match(T__6);
+			match(T__5);
 			setState(288);
-			match(T__7);
+			match(T__6);
 			setState(289);
-			block();
+			((IfStmtContext)_localctx).body = block();
 			setState(290);
-			match(T__18);
+			match(T__17);
 			setState(291);
-			elseIfOpt(0);
+			((IfStmtContext)_localctx).elseIfStmt = elseIfOpt(0);
 			setState(292);
-			elseOpt();
+			((IfStmtContext)_localctx).elseStmt = elseOpt();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1935,6 +2050,20 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ElseIfOptContext extends ParserRuleContext {
+		public ElseIfOptContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_elseIfOpt; }
+	 
+		public ElseIfOptContext() { }
+		public void copyFrom(ElseIfOptContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ElseIfContext extends ElseIfOptContext {
+		public ElseIfOptContext recursion;
+		public ExpressionContext expr;
+		public BlockContext body;
 		public ElseIfOptContext elseIfOpt() {
 			return getRuleContext(ElseIfOptContext.class,0);
 		}
@@ -1944,21 +2073,34 @@ public class ObsidiCodeParser extends Parser {
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
-		public ElseIfOptContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_elseIfOpt; }
+		public ElseIfContext(ElseIfOptContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterElseIfOpt(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterElseIf(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitElseIfOpt(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitElseIf(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitElseIfOpt(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitElseIf(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NoElseIfContext extends ElseIfOptContext {
+		public NoElseIfContext(ElseIfOptContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoElseIf(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoElseIf(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoElseIf(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1979,6 +2121,10 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
+			_localctx = new NoElseIfContext(_localctx);
+			_ctx = _localctx;
+			_prevctx = _localctx;
+
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(307);
@@ -1990,26 +2136,27 @@ public class ObsidiCodeParser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new ElseIfOptContext(_parentctx, _parentState);
+					_localctx = new ElseIfContext(new ElseIfOptContext(_parentctx, _parentState));
+					((ElseIfContext)_localctx).recursion = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_elseIfOpt);
 					setState(295);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(296);
-					match(T__7);
-					setState(297);
-					match(T__19);
-					setState(298);
-					match(T__5);
-					setState(299);
-					expression();
-					setState(300);
 					match(T__6);
+					setState(297);
+					match(T__18);
+					setState(298);
+					match(T__4);
+					setState(299);
+					((ElseIfContext)_localctx).expr = expression();
+					setState(300);
+					match(T__5);
 					setState(301);
-					match(T__7);
+					match(T__6);
 					setState(302);
-					block();
+					((ElseIfContext)_localctx).body = block();
 					setState(303);
-					match(T__20);
+					match(T__19);
 					}
 					} 
 				}
@@ -2031,24 +2178,49 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ElseOptContext extends ParserRuleContext {
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
-		}
 		public ElseOptContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_elseOpt; }
+	 
+		public ElseOptContext() { }
+		public void copyFrom(ElseOptContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class NoElseContext extends ElseOptContext {
+		public NoElseContext(ElseOptContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterElseOpt(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNoElse(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitElseOpt(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNoElse(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitElseOpt(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNoElse(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ElseContext extends ElseOptContext {
+		public BlockContext body;
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
+		}
+		public ElseContext(ElseOptContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterElse(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitElse(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitElse(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2060,21 +2232,23 @@ public class ObsidiCodeParser extends Parser {
 			setState(317);
 			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 			case 1:
+				_localctx = new ElseContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(310);
-				match(T__7);
+				match(T__6);
 				setState(311);
-				match(T__21);
+				match(T__20);
 				setState(312);
-				match(T__7);
+				match(T__6);
 				setState(313);
-				block();
+				((ElseContext)_localctx).body = block();
 				setState(314);
-				match(T__22);
+				match(T__21);
 				}
 				break;
 			case 2:
+				_localctx = new NoElseContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -2093,6 +2267,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class LoopStmtContext extends ParserRuleContext {
+		public RepeatStmtContext rep;
+		public ForeverStmtContext ever;
 		public RepeatStmtContext repeatStmt() {
 			return getRuleContext(RepeatStmtContext.class,0);
 		}
@@ -2124,18 +2300,18 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(321);
 			switch (_input.LA(1)) {
-			case T__23:
+			case T__22:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(319);
-				repeatStmt();
+				((LoopStmtContext)_localctx).rep = repeatStmt();
 				}
 				break;
-			case T__25:
+			case T__24:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(320);
-				foreverStmt();
+				((LoopStmtContext)_localctx).ever = foreverStmt();
 				}
 				break;
 			default:
@@ -2154,6 +2330,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class RepeatStmtContext extends ParserRuleContext {
+		public ExpressionContext expr;
+		public BlockContext body;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -2186,19 +2364,19 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(323);
-			match(T__23);
+			match(T__22);
 			setState(324);
-			match(T__5);
+			match(T__4);
 			setState(325);
-			expression();
+			((RepeatStmtContext)_localctx).expr = expression();
 			setState(326);
-			match(T__6);
+			match(T__5);
 			setState(327);
-			match(T__7);
+			match(T__6);
 			setState(328);
-			block();
+			((RepeatStmtContext)_localctx).body = block();
 			setState(329);
-			match(T__24);
+			match(T__23);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2213,6 +2391,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ForeverStmtContext extends ParserRuleContext {
+		public BlockContext body;
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
@@ -2242,13 +2421,13 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(331);
-			match(T__25);
+			match(T__24);
 			setState(332);
-			match(T__7);
+			match(T__6);
 			setState(333);
-			block();
+			((ForeverStmtContext)_localctx).body = block();
 			setState(334);
-			match(T__26);
+			match(T__25);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2263,6 +2442,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class FormalArgsContext extends ParserRuleContext {
+		public ArgsListContext list;
 		public ArgsListContext argsList() {
 			return getRuleContext(ArgsListContext.class,0);
 		}
@@ -2293,20 +2473,19 @@ public class ObsidiCodeParser extends Parser {
 			switch (_input.LA(1)) {
 			case T__0:
 			case T__1:
-			case T__5:
-			case T__38:
-			case T__39:
+			case T__4:
 			case Identifier:
 			case NumLit:
 			case CoordLit:
 			case StringLit:
+			case OP_MINUS:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(336);
-				argsList(0);
+				((FormalArgsContext)_localctx).list = argsList(0);
 				}
 				break;
-			case T__6:
+			case T__5:
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -2386,7 +2565,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(343);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(344);
-					match(T__9);
+					match(T__8);
 					setState(345);
 					expression();
 					}
@@ -2439,18 +2618,18 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(353);
 			switch (_input.LA(1)) {
-			case T__3:
-			case TYPE_KEY_NUM:
-			case TYPE_KEY_STRING:
-			case TYPE_KEY_COORD:
-			case TYPE_KEY_BOOL:
+			case TYPE_NUM:
+			case TYPE_STRING:
+			case TYPE_COORD:
+			case TYPE_BOOL:
+			case TYPE_LIST:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(351);
 				((FormalParamsContext)_localctx).list = paramsList(0);
 				}
 				break;
-			case T__6:
+			case T__5:
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -2534,7 +2713,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(358);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(359);
-					match(T__9);
+					match(T__8);
 					setState(360);
 					((ParamsListContext)_localctx).p = param();
 					}
@@ -2558,10 +2737,10 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ParamContext extends ParserRuleContext {
-		public TypeContext t;
+		public TypePrefixContext t;
 		public Token id;
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
+		public TypePrefixContext typePrefix() {
+			return getRuleContext(TypePrefixContext.class,0);
 		}
 		public TerminalNode Identifier() { return getToken(ObsidiCodeParser.Identifier, 0); }
 		public ParamContext(ParserRuleContext parent, int invokingState) {
@@ -2590,7 +2769,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(366);
-			((ParamContext)_localctx).t = type();
+			((ParamContext)_localctx).t = typePrefix();
 			setState(367);
 			((ParamContext)_localctx).id = match(Identifier);
 			}
@@ -2651,6 +2830,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class AssignmentExpressionContext extends ParserRuleContext {
+		public ConditionalExpressionContext skipCond;
+		public AssignmentContext skipAss;
 		public ConditionalExpressionContext conditionalExpression() {
 			return getRuleContext(ConditionalExpressionContext.class,0);
 		}
@@ -2686,14 +2867,14 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(371);
-				conditionalExpression();
+				((AssignmentExpressionContext)_localctx).skipCond = conditionalExpression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(372);
-				assignment();
+				((AssignmentExpressionContext)_localctx).skipAss = assignment();
 				}
 				break;
 			}
@@ -2710,6 +2891,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
+		public LeftHandSideContext lhs;
+		public ExpressionContext expr;
 		public LeftHandSideContext leftHandSide() {
 			return getRuleContext(LeftHandSideContext.class,0);
 		}
@@ -2742,11 +2925,11 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(375);
-			leftHandSide();
+			((AssignmentContext)_localctx).lhs = leftHandSide();
 			setState(376);
-			match(T__10);
+			match(T__9);
 			setState(377);
-			expression();
+			((AssignmentContext)_localctx).expr = expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2761,6 +2944,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class LeftHandSideContext extends ParserRuleContext {
+		public TypeNameContext tn;
+		public ListOptContext ext;
 		public TypeNameContext typeName() {
 			return getRuleContext(TypeNameContext.class,0);
 		}
@@ -2793,9 +2978,9 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(379);
-			typeName(0);
+			((LeftHandSideContext)_localctx).tn = typeName(0);
 			setState(380);
-			listOpt();
+			((LeftHandSideContext)_localctx).ext = listOpt();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2810,6 +2995,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ListOptContext extends ParserRuleContext {
+		public ExpressionContext expr;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -2842,11 +3028,11 @@ public class ObsidiCodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(382);
-				match(T__27);
+				match(T__26);
 				setState(383);
-				expression();
+				((ListOptContext)_localctx).expr = expression();
 				setState(384);
-				match(T__28);
+				match(T__27);
 				}
 				break;
 			case 2:
@@ -2868,6 +3054,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ConditionalExpressionContext extends ParserRuleContext {
+		public ConditionOrExpressionContext or;
 		public ConditionOrExpressionContext conditionOrExpression() {
 			return getRuleContext(ConditionOrExpressionContext.class,0);
 		}
@@ -2897,7 +3084,7 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(389);
-			conditionOrExpression(0);
+			((ConditionalExpressionContext)_localctx).or = conditionOrExpression(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2912,6 +3099,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ConditionOrExpressionContext extends ParserRuleContext {
+		public ConditionOrExpressionContext or;
+		public ConditionAndExpressionContext and;
 		public ConditionAndExpressionContext conditionAndExpression() {
 			return getRuleContext(ConditionAndExpressionContext.class,0);
 		}
@@ -2954,7 +3143,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(392);
-			conditionAndExpression(0);
+			((ConditionOrExpressionContext)_localctx).and = conditionAndExpression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(399);
@@ -2967,13 +3156,15 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new ConditionOrExpressionContext(_parentctx, _parentState);
+					_localctx.or = _prevctx;
+					_localctx.or = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_conditionOrExpression);
 					setState(394);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(395);
-					match(T__29);
+					match(T__28);
 					setState(396);
-					conditionAndExpression(0);
+					((ConditionOrExpressionContext)_localctx).and = conditionAndExpression(0);
 					}
 					} 
 				}
@@ -2995,6 +3186,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class ConditionAndExpressionContext extends ParserRuleContext {
+		public ConditionAndExpressionContext and;
+		public XOrExpressionContext xor;
 		public XOrExpressionContext xOrExpression() {
 			return getRuleContext(XOrExpressionContext.class,0);
 		}
@@ -3037,7 +3230,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(403);
-			xOrExpression(0);
+			((ConditionAndExpressionContext)_localctx).xor = xOrExpression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(410);
@@ -3050,13 +3243,15 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new ConditionAndExpressionContext(_parentctx, _parentState);
+					_localctx.and = _prevctx;
+					_localctx.and = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_conditionAndExpression);
 					setState(405);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(406);
-					match(T__30);
+					match(T__29);
 					setState(407);
-					xOrExpression(0);
+					((ConditionAndExpressionContext)_localctx).xor = xOrExpression(0);
 					}
 					} 
 				}
@@ -3078,6 +3273,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class XOrExpressionContext extends ParserRuleContext {
+		public XOrExpressionContext xor;
+		public EqualityExpressionContext eq;
 		public EqualityExpressionContext equalityExpression() {
 			return getRuleContext(EqualityExpressionContext.class,0);
 		}
@@ -3120,7 +3317,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(414);
-			equalityExpression(0);
+			((XOrExpressionContext)_localctx).eq = equalityExpression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(421);
@@ -3133,13 +3330,15 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new XOrExpressionContext(_parentctx, _parentState);
+					_localctx.xor = _prevctx;
+					_localctx.xor = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_xOrExpression);
 					setState(416);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(417);
-					match(T__31);
+					match(T__30);
 					setState(418);
-					equalityExpression(0);
+					((XOrExpressionContext)_localctx).eq = equalityExpression(0);
 					}
 					} 
 				}
@@ -3161,6 +3360,9 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class EqualityExpressionContext extends ParserRuleContext {
+		public EqualityExpressionContext eq;
+		public RelationalExpressionContext rel;
+		public EqualityExpressionEndContext eq_end;
 		public RelationalExpressionContext relationalExpression() {
 			return getRuleContext(RelationalExpressionContext.class,0);
 		}
@@ -3206,7 +3408,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(425);
-			relationalExpression(0);
+			((EqualityExpressionContext)_localctx).rel = relationalExpression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(431);
@@ -3219,11 +3421,13 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new EqualityExpressionContext(_parentctx, _parentState);
+					_localctx.eq = _prevctx;
+					_localctx.eq = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_equalityExpression);
 					setState(427);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(428);
-					equalityExpressionEnd();
+					((EqualityExpressionContext)_localctx).eq_end = equalityExpressionEnd();
 					}
 					} 
 				}
@@ -3245,6 +3449,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class EqualityExpressionEndContext extends ParserRuleContext {
+		public Token eq_mod;
+		public RelationalExpressionContext rel;
 		public RelationalExpressionContext relationalExpression() {
 			return getRuleContext(RelationalExpressionContext.class,0);
 		}
@@ -3273,22 +3479,22 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(438);
 			switch (_input.LA(1)) {
-			case T__32:
+			case EQ_MOD_IS:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(434);
-				match(T__32);
+				((EqualityExpressionEndContext)_localctx).eq_mod = match(EQ_MOD_IS);
 				setState(435);
-				relationalExpression(0);
+				((EqualityExpressionEndContext)_localctx).rel = relationalExpression(0);
 				}
 				break;
-			case T__33:
+			case EQ_MOD_NOT:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(436);
-				match(T__33);
+				((EqualityExpressionEndContext)_localctx).eq_mod = match(EQ_MOD_NOT);
 				setState(437);
-				relationalExpression(0);
+				((EqualityExpressionEndContext)_localctx).rel = relationalExpression(0);
 				}
 				break;
 			default:
@@ -3307,6 +3513,9 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class RelationalExpressionContext extends ParserRuleContext {
+		public RelationalExpressionContext rel;
+		public AdditiveExpressionContext add;
+		public RelationalExpressionEndContext rel_end;
 		public AdditiveExpressionContext additiveExpression() {
 			return getRuleContext(AdditiveExpressionContext.class,0);
 		}
@@ -3352,7 +3561,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(441);
-			additiveExpression(0);
+			((RelationalExpressionContext)_localctx).add = additiveExpression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(447);
@@ -3365,11 +3574,13 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new RelationalExpressionContext(_parentctx, _parentState);
+					_localctx.rel = _prevctx;
+					_localctx.rel = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_relationalExpression);
 					setState(443);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(444);
-					relationalExpressionEnd();
+					((RelationalExpressionContext)_localctx).rel_end = relationalExpressionEnd();
 					}
 					} 
 				}
@@ -3391,6 +3602,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class RelationalExpressionEndContext extends ParserRuleContext {
+		public Token relational_key;
+		public AdditiveExpressionContext add;
 		public AdditiveExpressionContext additiveExpression() {
 			return getRuleContext(AdditiveExpressionContext.class,0);
 		}
@@ -3419,40 +3632,40 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(458);
 			switch (_input.LA(1)) {
-			case T__34:
+			case RELATIONAL_KEY_LT:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(450);
-				match(T__34);
+				((RelationalExpressionEndContext)_localctx).relational_key = match(RELATIONAL_KEY_LT);
 				setState(451);
-				additiveExpression(0);
+				((RelationalExpressionEndContext)_localctx).add = additiveExpression(0);
 				}
 				break;
-			case T__35:
+			case RELATIONAL_KEY_GT:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(452);
-				match(T__35);
+				((RelationalExpressionEndContext)_localctx).relational_key = match(RELATIONAL_KEY_GT);
 				setState(453);
-				additiveExpression(0);
+				((RelationalExpressionEndContext)_localctx).add = additiveExpression(0);
 				}
 				break;
-			case T__36:
+			case RELATIONAL_KEY_LTE:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(454);
-				match(T__36);
+				((RelationalExpressionEndContext)_localctx).relational_key = match(RELATIONAL_KEY_LTE);
 				setState(455);
-				additiveExpression(0);
+				((RelationalExpressionEndContext)_localctx).add = additiveExpression(0);
 				}
 				break;
-			case T__37:
+			case T__31:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(456);
-				match(T__37);
+				((RelationalExpressionEndContext)_localctx).relational_key = match(T__31);
 				setState(457);
-				additiveExpression(0);
+				((RelationalExpressionEndContext)_localctx).add = additiveExpression(0);
 				}
 				break;
 			default:
@@ -3471,6 +3684,9 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class AdditiveExpressionContext extends ParserRuleContext {
+		public AdditiveExpressionContext add;
+		public MultiExprContext mult;
+		public AdditiveExpressionEndContext add_end;
 		public MultiExprContext multiExpr() {
 			return getRuleContext(MultiExprContext.class,0);
 		}
@@ -3516,7 +3732,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(461);
-			multiExpr(0);
+			((AdditiveExpressionContext)_localctx).mult = multiExpr(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(467);
@@ -3529,11 +3745,13 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new AdditiveExpressionContext(_parentctx, _parentState);
+					_localctx.add = _prevctx;
+					_localctx.add = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_additiveExpression);
 					setState(463);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(464);
-					additiveExpressionEnd();
+					((AdditiveExpressionContext)_localctx).add_end = additiveExpressionEnd();
 					}
 					} 
 				}
@@ -3555,6 +3773,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class AdditiveExpressionEndContext extends ParserRuleContext {
+		public Token op;
+		public MultiExprContext mult;
 		public MultiExprContext multiExpr() {
 			return getRuleContext(MultiExprContext.class,0);
 		}
@@ -3583,22 +3803,22 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(474);
 			switch (_input.LA(1)) {
-			case T__38:
+			case OP_PLUS:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(470);
-				match(T__38);
+				((AdditiveExpressionEndContext)_localctx).op = match(OP_PLUS);
 				setState(471);
-				multiExpr(0);
+				((AdditiveExpressionEndContext)_localctx).mult = multiExpr(0);
 				}
 				break;
-			case T__39:
+			case OP_MINUS:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(472);
-				match(T__39);
+				((AdditiveExpressionEndContext)_localctx).op = match(OP_MINUS);
 				setState(473);
-				multiExpr(0);
+				((AdditiveExpressionEndContext)_localctx).mult = multiExpr(0);
 				}
 				break;
 			default:
@@ -3617,6 +3837,9 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MultiExprContext extends ParserRuleContext {
+		public MultiExprContext mult;
+		public UnaryExprContext un;
+		public MultiExprEndContext mult_end;
 		public UnaryExprContext unaryExpr() {
 			return getRuleContext(UnaryExprContext.class,0);
 		}
@@ -3662,7 +3885,7 @@ public class ObsidiCodeParser extends Parser {
 			{
 			{
 			setState(477);
-			unaryExpr();
+			((MultiExprContext)_localctx).un = unaryExpr();
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(483);
@@ -3675,11 +3898,13 @@ public class ObsidiCodeParser extends Parser {
 					{
 					{
 					_localctx = new MultiExprContext(_parentctx, _parentState);
+					_localctx.mult = _prevctx;
+					_localctx.mult = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_multiExpr);
 					setState(479);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(480);
-					multiExprEnd();
+					((MultiExprContext)_localctx).mult_end = multiExprEnd();
 					}
 					} 
 				}
@@ -3701,6 +3926,8 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MultiExprEndContext extends ParserRuleContext {
+		public Token op;
+		public UnaryExprContext un;
 		public UnaryExprContext unaryExpr() {
 			return getRuleContext(UnaryExprContext.class,0);
 		}
@@ -3729,22 +3956,22 @@ public class ObsidiCodeParser extends Parser {
 		try {
 			setState(490);
 			switch (_input.LA(1)) {
-			case T__40:
+			case OP_MULT:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(486);
-				match(T__40);
+				((MultiExprEndContext)_localctx).op = match(OP_MULT);
 				setState(487);
-				unaryExpr();
+				((MultiExprEndContext)_localctx).un = unaryExpr();
 				}
 				break;
-			case T__41:
+			case OP_DIV:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(488);
-				match(T__41);
+				((MultiExprEndContext)_localctx).op = match(OP_DIV);
 				setState(489);
-				unaryExpr();
+				((MultiExprEndContext)_localctx).un = unaryExpr();
 				}
 				break;
 			default:
@@ -3763,6 +3990,9 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class UnaryExprContext extends ParserRuleContext {
+		public Token op;
+		public UnaryExprContext un;
+		public PrimaryContext prim;
 		public UnaryExprContext unaryExpr() {
 			return getRuleContext(UnaryExprContext.class,0);
 		}
@@ -3792,37 +4022,28 @@ public class ObsidiCodeParser extends Parser {
 		UnaryExprContext _localctx = new UnaryExprContext(_ctx, getState());
 		enterRule(_localctx, 108, RULE_unaryExpr);
 		try {
-			setState(497);
+			setState(495);
 			switch (_input.LA(1)) {
-			case T__38:
+			case OP_MINUS:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(492);
-				match(T__38);
+				((UnaryExprContext)_localctx).op = match(OP_MINUS);
 				setState(493);
-				unaryExpr();
-				}
-				break;
-			case T__39:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(494);
-				match(T__39);
-				setState(495);
-				unaryExpr();
+				((UnaryExprContext)_localctx).un = unaryExpr();
 				}
 				break;
 			case T__0:
 			case T__1:
-			case T__5:
+			case T__4:
 			case Identifier:
 			case NumLit:
 			case CoordLit:
 			case StringLit:
-				enterOuterAlt(_localctx, 3);
+				enterOuterAlt(_localctx, 2);
 				{
-				setState(496);
-				primary();
+				setState(494);
+				((UnaryExprContext)_localctx).prim = primary();
 				}
 				break;
 			default:
@@ -3841,36 +4062,90 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class PrimaryContext extends ParserRuleContext {
-		public LiteralContext literal() {
-			return getRuleContext(LiteralContext.class,0);
-		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TypeNameContext typeName() {
-			return getRuleContext(TypeNameContext.class,0);
-		}
-		public ListOptContext listOpt() {
-			return getRuleContext(ListOptContext.class,0);
-		}
-		public MethodInvocationContext methodInvocation() {
-			return getRuleContext(MethodInvocationContext.class,0);
-		}
 		public PrimaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primary; }
+	 
+		public PrimaryContext() { }
+		public void copyFrom(PrimaryContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class PrimaryMethodInvocContext extends PrimaryContext {
+		public MethodInvocationContext methodInvocation() {
+			return getRuleContext(MethodInvocationContext.class,0);
+		}
+		public PrimaryMethodInvocContext(PrimaryContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterPrimary(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterPrimaryMethodInvoc(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitPrimary(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitPrimaryMethodInvoc(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitPrimary(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitPrimaryMethodInvoc(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class PrimaryIdRefContext extends PrimaryContext {
+		public LeftHandSideContext lhs;
+		public LeftHandSideContext leftHandSide() {
+			return getRuleContext(LeftHandSideContext.class,0);
+		}
+		public PrimaryIdRefContext(PrimaryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterPrimaryIdRef(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitPrimaryIdRef(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitPrimaryIdRef(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class PrimaryLiteralContext extends PrimaryContext {
+		public LiteralContext literal() {
+			return getRuleContext(LiteralContext.class,0);
+		}
+		public PrimaryLiteralContext(PrimaryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterPrimaryLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitPrimaryLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitPrimaryLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ParenExprContext extends PrimaryContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ParenExprContext(PrimaryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterParenExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitParenExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitParenExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -3879,39 +4154,41 @@ public class ObsidiCodeParser extends Parser {
 		PrimaryContext _localctx = new PrimaryContext(_ctx, getState());
 		enterRule(_localctx, 110, RULE_primary);
 		try {
-			setState(508);
+			setState(504);
 			switch ( getInterpreter().adaptivePredict(_input,37,_ctx) ) {
 			case 1:
+				_localctx = new PrimaryLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(499);
+				setState(497);
 				literal();
 				}
 				break;
 			case 2:
+				_localctx = new ParenExprContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
+				setState(498);
+				match(T__4);
+				setState(499);
+				expression();
 				setState(500);
 				match(T__5);
-				setState(501);
-				expression();
-				setState(502);
-				match(T__6);
 				}
 				break;
 			case 3:
+				_localctx = new PrimaryIdRefContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(504);
-				typeName(0);
-				setState(505);
-				listOpt();
+				setState(502);
+				((PrimaryIdRefContext)_localctx).lhs = leftHandSide();
 				}
 				break;
 			case 4:
+				_localctx = new PrimaryMethodInvocContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(507);
+				setState(503);
 				methodInvocation();
 				}
 				break;
@@ -4079,7 +4356,7 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\38\u0201\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\39\u01fd\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -4115,146 +4392,144 @@ public class ObsidiCodeParser extends Parser {
 		"\n\63\3\64\3\64\3\64\3\64\3\64\7\64\u01d4\n\64\f\64\16\64\u01d7\13\64"+
 		"\3\65\3\65\3\65\3\65\5\65\u01dd\n\65\3\66\3\66\3\66\3\66\3\66\7\66\u01e4"+
 		"\n\66\f\66\16\66\u01e7\13\66\3\67\3\67\3\67\3\67\5\67\u01ed\n\67\38\3"+
-		"8\38\38\38\58\u01f4\n8\39\39\39\39\39\39\39\39\39\59\u01ff\n9\39\2\22"+
-		"\6\n\16\24\34*8DHXZ\\^bfj:\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$"+
-		"&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnp\2\4\4\2\3\4.\60\4\2\6"+
-		"\6\64\67\u01f9\2r\3\2\2\2\4v\3\2\2\2\6x\3\2\2\2\b\u0083\3\2\2\2\n\u0085"+
-		"\3\2\2\2\f\u0091\3\2\2\2\16\u0095\3\2\2\2\20\u00a2\3\2\2\2\22\u00a4\3"+
-		"\2\2\2\24\u00a8\3\2\2\2\26\u00b7\3\2\2\2\30\u00b9\3\2\2\2\32\u00c0\3\2"+
-		"\2\2\34\u00c2\3\2\2\2\36\u00d1\3\2\2\2 \u00d5\3\2\2\2\"\u00d9\3\2\2\2"+
-		"$\u00df\3\2\2\2&\u00e5\3\2\2\2(\u00f0\3\2\2\2*\u00f2\3\2\2\2,\u0105\3"+
-		"\2\2\2.\u010d\3\2\2\2\60\u010f\3\2\2\2\62\u0117\3\2\2\2\64\u0119\3\2\2"+
-		"\2\66\u011e\3\2\2\28\u0128\3\2\2\2:\u013f\3\2\2\2<\u0143\3\2\2\2>\u0145"+
-		"\3\2\2\2@\u014d\3\2\2\2B\u0154\3\2\2\2D\u0156\3\2\2\2F\u0163\3\2\2\2H"+
-		"\u0165\3\2\2\2J\u0170\3\2\2\2L\u0173\3\2\2\2N\u0177\3\2\2\2P\u0179\3\2"+
-		"\2\2R\u017d\3\2\2\2T\u0185\3\2\2\2V\u0187\3\2\2\2X\u0189\3\2\2\2Z\u0194"+
-		"\3\2\2\2\\\u019f\3\2\2\2^\u01aa\3\2\2\2`\u01b8\3\2\2\2b\u01ba\3\2\2\2"+
-		"d\u01cc\3\2\2\2f\u01ce\3\2\2\2h\u01dc\3\2\2\2j\u01de\3\2\2\2l\u01ec\3"+
-		"\2\2\2n\u01f3\3\2\2\2p\u01fe\3\2\2\2rs\5\f\7\2st\5\n\6\2tu\5\16\b\2u\3"+
-		"\3\2\2\2vw\t\2\2\2w\5\3\2\2\2xy\b\4\1\2yz\7-\2\2z\u0080\3\2\2\2{|\f\3"+
-		"\2\2|}\7\5\2\2}\177\7-\2\2~{\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2"+
-		"\u0080\u0081\3\2\2\2\u0081\7\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\t"+
-		"\3\2\2\u0084\t\3\2\2\2\u0085\u008e\b\6\1\2\u0086\u0087\f\4\2\2\u0087\u0088"+
-		"\7\7\2\2\u0088\u0089\7\b\2\2\u0089\u008a\7\60\2\2\u008a\u008b\7\t\2\2"+
-		"\u008b\u008d\7\n\2\2\u008c\u0086\3\2\2\2\u008d\u0090\3\2\2\2\u008e\u008c"+
-		"\3\2\2\2\u008e\u008f\3\2\2\2\u008f\13\3\2\2\2\u0090\u008e\3\2\2\2\u0091"+
-		"\u0092\7-\2\2\u0092\u0093\7\13\2\2\u0093\u0094\7\n\2\2\u0094\r\3\2\2\2"+
-		"\u0095\u0096\b\b\1\2\u0096\u0097\5\20\t\2\u0097\u009c\3\2\2\2\u0098\u0099"+
-		"\f\4\2\2\u0099\u009b\5\20\t\2\u009a\u0098\3\2\2\2\u009b\u009e\3\2\2\2"+
-		"\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d\17\3\2\2\2\u009e\u009c"+
-		"\3\2\2\2\u009f\u00a3\5\22\n\2\u00a0\u00a3\5\36\20\2\u00a1\u00a3\7\n\2"+
-		"\2\u00a2\u009f\3\2\2\2\u00a2\u00a0\3\2\2\2\u00a2\u00a1\3\2\2\2\u00a3\21"+
-		"\3\2\2\2\u00a4\u00a5\5\b\5\2\u00a5\u00a6\5\24\13\2\u00a6\u00a7\7\n\2\2"+
-		"\u00a7\23\3\2\2\2\u00a8\u00a9\b\13\1\2\u00a9\u00aa\5\26\f\2\u00aa\u00b0"+
-		"\3\2\2\2\u00ab\u00ac\f\3\2\2\u00ac\u00ad\7\f\2\2\u00ad\u00af\5\26\f\2"+
-		"\u00ae\u00ab\3\2\2\2\u00af\u00b2\3\2\2\2\u00b0\u00ae\3\2\2\2\u00b0\u00b1"+
-		"\3\2\2\2\u00b1\25\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b3\u00b8\5\30\r\2\u00b4"+
-		"\u00b5\7-\2\2\u00b5\u00b6\7\r\2\2\u00b6\u00b8\5\32\16\2\u00b7\u00b3\3"+
-		"\2\2\2\u00b7\u00b4\3\2\2\2\u00b8\27\3\2\2\2\u00b9\u00ba\5N(\2\u00ba\31"+
-		"\3\2\2\2\u00bb\u00bc\5\34\17\2\u00bc\u00bd\7\16\2\2\u00bd\u00be\7-\2\2"+
-		"\u00be\u00c1\3\2\2\2\u00bf\u00c1\3\2\2\2\u00c0\u00bb\3\2\2\2\u00c0\u00bf"+
-		"\3\2\2\2\u00c1\33\3\2\2\2\u00c2\u00c3\b\17\1\2\u00c3\u00c4\5p9\2\u00c4"+
-		"\u00ca\3\2\2\2\u00c5\u00c6\f\4\2\2\u00c6\u00c7\7\f\2\2\u00c7\u00c9\5p"+
-		"9\2\u00c8\u00c5\3\2\2\2\u00c9\u00cc\3\2\2\2\u00ca\u00c8\3\2\2\2\u00ca"+
-		"\u00cb\3\2\2\2\u00cb\35\3\2\2\2\u00cc\u00ca\3\2\2\2\u00cd\u00ce\5 \21"+
-		"\2\u00ce\u00cf\5$\23\2\u00cf\u00d2\3\2\2\2\u00d0\u00d2\5&\24\2\u00d1\u00cd"+
-		"\3\2\2\2\u00d1\u00d0\3\2\2\2\u00d2\37\3\2\2\2\u00d3\u00d6\78\2\2\u00d4"+
-		"\u00d6\5\b\5\2\u00d5\u00d3\3\2\2\2\u00d5\u00d4\3\2\2\2\u00d6\u00d7\3\2"+
-		"\2\2\u00d7\u00d8\5\"\22\2\u00d8!\3\2\2\2\u00d9\u00da\7-\2\2\u00da\u00db"+
-		"\7\b\2\2\u00db\u00dc\5F$\2\u00dc\u00dd\7\t\2\2\u00dd\u00de\7\n\2\2\u00de"+
-		"#\3\2\2\2\u00df\u00e1\5(\25\2\u00e0\u00e2\7\16\2\2\u00e1\u00e0\3\2\2\2"+
-		"\u00e1\u00e2\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3\u00e4\7-\2\2\u00e4%\3\2"+
-		"\2\2\u00e5\u00e6\7\17\2\2\u00e6\u00e7\7-\2\2\u00e7\u00e8\7\b\2\2\u00e8"+
-		"\u00e9\5F$\2\u00e9\u00ea\7\t\2\2\u00ea\u00eb\7\n\2\2\u00eb\u00ec\5(\25"+
-		"\2\u00ec\u00ed\7\20\2\2\u00ed\'\3\2\2\2\u00ee\u00f1\5*\26\2\u00ef\u00f1"+
-		"\3\2\2\2\u00f0\u00ee\3\2\2\2\u00f0\u00ef\3\2\2\2\u00f1)\3\2\2\2\u00f2"+
-		"\u00f3\b\26\1\2\u00f3\u00f4\5,\27\2\u00f4\u00f5\7\n\2\2\u00f5\u00fc\3"+
-		"\2\2\2\u00f6\u00f7\f\4\2\2\u00f7\u00f8\5,\27\2\u00f8\u00f9\7\n\2\2\u00f9"+
-		"\u00fb\3\2\2\2\u00fa\u00f6\3\2\2\2\u00fb\u00fe\3\2\2\2\u00fc\u00fa\3\2"+
-		"\2\2\u00fc\u00fd\3\2\2\2\u00fd+\3\2\2\2\u00fe\u00fc\3\2\2\2\u00ff\u0100"+
-		"\5\b\5\2\u0100\u0101\5\24\13\2\u0101\u0106\3\2\2\2\u0102\u0106\5.\30\2"+
-		"\u0103\u0106\5\66\34\2\u0104\u0106\5<\37\2\u0105\u00ff\3\2\2\2\u0105\u0102"+
-		"\3\2\2\2\u0105\u0103\3\2\2\2\u0105\u0104\3\2\2\2\u0106-\3\2\2\2\u0107"+
-		"\u010e\3\2\2\2\u0108\u010e\5\60\31\2\u0109\u010e\5\62\32\2\u010a\u010e"+
-		"\7\21\2\2\u010b\u010c\7\22\2\2\u010c\u010e\5L\'\2\u010d\u0107\3\2\2\2"+
-		"\u010d\u0108\3\2\2\2\u010d\u0109\3\2\2\2\u010d\u010a\3\2\2\2\u010d\u010b"+
-		"\3\2\2\2\u010e/\3\2\2\2\u010f\u0110\7\23\2\2\u0110\u0111\7-\2\2\u0111"+
-		"\u0112\7\b\2\2\u0112\u0113\5D#\2\u0113\u0114\7\t\2\2\u0114\61\3\2\2\2"+
-		"\u0115\u0118\5N(\2\u0116\u0118\5\64\33\2\u0117\u0115\3\2\2\2\u0117\u0116"+
-		"\3\2\2\2\u0118\63\3\2\2\2\u0119\u011a\5\6\4\2\u011a\u011b\7\b\2\2\u011b"+
-		"\u011c\5B\"\2\u011c\u011d\7\t\2\2\u011d\65\3\2\2\2\u011e\u011f\7\24\2"+
-		"\2\u011f\u0120\7\b\2\2\u0120\u0121\5L\'\2\u0121\u0122\7\t\2\2\u0122\u0123"+
-		"\7\n\2\2\u0123\u0124\5(\25\2\u0124\u0125\7\25\2\2\u0125\u0126\58\35\2"+
-		"\u0126\u0127\5:\36\2\u0127\67\3\2\2\2\u0128\u0135\b\35\1\2\u0129\u012a"+
-		"\f\4\2\2\u012a\u012b\7\n\2\2\u012b\u012c\7\26\2\2\u012c\u012d\7\b\2\2"+
-		"\u012d\u012e\5L\'\2\u012e\u012f\7\t\2\2\u012f\u0130\7\n\2\2\u0130\u0131"+
-		"\5(\25\2\u0131\u0132\7\27\2\2\u0132\u0134\3\2\2\2\u0133\u0129\3\2\2\2"+
-		"\u0134\u0137\3\2\2\2\u0135\u0133\3\2\2\2\u0135\u0136\3\2\2\2\u01369\3"+
-		"\2\2\2\u0137\u0135\3\2\2\2\u0138\u0139\7\n\2\2\u0139\u013a\7\30\2\2\u013a"+
-		"\u013b\7\n\2\2\u013b\u013c\5(\25\2\u013c\u013d\7\31\2\2\u013d\u0140\3"+
-		"\2\2\2\u013e\u0140\3\2\2\2\u013f\u0138\3\2\2\2\u013f\u013e\3\2\2\2\u0140"+
+		"8\38\58\u01f2\n8\39\39\39\39\39\39\39\59\u01fb\n9\39\2\22\6\n\16\24\34"+
+		"*8DHXZ\\^bfj:\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64"+
+		"\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnp\2\4\4\2\3\4$&\4\2*-//\u01f4\2r\3\2\2"+
+		"\2\4v\3\2\2\2\6x\3\2\2\2\b\u0083\3\2\2\2\n\u0085\3\2\2\2\f\u0091\3\2\2"+
+		"\2\16\u0095\3\2\2\2\20\u00a2\3\2\2\2\22\u00a4\3\2\2\2\24\u00a8\3\2\2\2"+
+		"\26\u00b7\3\2\2\2\30\u00b9\3\2\2\2\32\u00c0\3\2\2\2\34\u00c2\3\2\2\2\36"+
+		"\u00d1\3\2\2\2 \u00d5\3\2\2\2\"\u00d9\3\2\2\2$\u00df\3\2\2\2&\u00e5\3"+
+		"\2\2\2(\u00f0\3\2\2\2*\u00f2\3\2\2\2,\u0105\3\2\2\2.\u010d\3\2\2\2\60"+
+		"\u010f\3\2\2\2\62\u0117\3\2\2\2\64\u0119\3\2\2\2\66\u011e\3\2\2\28\u0128"+
+		"\3\2\2\2:\u013f\3\2\2\2<\u0143\3\2\2\2>\u0145\3\2\2\2@\u014d\3\2\2\2B"+
+		"\u0154\3\2\2\2D\u0156\3\2\2\2F\u0163\3\2\2\2H\u0165\3\2\2\2J\u0170\3\2"+
+		"\2\2L\u0173\3\2\2\2N\u0177\3\2\2\2P\u0179\3\2\2\2R\u017d\3\2\2\2T\u0185"+
+		"\3\2\2\2V\u0187\3\2\2\2X\u0189\3\2\2\2Z\u0194\3\2\2\2\\\u019f\3\2\2\2"+
+		"^\u01aa\3\2\2\2`\u01b8\3\2\2\2b\u01ba\3\2\2\2d\u01cc\3\2\2\2f\u01ce\3"+
+		"\2\2\2h\u01dc\3\2\2\2j\u01de\3\2\2\2l\u01ec\3\2\2\2n\u01f1\3\2\2\2p\u01fa"+
+		"\3\2\2\2rs\5\f\7\2st\5\n\6\2tu\5\16\b\2u\3\3\2\2\2vw\t\2\2\2w\5\3\2\2"+
+		"\2xy\b\4\1\2yz\7#\2\2z\u0080\3\2\2\2{|\f\3\2\2|}\7\5\2\2}\177\7#\2\2~"+
+		"{\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080\u0081\3\2\2\2\u0081\7"+
+		"\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\t\3\2\2\u0084\t\3\2\2\2\u0085"+
+		"\u008e\b\6\1\2\u0086\u0087\f\4\2\2\u0087\u0088\7\6\2\2\u0088\u0089\7\7"+
+		"\2\2\u0089\u008a\7&\2\2\u008a\u008b\7\b\2\2\u008b\u008d\7\t\2\2\u008c"+
+		"\u0086\3\2\2\2\u008d\u0090\3\2\2\2\u008e\u008c\3\2\2\2\u008e\u008f\3\2"+
+		"\2\2\u008f\13\3\2\2\2\u0090\u008e\3\2\2\2\u0091\u0092\7#\2\2\u0092\u0093"+
+		"\7\n\2\2\u0093\u0094\7\t\2\2\u0094\r\3\2\2\2\u0095\u0096\b\b\1\2\u0096"+
+		"\u0097\5\20\t\2\u0097\u009c\3\2\2\2\u0098\u0099\f\4\2\2\u0099\u009b\5"+
+		"\20\t\2\u009a\u0098\3\2\2\2\u009b\u009e\3\2\2\2\u009c\u009a\3\2\2\2\u009c"+
+		"\u009d\3\2\2\2\u009d\17\3\2\2\2\u009e\u009c\3\2\2\2\u009f\u00a3\5\22\n"+
+		"\2\u00a0\u00a3\5\36\20\2\u00a1\u00a3\7\t\2\2\u00a2\u009f\3\2\2\2\u00a2"+
+		"\u00a0\3\2\2\2\u00a2\u00a1\3\2\2\2\u00a3\21\3\2\2\2\u00a4\u00a5\5\b\5"+
+		"\2\u00a5\u00a6\5\24\13\2\u00a6\u00a7\7\t\2\2\u00a7\23\3\2\2\2\u00a8\u00a9"+
+		"\b\13\1\2\u00a9\u00aa\5\26\f\2\u00aa\u00b0\3\2\2\2\u00ab\u00ac\f\3\2\2"+
+		"\u00ac\u00ad\7\13\2\2\u00ad\u00af\5\26\f\2\u00ae\u00ab\3\2\2\2\u00af\u00b2"+
+		"\3\2\2\2\u00b0\u00ae\3\2\2\2\u00b0\u00b1\3\2\2\2\u00b1\25\3\2\2\2\u00b2"+
+		"\u00b0\3\2\2\2\u00b3\u00b8\5\30\r\2\u00b4\u00b5\7#\2\2\u00b5\u00b6\7\f"+
+		"\2\2\u00b6\u00b8\5\32\16\2\u00b7\u00b3\3\2\2\2\u00b7\u00b4\3\2\2\2\u00b8"+
+		"\27\3\2\2\2\u00b9\u00ba\5N(\2\u00ba\31\3\2\2\2\u00bb\u00bc\5\34\17\2\u00bc"+
+		"\u00bd\7\r\2\2\u00bd\u00be\7#\2\2\u00be\u00c1\3\2\2\2\u00bf\u00c1\3\2"+
+		"\2\2\u00c0\u00bb\3\2\2\2\u00c0\u00bf\3\2\2\2\u00c1\33\3\2\2\2\u00c2\u00c3"+
+		"\b\17\1\2\u00c3\u00c4\5p9\2\u00c4\u00ca\3\2\2\2\u00c5\u00c6\f\4\2\2\u00c6"+
+		"\u00c7\7\13\2\2\u00c7\u00c9\5p9\2\u00c8\u00c5\3\2\2\2\u00c9\u00cc\3\2"+
+		"\2\2\u00ca\u00c8\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb\35\3\2\2\2\u00cc\u00ca"+
+		"\3\2\2\2\u00cd\u00ce\5 \21\2\u00ce\u00cf\5$\23\2\u00cf\u00d2\3\2\2\2\u00d0"+
+		"\u00d2\5&\24\2\u00d1\u00cd\3\2\2\2\u00d1\u00d0\3\2\2\2\u00d2\37\3\2\2"+
+		"\2\u00d3\u00d6\5\b\5\2\u00d4\u00d6\7.\2\2\u00d5\u00d3\3\2\2\2\u00d5\u00d4"+
+		"\3\2\2\2\u00d6\u00d7\3\2\2\2\u00d7\u00d8\5\"\22\2\u00d8!\3\2\2\2\u00d9"+
+		"\u00da\7#\2\2\u00da\u00db\7\7\2\2\u00db\u00dc\5F$\2\u00dc\u00dd\7\b\2"+
+		"\2\u00dd\u00de\7\t\2\2\u00de#\3\2\2\2\u00df\u00e1\5(\25\2\u00e0\u00e2"+
+		"\7\r\2\2\u00e1\u00e0\3\2\2\2\u00e1\u00e2\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3"+
+		"\u00e4\7#\2\2\u00e4%\3\2\2\2\u00e5\u00e6\7\16\2\2\u00e6\u00e7\7#\2\2\u00e7"+
+		"\u00e8\7\7\2\2\u00e8\u00e9\5F$\2\u00e9\u00ea\7\b\2\2\u00ea\u00eb\7\t\2"+
+		"\2\u00eb\u00ec\5(\25\2\u00ec\u00ed\7\17\2\2\u00ed\'\3\2\2\2\u00ee\u00f1"+
+		"\5*\26\2\u00ef\u00f1\3\2\2\2\u00f0\u00ee\3\2\2\2\u00f0\u00ef\3\2\2\2\u00f1"+
+		")\3\2\2\2\u00f2\u00f3\b\26\1\2\u00f3\u00f4\5,\27\2\u00f4\u00f5\7\t\2\2"+
+		"\u00f5\u00fc\3\2\2\2\u00f6\u00f7\f\4\2\2\u00f7\u00f8\5,\27\2\u00f8\u00f9"+
+		"\7\t\2\2\u00f9\u00fb\3\2\2\2\u00fa\u00f6\3\2\2\2\u00fb\u00fe\3\2\2\2\u00fc"+
+		"\u00fa\3\2\2\2\u00fc\u00fd\3\2\2\2\u00fd+\3\2\2\2\u00fe\u00fc\3\2\2\2"+
+		"\u00ff\u0100\5\b\5\2\u0100\u0101\5\24\13\2\u0101\u0106\3\2\2\2\u0102\u0106"+
+		"\5.\30\2\u0103\u0106\5\66\34\2\u0104\u0106\5<\37\2\u0105\u00ff\3\2\2\2"+
+		"\u0105\u0102\3\2\2\2\u0105\u0103\3\2\2\2\u0105\u0104\3\2\2\2\u0106-\3"+
+		"\2\2\2\u0107\u010e\3\2\2\2\u0108\u010e\5\60\31\2\u0109\u010e\5\62\32\2"+
+		"\u010a\u010e\7\20\2\2\u010b\u010c\7\21\2\2\u010c\u010e\5L\'\2\u010d\u0107"+
+		"\3\2\2\2\u010d\u0108\3\2\2\2\u010d\u0109\3\2\2\2\u010d\u010a\3\2\2\2\u010d"+
+		"\u010b\3\2\2\2\u010e/\3\2\2\2\u010f\u0110\7\22\2\2\u0110\u0111\7#\2\2"+
+		"\u0111\u0112\7\7\2\2\u0112\u0113\5D#\2\u0113\u0114\7\b\2\2\u0114\61\3"+
+		"\2\2\2\u0115\u0118\5N(\2\u0116\u0118\5\64\33\2\u0117\u0115\3\2\2\2\u0117"+
+		"\u0116\3\2\2\2\u0118\63\3\2\2\2\u0119\u011a\5\6\4\2\u011a\u011b\7\7\2"+
+		"\2\u011b\u011c\5B\"\2\u011c\u011d\7\b\2\2\u011d\65\3\2\2\2\u011e\u011f"+
+		"\7\23\2\2\u011f\u0120\7\7\2\2\u0120\u0121\5L\'\2\u0121\u0122\7\b\2\2\u0122"+
+		"\u0123\7\t\2\2\u0123\u0124\5(\25\2\u0124\u0125\7\24\2\2\u0125\u0126\5"+
+		"8\35\2\u0126\u0127\5:\36\2\u0127\67\3\2\2\2\u0128\u0135\b\35\1\2\u0129"+
+		"\u012a\f\4\2\2\u012a\u012b\7\t\2\2\u012b\u012c\7\25\2\2\u012c\u012d\7"+
+		"\7\2\2\u012d\u012e\5L\'\2\u012e\u012f\7\b\2\2\u012f\u0130\7\t\2\2\u0130"+
+		"\u0131\5(\25\2\u0131\u0132\7\26\2\2\u0132\u0134\3\2\2\2\u0133\u0129\3"+
+		"\2\2\2\u0134\u0137\3\2\2\2\u0135\u0133\3\2\2\2\u0135\u0136\3\2\2\2\u0136"+
+		"9\3\2\2\2\u0137\u0135\3\2\2\2\u0138\u0139\7\t\2\2\u0139\u013a\7\27\2\2"+
+		"\u013a\u013b\7\t\2\2\u013b\u013c\5(\25\2\u013c\u013d\7\30\2\2\u013d\u0140"+
+		"\3\2\2\2\u013e\u0140\3\2\2\2\u013f\u0138\3\2\2\2\u013f\u013e\3\2\2\2\u0140"+
 		";\3\2\2\2\u0141\u0144\5> \2\u0142\u0144\5@!\2\u0143\u0141\3\2\2\2\u0143"+
-		"\u0142\3\2\2\2\u0144=\3\2\2\2\u0145\u0146\7\32\2\2\u0146\u0147\7\b\2\2"+
-		"\u0147\u0148\5L\'\2\u0148\u0149\7\t\2\2\u0149\u014a\7\n\2\2\u014a\u014b"+
-		"\5(\25\2\u014b\u014c\7\33\2\2\u014c?\3\2\2\2\u014d\u014e\7\34\2\2\u014e"+
-		"\u014f\7\n\2\2\u014f\u0150\5(\25\2\u0150\u0151\7\35\2\2\u0151A\3\2\2\2"+
+		"\u0142\3\2\2\2\u0144=\3\2\2\2\u0145\u0146\7\31\2\2\u0146\u0147\7\7\2\2"+
+		"\u0147\u0148\5L\'\2\u0148\u0149\7\b\2\2\u0149\u014a\7\t\2\2\u014a\u014b"+
+		"\5(\25\2\u014b\u014c\7\32\2\2\u014c?\3\2\2\2\u014d\u014e\7\33\2\2\u014e"+
+		"\u014f\7\t\2\2\u014f\u0150\5(\25\2\u0150\u0151\7\34\2\2\u0151A\3\2\2\2"+
 		"\u0152\u0155\5D#\2\u0153\u0155\3\2\2\2\u0154\u0152\3\2\2\2\u0154\u0153"+
 		"\3\2\2\2\u0155C\3\2\2\2\u0156\u0157\b#\1\2\u0157\u0158\5L\'\2\u0158\u015e"+
-		"\3\2\2\2\u0159\u015a\f\4\2\2\u015a\u015b\7\f\2\2\u015b\u015d\5L\'\2\u015c"+
+		"\3\2\2\2\u0159\u015a\f\4\2\2\u015a\u015b\7\13\2\2\u015b\u015d\5L\'\2\u015c"+
 		"\u0159\3\2\2\2\u015d\u0160\3\2\2\2\u015e\u015c\3\2\2\2\u015e\u015f\3\2"+
 		"\2\2\u015fE\3\2\2\2\u0160\u015e\3\2\2\2\u0161\u0164\5H%\2\u0162\u0164"+
 		"\3\2\2\2\u0163\u0161\3\2\2\2\u0163\u0162\3\2\2\2\u0164G\3\2\2\2\u0165"+
 		"\u0166\b%\1\2\u0166\u0167\5J&\2\u0167\u016d\3\2\2\2\u0168\u0169\f\4\2"+
-		"\2\u0169\u016a\7\f\2\2\u016a\u016c\5J&\2\u016b\u0168\3\2\2\2\u016c\u016f"+
+		"\2\u0169\u016a\7\13\2\2\u016a\u016c\5J&\2\u016b\u0168\3\2\2\2\u016c\u016f"+
 		"\3\2\2\2\u016d\u016b\3\2\2\2\u016d\u016e\3\2\2\2\u016eI\3\2\2\2\u016f"+
-		"\u016d\3\2\2\2\u0170\u0171\5\b\5\2\u0171\u0172\7-\2\2\u0172K\3\2\2\2\u0173"+
+		"\u016d\3\2\2\2\u0170\u0171\5\b\5\2\u0171\u0172\7#\2\2\u0172K\3\2\2\2\u0173"+
 		"\u0174\5N(\2\u0174M\3\2\2\2\u0175\u0178\5V,\2\u0176\u0178\5P)\2\u0177"+
 		"\u0175\3\2\2\2\u0177\u0176\3\2\2\2\u0178O\3\2\2\2\u0179\u017a\5R*\2\u017a"+
-		"\u017b\7\r\2\2\u017b\u017c\5L\'\2\u017cQ\3\2\2\2\u017d\u017e\5\6\4\2\u017e"+
-		"\u017f\5T+\2\u017fS\3\2\2\2\u0180\u0181\7\36\2\2\u0181\u0182\5L\'\2\u0182"+
-		"\u0183\7\37\2\2\u0183\u0186\3\2\2\2\u0184\u0186\3\2\2\2\u0185\u0180\3"+
+		"\u017b\7\f\2\2\u017b\u017c\5L\'\2\u017cQ\3\2\2\2\u017d\u017e\5\6\4\2\u017e"+
+		"\u017f\5T+\2\u017fS\3\2\2\2\u0180\u0181\7\35\2\2\u0181\u0182\5L\'\2\u0182"+
+		"\u0183\7\36\2\2\u0183\u0186\3\2\2\2\u0184\u0186\3\2\2\2\u0185\u0180\3"+
 		"\2\2\2\u0185\u0184\3\2\2\2\u0186U\3\2\2\2\u0187\u0188\5X-\2\u0188W\3\2"+
 		"\2\2\u0189\u018a\b-\1\2\u018a\u018b\5Z.\2\u018b\u0191\3\2\2\2\u018c\u018d"+
-		"\f\3\2\2\u018d\u018e\7 \2\2\u018e\u0190\5Z.\2\u018f\u018c\3\2\2\2\u0190"+
+		"\f\3\2\2\u018d\u018e\7\37\2\2\u018e\u0190\5Z.\2\u018f\u018c\3\2\2\2\u0190"+
 		"\u0193\3\2\2\2\u0191\u018f\3\2\2\2\u0191\u0192\3\2\2\2\u0192Y\3\2\2\2"+
 		"\u0193\u0191\3\2\2\2\u0194\u0195\b.\1\2\u0195\u0196\5\\/\2\u0196\u019c"+
-		"\3\2\2\2\u0197\u0198\f\3\2\2\u0198\u0199\7!\2\2\u0199\u019b\5\\/\2\u019a"+
+		"\3\2\2\2\u0197\u0198\f\3\2\2\u0198\u0199\7 \2\2\u0199\u019b\5\\/\2\u019a"+
 		"\u0197\3\2\2\2\u019b\u019e\3\2\2\2\u019c\u019a\3\2\2\2\u019c\u019d\3\2"+
 		"\2\2\u019d[\3\2\2\2\u019e\u019c\3\2\2\2\u019f\u01a0\b/\1\2\u01a0\u01a1"+
-		"\5^\60\2\u01a1\u01a7\3\2\2\2\u01a2\u01a3\f\3\2\2\u01a3\u01a4\7\"\2\2\u01a4"+
+		"\5^\60\2\u01a1\u01a7\3\2\2\2\u01a2\u01a3\f\3\2\2\u01a3\u01a4\7!\2\2\u01a4"+
 		"\u01a6\5^\60\2\u01a5\u01a2\3\2\2\2\u01a6\u01a9\3\2\2\2\u01a7\u01a5\3\2"+
 		"\2\2\u01a7\u01a8\3\2\2\2\u01a8]\3\2\2\2\u01a9\u01a7\3\2\2\2\u01aa\u01ab"+
 		"\b\60\1\2\u01ab\u01ac\5b\62\2\u01ac\u01b1\3\2\2\2\u01ad\u01ae\f\3\2\2"+
 		"\u01ae\u01b0\5`\61\2\u01af\u01ad\3\2\2\2\u01b0\u01b3\3\2\2\2\u01b1\u01af"+
 		"\3\2\2\2\u01b1\u01b2\3\2\2\2\u01b2_\3\2\2\2\u01b3\u01b1\3\2\2\2\u01b4"+
-		"\u01b5\7#\2\2\u01b5\u01b9\5b\62\2\u01b6\u01b7\7$\2\2\u01b7\u01b9\5b\62"+
-		"\2\u01b8\u01b4\3\2\2\2\u01b8\u01b6\3\2\2\2\u01b9a\3\2\2\2\u01ba\u01bb"+
+		"\u01b5\7\60\2\2\u01b5\u01b9\5b\62\2\u01b6\u01b7\7\61\2\2\u01b7\u01b9\5"+
+		"b\62\2\u01b8\u01b4\3\2\2\2\u01b8\u01b6\3\2\2\2\u01b9a\3\2\2\2\u01ba\u01bb"+
 		"\b\62\1\2\u01bb\u01bc\5f\64\2\u01bc\u01c1\3\2\2\2\u01bd\u01be\f\3\2\2"+
 		"\u01be\u01c0\5d\63\2\u01bf\u01bd\3\2\2\2\u01c0\u01c3\3\2\2\2\u01c1\u01bf"+
 		"\3\2\2\2\u01c1\u01c2\3\2\2\2\u01c2c\3\2\2\2\u01c3\u01c1\3\2\2\2\u01c4"+
-		"\u01c5\7%\2\2\u01c5\u01cd\5f\64\2\u01c6\u01c7\7&\2\2\u01c7\u01cd\5f\64"+
-		"\2\u01c8\u01c9\7\'\2\2\u01c9\u01cd\5f\64\2\u01ca\u01cb\7(\2\2\u01cb\u01cd"+
-		"\5f\64\2\u01cc\u01c4\3\2\2\2\u01cc\u01c6\3\2\2\2\u01cc\u01c8\3\2\2\2\u01cc"+
-		"\u01ca\3\2\2\2\u01cde\3\2\2\2\u01ce\u01cf\b\64\1\2\u01cf\u01d0\5j\66\2"+
-		"\u01d0\u01d5\3\2\2\2\u01d1\u01d2\f\3\2\2\u01d2\u01d4\5h\65\2\u01d3\u01d1"+
-		"\3\2\2\2\u01d4\u01d7\3\2\2\2\u01d5\u01d3\3\2\2\2\u01d5\u01d6\3\2\2\2\u01d6"+
-		"g\3\2\2\2\u01d7\u01d5\3\2\2\2\u01d8\u01d9\7)\2\2\u01d9\u01dd\5j\66\2\u01da"+
-		"\u01db\7*\2\2\u01db\u01dd\5j\66\2\u01dc\u01d8\3\2\2\2\u01dc\u01da\3\2"+
-		"\2\2\u01ddi\3\2\2\2\u01de\u01df\b\66\1\2\u01df\u01e0\5n8\2\u01e0\u01e5"+
-		"\3\2\2\2\u01e1\u01e2\f\3\2\2\u01e2\u01e4\5l\67\2\u01e3\u01e1\3\2\2\2\u01e4"+
-		"\u01e7\3\2\2\2\u01e5\u01e3\3\2\2\2\u01e5\u01e6\3\2\2\2\u01e6k\3\2\2\2"+
-		"\u01e7\u01e5\3\2\2\2\u01e8\u01e9\7+\2\2\u01e9\u01ed\5n8\2\u01ea\u01eb"+
-		"\7,\2\2\u01eb\u01ed\5n8\2\u01ec\u01e8\3\2\2\2\u01ec\u01ea\3\2\2\2\u01ed"+
-		"m\3\2\2\2\u01ee\u01ef\7)\2\2\u01ef\u01f4\5n8\2\u01f0\u01f1\7*\2\2\u01f1"+
-		"\u01f4\5n8\2\u01f2\u01f4\5p9\2\u01f3\u01ee\3\2\2\2\u01f3\u01f0\3\2\2\2"+
-		"\u01f3\u01f2\3\2\2\2\u01f4o\3\2\2\2\u01f5\u01ff\5\4\3\2\u01f6\u01f7\7"+
-		"\b\2\2\u01f7\u01f8\5L\'\2\u01f8\u01f9\7\t\2\2\u01f9\u01ff\3\2\2\2\u01fa"+
-		"\u01fb\5\6\4\2\u01fb\u01fc\5T+\2\u01fc\u01ff\3\2\2\2\u01fd\u01ff\5\64"+
-		"\33\2\u01fe\u01f5\3\2\2\2\u01fe\u01f6\3\2\2\2\u01fe\u01fa\3\2\2\2\u01fe"+
-		"\u01fd\3\2\2\2\u01ffq\3\2\2\2(\u0080\u008e\u009c\u00a2\u00b0\u00b7\u00c0"+
-		"\u00ca\u00d1\u00d5\u00e1\u00f0\u00fc\u0105\u010d\u0117\u0135\u013f\u0143"+
-		"\u0154\u015e\u0163\u016d\u0177\u0185\u0191\u019c\u01a7\u01b1\u01b8\u01c1"+
-		"\u01cc\u01d5\u01dc\u01e5\u01ec\u01f3\u01fe";
+		"\u01c5\7\62\2\2\u01c5\u01cd\5f\64\2\u01c6\u01c7\7\63\2\2\u01c7\u01cd\5"+
+		"f\64\2\u01c8\u01c9\7\64\2\2\u01c9\u01cd\5f\64\2\u01ca\u01cb\7\"\2\2\u01cb"+
+		"\u01cd\5f\64\2\u01cc\u01c4\3\2\2\2\u01cc\u01c6\3\2\2\2\u01cc\u01c8\3\2"+
+		"\2\2\u01cc\u01ca\3\2\2\2\u01cde\3\2\2\2\u01ce\u01cf\b\64\1\2\u01cf\u01d0"+
+		"\5j\66\2\u01d0\u01d5\3\2\2\2\u01d1\u01d2\f\3\2\2\u01d2\u01d4\5h\65\2\u01d3"+
+		"\u01d1\3\2\2\2\u01d4\u01d7\3\2\2\2\u01d5\u01d3\3\2\2\2\u01d5\u01d6\3\2"+
+		"\2\2\u01d6g\3\2\2\2\u01d7\u01d5\3\2\2\2\u01d8\u01d9\7\66\2\2\u01d9\u01dd"+
+		"\5j\66\2\u01da\u01db\7\67\2\2\u01db\u01dd\5j\66\2\u01dc\u01d8\3\2\2\2"+
+		"\u01dc\u01da\3\2\2\2\u01ddi\3\2\2\2\u01de\u01df\b\66\1\2\u01df\u01e0\5"+
+		"n8\2\u01e0\u01e5\3\2\2\2\u01e1\u01e2\f\3\2\2\u01e2\u01e4\5l\67\2\u01e3"+
+		"\u01e1\3\2\2\2\u01e4\u01e7\3\2\2\2\u01e5\u01e3\3\2\2\2\u01e5\u01e6\3\2"+
+		"\2\2\u01e6k\3\2\2\2\u01e7\u01e5\3\2\2\2\u01e8\u01e9\78\2\2\u01e9\u01ed"+
+		"\5n8\2\u01ea\u01eb\79\2\2\u01eb\u01ed\5n8\2\u01ec\u01e8\3\2\2\2\u01ec"+
+		"\u01ea\3\2\2\2\u01edm\3\2\2\2\u01ee\u01ef\7\67\2\2\u01ef\u01f2\5n8\2\u01f0"+
+		"\u01f2\5p9\2\u01f1\u01ee\3\2\2\2\u01f1\u01f0\3\2\2\2\u01f2o\3\2\2\2\u01f3"+
+		"\u01fb\5\4\3\2\u01f4\u01f5\7\7\2\2\u01f5\u01f6\5L\'\2\u01f6\u01f7\7\b"+
+		"\2\2\u01f7\u01fb\3\2\2\2\u01f8\u01fb\5R*\2\u01f9\u01fb\5\64\33\2\u01fa"+
+		"\u01f3\3\2\2\2\u01fa\u01f4\3\2\2\2\u01fa\u01f8\3\2\2\2\u01fa\u01f9\3\2"+
+		"\2\2\u01fbq\3\2\2\2(\u0080\u008e\u009c\u00a2\u00b0\u00b7\u00c0\u00ca\u00d1"+
+		"\u00d5\u00e1\u00f0\u00fc\u0105\u010d\u0117\u0135\u013f\u0143\u0154\u015e"+
+		"\u0163\u016d\u0177\u0185\u0191\u019c\u01a7\u01b1\u01b8\u01c1\u01cc\u01d5"+
+		"\u01dc\u01e5\u01ec\u01f1\u01fa";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
