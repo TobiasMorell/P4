@@ -5,16 +5,13 @@ fragment NameStartChar
         :       'A'..'Z' | 'a'..'z';
 fragment NameChar
         :       NameStartChar
-        |       '0'..'9'
+        |       Num
         |       '_'
         ;
 fragment Num
         :       '0'..'9';
 
 //Regex for the scanner:
-Identifier
-	:	NameStartChar NameChar*;
-
 NumLit
 	:	Num+ ('.'Num+)?;
 CoordLit
@@ -31,7 +28,33 @@ COMMENT
 	;
 EOLCOMMENT
 	:	'//' .*? '\n' -> skip
-	; 
+	;
+
+NUM: 'NUM';
+STRING: 'STRING';
+COORD: 'COORD';
+BOOL: 'BOOL';
+VOID: 'VOID';
+LIST: 'LIST';
+
+EQ_MOD_IS: 'IS';
+EQ_MOD_NOT: 'NOT';
+
+RELATIONAL_KEY_LT: 'LESS_THAN';
+RELATIONAL_KEY_GT: 'GREATER_THAN';
+RELATIONAL_KEY_LTE: 'LESS_THAN_EQUAL';
+RELATIONAL_KEY_GTE: 'GREATHER_THAN_EQUAL';
+
+OP_PLUS: '+';
+OP_MINUS: '-';
+OP_MULT: '*';
+OP_DIV: '/';
+
+TRUE: 'TRUE';
+FALSE: 'FALSE';
+
+Identifier
+    :	NameStartChar NameChar*;
 
 prog
 	:	roboDcl loads roboBodyDcl;
@@ -49,7 +72,11 @@ typeName
 	;
 
 typePrefix
-	:	type=('NUM' | 'BOOL' | 'STRING' | 'COORD' | 'LIST')
+	:	type='NUM'
+	|   type='BOOL'
+	|   type='STRING'
+	|   type='COORD'
+	|   type='LIST'
 	;
 
 loads
@@ -254,23 +281,3 @@ primary
 	|	lhs=leftHandSide			#primaryIdRef
 	|	methodInvocation		#primaryMethodInvoc
 ;
-
-TYPE_NUM: 'NUM';
-TYPE_STRING: 'STRING';
-TYPE_COORD: 'COORD';
-TYPE_BOOL: 'BOOL';
-TYPE_VOID: 'VOID';
-TYPE_LIST: 'LIST';
-
-EQ_MOD_IS: 'IS';
-EQ_MOD_NOT: 'NOT';
-
-RELATIONAL_KEY_LT: 'LESS_THAN';
-RELATIONAL_KEY_GT: 'GREATER_THAN';
-RELATIONAL_KEY_LTE: 'LESS_THAN_EQUAL';
-RELATIONAL_KEY_GTE: 'GREATHER_THAN_EQUAL';
-
-OP_PLUS: '+';
-OP_MINUS: '-';
-OP_MULT: '*';
-OP_DIV: '/';

@@ -33,16 +33,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			}
 			
 			switch(type) {
-			case ObsidiCodeParser.TYPE_NUM:
+			case ObsidiCodeParser.NUM:
 				bn.AddNode(new NumDcl(id, initialization));
 				break;
-			case ObsidiCodeParser.TYPE_STRING:
+			case ObsidiCodeParser.STRING:
 				bn.AddNode(new StringDcl(id, initialization));
 				break;
-			case ObsidiCodeParser.TYPE_BOOL:
+			case ObsidiCodeParser.BOOL:
 				bn.AddNode(new BoolDcl(id, initialization));
 				break;
-			case ObsidiCodeParser.TYPE_COORD:
+			case ObsidiCodeParser.COORD:
 				bn.AddNode(new CoordDcl(id, initialization));
 				break;
 			}
@@ -257,16 +257,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			declIdentifier = new DeclarationNode(id, params);
 		else {
 			switch(ctx.t.type.getType()){
-			case ObsidiCodeParser.TYPE_NUM:
+			case ObsidiCodeParser.NUM:
 				declIdentifier = new NumDcl(id, params);
 				break;
-			case ObsidiCodeParser.TYPE_STRING:
+			case ObsidiCodeParser.STRING:
 				declIdentifier = new StringDcl(id, params);
 				break;
-			case ObsidiCodeParser.TYPE_COORD:
+			case ObsidiCodeParser.COORD:
 				declIdentifier = new CoordDcl(id, params);
 				break;
-			case ObsidiCodeParser.TYPE_BOOL:
+			case ObsidiCodeParser.BOOL:
 				declIdentifier = new BoolDcl(id, params);
 				break;
 			default :
@@ -537,16 +537,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitParam(ObsidiCodeParser.ParamContext ctx) {
 		Node decl = new DeclarationNode(null, null);
 		switch(ctx.t.type.getType()){
-		case ObsidiCodeParser.TYPE_NUM:
+		case ObsidiCodeParser.NUM:
 			decl = new NumDcl(ctx.id.getText(), null);
 			break;
-		case ObsidiCodeParser.TYPE_COORD:
+		case ObsidiCodeParser.COORD:
 			decl = new CoordDcl(ctx.id.getText(), null);
 			break;
-		case ObsidiCodeParser.TYPE_BOOL:
+		case ObsidiCodeParser.BOOL:
 			decl = new BoolDcl(ctx.id.getText(), null);
 			break;
-		case ObsidiCodeParser.TYPE_STRING:
+		case ObsidiCodeParser.STRING:
 			decl = new StringDcl(ctx.id.getText(), null);
 			break;
 		}
