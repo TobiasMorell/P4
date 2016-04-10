@@ -1,7 +1,6 @@
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.SyntaxNodes.BlockNode;
-import ASTNodes.SyntaxNodes.DclNode;
 import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.ProgNode;
 

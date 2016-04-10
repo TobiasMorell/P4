@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ASTNodes.GeneralNodes.NaryNode;
 import ASTNodes.GeneralNodes.Node;
+import Visitors.AbstractVisitor;
 
 /**
  * Created by morell on 3/31/16.
@@ -57,6 +58,11 @@ public class IfNode extends NaryNode{
 	public IfNode(ArrayList<Node> childNodes) {
 		super(childNodes);
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public Object Accept(AbstractVisitor v) {
+		return v.visit(this);
 	}
 	
 }

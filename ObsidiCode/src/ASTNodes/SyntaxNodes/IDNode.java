@@ -1,6 +1,7 @@
 package ASTNodes.SyntaxNodes;
 
 import ASTNodes.GeneralNodes.*;
+import Visitors.AbstractVisitor;
 
 public class IDNode extends LeafNode{
     private String _id;
@@ -20,5 +21,10 @@ public class IDNode extends LeafNode{
     public void AddExtension(ExprNode ext)
     {
     	_extension = ext;
+    }
+
+    @Override
+    public Object Accept(AbstractVisitor v) {
+        return v.visit(this);
     }
 }

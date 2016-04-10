@@ -1,6 +1,8 @@
 package ASTNodes.GeneralNodes;
 
-public abstract class Node
+import Visitors.Visitable;
+
+public abstract class Node implements Visitable
 {
     public enum Type{
         num, string, coord, bool

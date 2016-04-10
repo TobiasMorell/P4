@@ -53,7 +53,6 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitProg(ObsidiCodeParser.ProgContext ctx) {
 		ProgNode pn = (ProgNode) visit(ctx.roboDcl());
-		//System.out.println("Parsed the roboDcl");
 		pn.AddNode(visit(ctx.loads()));
 		
 		return pn;

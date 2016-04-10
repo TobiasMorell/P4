@@ -2,6 +2,7 @@ package ASTNodes.Operators;
 
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.Node;
+import Visitors.AbstractVisitor;
 
 public class GreaterNode extends BinaryNode {
 
@@ -9,4 +10,8 @@ public class GreaterNode extends BinaryNode {
 		super(leftChild, rightChild);
 	}
 
+	@Override
+	public Object Accept(AbstractVisitor v) {
+		return v.visit(this);
+	}
 }

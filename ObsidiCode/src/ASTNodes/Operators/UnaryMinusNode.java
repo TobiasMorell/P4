@@ -1,4 +1,7 @@
-package ASTNodes.GeneralNodes;
+package ASTNodes.Operators;
+
+import ASTNodes.GeneralNodes.Node;
+import ASTNodes.GeneralNodes.UnaryNode;
 
 public class UnaryMinusNode extends UnaryNode {
 

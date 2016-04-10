@@ -1,4 +1,7 @@
-package ASTNodes.GeneralNodes;
+package ASTNodes.Operators;
+
+import ASTNodes.GeneralNodes.BinaryNode;
+import ASTNodes.GeneralNodes.Node;
 
 public class GreaterEqualNode extends BinaryNode {
 

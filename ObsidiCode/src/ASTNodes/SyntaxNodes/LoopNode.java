@@ -1,6 +1,7 @@
 package ASTNodes.SyntaxNodes;
 
 import ASTNodes.GeneralNodes.*;
+import Visitors.AbstractVisitor;
 
 /**
  * Created by morell on 3/31/16.
@@ -8,5 +9,10 @@ import ASTNodes.GeneralNodes.*;
 public class LoopNode extends BinaryNode{
     public LoopNode(ExprNode condition, BlockNode stmts){
         super(condition, stmts);
+    }
+
+    @Override
+    public Object Accept(AbstractVisitor v) {
+        return v.visit(this);
     }
 }

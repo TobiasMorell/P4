@@ -1,6 +1,7 @@
 package ASTNodes.SyntaxNodes;
 
 import ASTNodes.GeneralNodes.*;
+import Visitors.AbstractVisitor;
 
 import java.util.ArrayList;
 
@@ -10,5 +11,10 @@ import java.util.ArrayList;
 public class FuncNode extends NaryNode{
     public FuncNode(ArrayList<Node> stmts){
         super(stmts);
+    }
+
+    @Override
+    public Object Accept(AbstractVisitor v) {
+        return v.visit(this);
     }
 }

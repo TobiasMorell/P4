@@ -2,6 +2,7 @@ package ASTNodes.SyntaxNodes;
 
 import ASTNodes.GeneralNodes.NaryNode;
 import ASTNodes.GeneralNodes.Node;
+import Visitors.AbstractVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,11 @@ public class ProgNode extends NaryNode {
         super(stmts);
         System.out.println("Now creating the ProgNode with name " + id);
         _id = id;
+    }
+
+    @Override
+    public Object Accept(AbstractVisitor v) {
+        return v.visit(this);
     }
 
 }

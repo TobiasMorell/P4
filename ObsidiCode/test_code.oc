@@ -1,3 +1,9 @@
 FIXDISBOT:
 LOAD("I-ARE-IDIOT-BOT")
 NUM a = 12
+
+VOID Start()
+  NUM b
+  b = 10
+  a+b
+END Start
