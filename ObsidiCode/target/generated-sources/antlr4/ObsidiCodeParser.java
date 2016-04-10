@@ -389,27 +389,51 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class LoadsContext extends ParserRuleContext {
+		public LoadsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_loads; }
+	 
+		public LoadsContext() { }
+		public void copyFrom(LoadsContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class LambdaLoadContext extends LoadsContext {
+		public LambdaLoadContext(LoadsContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterLambdaLoad(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitLambdaLoad(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitLambdaLoad(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NonLambdaLoadContext extends LoadsContext {
 		public LoadsContext recursion;
 		public Token load_id;
 		public LoadsContext loads() {
 			return getRuleContext(LoadsContext.class,0);
 		}
 		public TerminalNode StringLit() { return getToken(ObsidiCodeParser.StringLit, 0); }
-		public LoadsContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_loads; }
+		public NonLambdaLoadContext(LoadsContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterLoads(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterNonLambdaLoad(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitLoads(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitNonLambdaLoad(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitLoads(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitNonLambdaLoad(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -430,6 +454,10 @@ public class ObsidiCodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
+			_localctx = new LambdaLoadContext(_localctx);
+			_ctx = _localctx;
+			_prevctx = _localctx;
+
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(145);
@@ -441,9 +469,8 @@ public class ObsidiCodeParser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new LoadsContext(_parentctx, _parentState);
-					_localctx.recursion = _prevctx;
-					_localctx.recursion = _prevctx;
+					_localctx = new NonLambdaLoadContext(new LoadsContext(_parentctx, _parentState));
+					((NonLambdaLoadContext)_localctx).recursion = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_loads);
 					setState(137);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
@@ -452,7 +479,7 @@ public class ObsidiCodeParser extends Parser {
 					setState(139);
 					match(T__2);
 					setState(140);
-					((LoadsContext)_localctx).load_id = match(StringLit);
+					((NonLambdaLoadContext)_localctx).load_id = match(StringLit);
 					setState(141);
 					match(T__3);
 					setState(142);

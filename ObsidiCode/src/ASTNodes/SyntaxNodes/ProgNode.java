@@ -4,6 +4,7 @@ import ASTNodes.GeneralNodes.NaryNode;
 import ASTNodes.GeneralNodes.Node;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Gedesnegl on 29-03-2016.
@@ -11,8 +12,9 @@ import java.util.ArrayList;
 public class ProgNode extends NaryNode {
     String _id;
 
-    public ProgNode(ArrayList<Node> stmts, String id){
+    public ProgNode(List<Node> stmts, String id){
         super(stmts);
+        System.out.println("Now creating the ProgNode with name " + id);
         _id = id;
     }
 

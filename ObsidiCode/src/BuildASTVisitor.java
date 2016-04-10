@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.*;
@@ -52,7 +53,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitProg(ObsidiCodeParser.ProgContext ctx) {
 		ProgNode pn = (ProgNode) visit(ctx.roboDcl());
-		System.out.println("Parsed the roboDcl");
+		//System.out.println("Parsed the roboDcl");
 		pn.AddNode(visit(ctx.loads()));
 		
 		return pn;
@@ -85,12 +86,9 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		ReferenceNode ref = new ReferenceNode( ctx.id.getText() );
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.TypeNameContext)
-		{
 			visit(ctx.parent);
-		}
-		else {
+		else
 			ref = new ReferenceNode( ctx.id.getText() );
-		}
 		
 		return ref;
 	}
@@ -101,13 +99,18 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	}
 
 	@Override
-	public Node visitLoads(ObsidiCodeParser.LoadsContext ctx) {
-		LoadNode ln;
-		if(ctx.getChild(1) != null)
-			ln = (LoadNode) visit(ctx.recursion);
-		else
+	public Node visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) {
+		return null;
+	}
+
+	@Override
+	public Node visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) {
+		LoadNode ln = (LoadNode) visit(ctx.recursion);
+
+		//The child was empty i.e. last step of recursion
+		if(ln == null)
 			ln = new LoadNode();
-		
+
 		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.load_id.getText()));
 		return ln;
 	}
@@ -116,8 +119,11 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
 		String robotName = ctx.id.getText();
 		System.out.println("The name of the program is: " + robotName); //<------- for TESTING 
-		
-		return new ProgNode(new ArrayList<Node>(), robotName);
+
+		System.out.println("Initializing list...");
+		List<Node> stmts = new ArrayList<>(10);
+
+		return new ProgNode(stmts, robotName);
 	}
 
 	@Override

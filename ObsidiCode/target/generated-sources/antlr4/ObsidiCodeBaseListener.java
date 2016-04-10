@@ -63,13 +63,25 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLoads(ObsidiCodeParser.LoadsContext ctx) { }
+	@Override public void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLoads(ObsidiCodeParser.LoadsContext ctx) { }
+	@Override public void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

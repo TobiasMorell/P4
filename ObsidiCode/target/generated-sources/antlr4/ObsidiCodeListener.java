@@ -47,15 +47,29 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#loads}.
+	 * Enter a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
 	 */
-	void enterLoads(ObsidiCodeParser.LoadsContext ctx);
+	void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#loads}.
+	 * Exit a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
 	 */
-	void exitLoads(ObsidiCodeParser.LoadsContext ctx);
+	void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#roboDcl}.
 	 * @param ctx the parse tree

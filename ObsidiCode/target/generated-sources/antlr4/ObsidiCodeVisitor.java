@@ -34,11 +34,19 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#loads}.
+	 * Visit a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLoads(ObsidiCodeParser.LoadsContext ctx);
+	T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#roboDcl}.
 	 * @param ctx the parse tree

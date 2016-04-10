@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -33,13 +34,18 @@ public class Compiler {
 
         ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
         ParseTree tree = parser.prog();// begin parsing at rule 'prog'
-        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
 
-        /*
-         * FOR TESTING ONLY
-         */
-        //show AST in GUI
-        JFrame frame = new JFrame("Antlr AST");
+        BuildASTVisitor bASTv = new BuildASTVisitor();
+        ProgNode pn = (ProgNode) bASTv.visit(tree);
+    }
+
+    /*
+     * FOR TESTING ONLY - show AST in GUI, but doesn't work with large trees
+     */
+    private void showTreeOnGUI(ParseTree tree, ObsidiCodeParser parser)
+    {
+        JFrame frame = new JFrame("ObsidiCode Tree Viewer");
         JPanel panel = new JPanel();
         TreeViewer viewr = new TreeViewer(Arrays.asList(
                 parser.getRuleNames()),tree);
@@ -47,10 +53,8 @@ public class Compiler {
         panel.add(viewr);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200,200);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setSize(screenSize.width,screenSize.height);
         frame.setVisible(true);
-
-        /*BuildASTVisitor bASTv = new BuildASTVisitor();
-        ProgNode pn = (ProgNode) bASTv.visit(tree);*/
     }
 }

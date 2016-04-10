@@ -44,7 +44,14 @@ public class ObsidiCodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLoads(ObsidiCodeParser.LoadsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

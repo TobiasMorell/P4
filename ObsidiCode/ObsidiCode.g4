@@ -80,8 +80,8 @@ typePrefix
 	;
 
 loads
-	:	recursion=loads 'LOAD' '(' load_id=StringLit ')' '\n' 
-	|	//lambda
+	:	recursion=loads 'LOAD' '(' load_id=StringLit ')' '\n'   #nonLambdaLoad
+	|	/*lambda*/                                              #lambdaLoad
 	;
 
 //Declarations
