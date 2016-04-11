@@ -35,20 +35,34 @@ public class SymbolTable {
     private void ProcessNode(Node node) {
         //Check weather to put something in the SymbolTable
         if (node instanceof BlockNode) {
-            OpenScope();
+            //As a new scope is already opened with a method declaration.
+            //we choose to check that the parent is not of this type
+            if(!(node._parent instanceof MethodDcl))
+                OpenScope();
             ProcessChildren(node);
             CloseScope();
         }else if(node instanceof DeclarationNode){
             String id = ((IDNode)node.GetLeftChild()).GetID();
             EnterSymbol(id, ((DeclarationNode)node).type);
         }else if(node instanceof ReferenceNode){
-            //Symbol = Symboltable.retrieveSymbol(node.name)
-            //if(Symbol == null) error
-            //elseerror
+            Symbol s = RetrieveSymbol(((ReferenceNode) node).GetId().GetID());
+            if(s == null)
+                MakeError("Symbol \"" +s.name+ "\" does not exist");
         }else if(node instanceof MethodDcl){
-
+            OpenScope();
+            ProcessChildren(node);
+            //As MethodDcl Always has a Blocknode in it, Scope will automatically be closed
         }
 
+    }
+
+    /**
+     * Prints a simple error message and exits the compiler afterwards.
+     * @param s Error message
+     */
+    private void MakeError(String s) {
+        System.out.println(s);
+        System.exit(-1);
     }
 
     /**
@@ -65,6 +79,7 @@ public class SymbolTable {
         }else if(node instanceof NaryNode){
             for (Node n: ((NaryNode)node).GetChildren()) {
                 ProcessNode(n);
+
             }
         }
 
@@ -78,15 +93,24 @@ public class SymbolTable {
     private void EnterSymbol(String id, Node.Type type) {
         Symbol oldSymbol = RetrieveSymbol(id);
         if(oldSymbol != null && oldSymbol.depth == depth){
-            //Error...
+            MakeError("Symbol \"" + id + "\" has already been initialized in this scope");
         }else{
-
             Symbol newSymbol = new Symbol(id, type, null, 0, depth);
+            Elements.add(newSymbol);
         }
 
     }
 
+    /**
+     * Retrieves Closest(scope wise) symbol with given id
+     * @param id String name of the symbol.
+     * @return
+     */
     private Symbol RetrieveSymbol(String id) {
+        for (int i = Elements.size(); i > 0; i--) {
+            if (Elements.get(i).name == id)
+                return Elements.get(i);
+        }
         return null;
     }
 
@@ -94,7 +118,16 @@ public class SymbolTable {
         depth++;
     }
 
+    /**
+     * Closes current scope and deletes all Symbols contained.
+     */
     private void CloseScope() {
+        int i = 0;
+        for (Symbol s :Elements) {
+            if(s.depth == depth)
+                Elements.remove(i);
+            i++;
+        }
         depth--;
     }
 
