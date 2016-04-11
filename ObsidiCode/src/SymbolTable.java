@@ -1,4 +1,5 @@
 import ASTNodes.Declarations.DeclarationNode;
+import ASTNodes.Declarations.MethodDcl;
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.NaryNode;
@@ -27,29 +28,42 @@ public class SymbolTable {
     Det meget spøjse er Lasse ansigt. Side 292
      */
 
+    /**
+     * Fills out symbol table from a node.
+     * @param node
+     */
     private void ProcessNode(Node node) {
         //Check weather to put something in the SymbolTable
         if (node instanceof BlockNode) {
             OpenScope();
+            ProcessChildren(node);
+            CloseScope();
         }else if(node instanceof DeclarationNode){
             String id = ((IDNode)node.GetLeftChild()).GetID();
-            EnterSymbol(id, ((DeclarationNode)node).GetType());
+            EnterSymbol(id, ((DeclarationNode)node).type);
         }else if(node instanceof ReferenceNode){
             //Symbol = Symboltable.retrieveSymbol(node.name)
             //if(Symbol == null) error
             //elseerror
+        }else if(node instanceof MethodDcl){
+            
         }
-        //Process all children
+
+    }
+
+    /**
+     * Processes all children of a parent node
+     * @param node parent node
+     */
+    private void ProcessChildren(Node node){
         if(node instanceof UnaryNode){
             ProcessNode(((UnaryNode)node).GetLeftChild());
-            
+
         }else if(node instanceof BinaryNode){
             ProcessNode(((BinaryNode)node).GetLeftChild());
             ProcessNode(((BinaryNode)node).GetRightChild());
         }else if(node instanceof NaryNode){
-            for (Node child: ((NaryNode)node).GetChildren()) {
-                ProcessNode(child);
-            }
+            ((NaryNode) node).GetChildren().forEach(this::ProcessNode);
         }
 
         if(node instanceof BlockNode){
