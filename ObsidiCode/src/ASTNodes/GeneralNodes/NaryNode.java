@@ -30,4 +30,8 @@ public abstract class NaryNode extends Node {
     		children.add(n);
     	}
     }
+
+    public ArrayList<Node> GetChildren(){
+        return children;
+    }
 }
