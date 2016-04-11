@@ -279,25 +279,13 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx) { }
+	@Override public void enterStatement(ObsidiCodeParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStmtSkip(ObsidiCodeParser.StmtSkipContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx) { }
+	@Override public void exitStatement(ObsidiCodeParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

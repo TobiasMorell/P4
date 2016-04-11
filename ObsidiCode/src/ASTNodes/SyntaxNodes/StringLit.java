@@ -4,7 +4,7 @@ import ASTNodes.GeneralNodes.LeafNode;
 import Visitors.AbstractVisitor;
 
 public class StringLit extends LeafNode {
-	private String text;
+	public String text;
 	
 	public StringLit(String spelling)
 	{

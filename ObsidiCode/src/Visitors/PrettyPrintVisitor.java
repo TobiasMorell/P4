@@ -5,6 +5,8 @@ import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 
+import java.util.ArrayList;
+
 /**
  * Created by Nete on 09-03-2016.
  */
@@ -16,32 +18,36 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolDcl node) {
-        Object lo, ro;
+        String id;
 
-        lo = node.GetLeftChild().Accept(this);
-        ro = node.GetRightChild().Accept(this);
+        id = node.GetLeftChild().Accept(this).toString();
+        if(node.GetRightChild() != null)
+            id += " = " + visit(node.GetRightChild()) + ';';
 
-        return lo.toString() + ", BoolDcl [" + ro.toString() + ']';
+
+        return "boolean " + id;
     }
 
     @Override
     public Object visit(CoordDcl node) {
-        Object lo, ro;
+        String dcl;
 
-        lo = node.GetLeftChild().Accept(this);
-        ro = node.GetRightChild().Accept(this);
+        dcl = visit(node.GetLeftChild()).toString();
+        if(node.GetRightChild() != null)
+            dcl += " = " + visit(node.GetRightChild()) + ';';
 
-        return lo.toString() + ", CoordDcl [" + ro.toString() + ']';
+        return dcl;
     }
 
     @Override
     public Object visit(DeclarationNode node) {
-        Object lo, ro;
+        String dcl;
 
-        lo = node.GetLeftChild().Accept(this);
-        ro = node.GetRightChild().Accept(this);
+        dcl = node.GetLeftChild().Accept(this).toString();
+        if(node.GetRightChild() != null)
+            dcl += " = " + visit(node.GetRightChild()) + ';';
 
-        return lo.toString() + ", DeclarationNode [" + ro.toString() + ']';
+        return dcl;
     }
 
     @Override
@@ -50,191 +56,333 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
         lo = node.GetLeftChild().Accept(this);
 
-        return "HearDcl" + ", id: " + node.id + ", params: " + node.parameters + "body: " + lo;
+        return "public void hear" + node.id + '(' + node.parameters + ") {\n" + lo + '}';
     }
 
     @Override
     public Object visit(MethodDcl node) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        //Create access modifier and return type
+        sb.append("public ");
+        switch (node.type){
+            case bool:
+                sb.append("boolean ");
+                break;
+            case coord:
+                sb.append("Coord ");
+                break;
+            case num:
+                sb.append("float ");
+                break;
+            case string:
+                sb.append("String ");
+                break;
+            case Void:
+                sb.append("void ");
+                break;
+        }
+
+        //Append ID and params
+        sb.append(node.id);
+        appendParams(sb, node.parameters);
+        sb.append("{\n");
+        sb.append(visit(node.GetLeftChild()));
+        sb.append("}\n");
+
+        return sb.toString();
+    }
+
+    private void appendParams(StringBuilder sb, ArrayList<Node> parameters)
+    {
+        sb.append('(');
+        for (int i = 0; i < parameters.size(); i++) {
+            if(i != 0)
+                sb.append(',');
+            sb.append(visit(parameters.get(i)));
+        }
+        sb.append(')');
     }
 
     @Override
     public Object visit(NumDcl node) {
-        return null;
+        String id = visit(node.GetLeftChild()).toString();
+        if(node.GetRightChild() != null)
+            id += " = " + visit(node.GetRightChild());
+        return "float " + id + ';';
     }
 
     @Override
     public Object visit(ReferenceNode node) {
-        return null;
+        return visit(node.GetId());
     }
 
     @Override
     public Object visit(StringDcl node) {
-        return null;
+        String id = visit(node.GetLeftChild()).toString();
+        if(node.GetRightChild() != null)
+            id += " = " + visit(node.GetRightChild()) + ';';
+        return id;
     }
 
     @Override
     public Object visit(GreaterEqualNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " >= " + ro;
     }
 
     @Override
     public Object visit(LessEqualNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " <= " + ro;
     }
 
     @Override
     public Object visit(AndNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " && " + ro;
     }
 
     @Override
     public Object visit(AssignNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " = " + ro + ";\n";
     }
 
     @Override
     public Object visit(DivNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " / " + ro;
     }
 
     @Override
     public Object visit(GreaterNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " > " + ro;
     }
 
     @Override
     public Object visit(IsNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " == " + ro;
     }
 
     @Override
     public Object visit(LessNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " < " + ro;
     }
 
     @Override
     public Object visit(MinusNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " - " + ro;
     }
 
     @Override
     public Object visit(MultNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " * " + ro;
     }
 
     @Override
     public Object visit(NotNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " != " + ro;
     }
 
     @Override
     public Object visit(OrNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " || " + ro;
     }
 
     @Override
     public Object visit(PlusNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " + " + ro;
     }
 
     @Override
     public Object visit(UnaryMinusNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+
+        return "-" + lo;
     }
 
     @Override
     public Object visit(XandNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " XAND " + ro;
     }
 
     @Override
     public Object visit(XorNode node) {
-        return null;
+        Object lo = visit(node.GetLeftChild());
+        Object ro = visit(node.GetRightChild());
+
+        return lo + " XOR " + ro;
     }
 
     @Override
     public Object visit(BlockNode node) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Node> stmts = node.GetChildren();
+
+        for (int i = 0; i < stmts.size(); i++) {
+            sb.append(visit(stmts.get(i)).toString() + '\n');
+        }
+
+        return sb.toString();
     }
 
     @Override
     public Object visit(BoolLit node) {
-        return null;
+        return "BoolLit: "+ node.value;
     }
 
     @Override
     public Object visit(BreakNode node) {
-        return null;
+        return "BREAK MOTHERFUCKERS!";
     }
 
     @Override
     public Object visit(CoordLit node) {
-        return null;
+        return "CoordLit: ("+ node.x + ", " + node.y + ", " + node.z + ")";
     }
 
     @Override
     public Object visit(ElseNode node) {
-        return null;
+        return "Else node:\n" + visit(node.GetLeftChild());
     }
 
     @Override
     public Object visit(ExprNode node) {
-        return null;
-    }
+        Object lo = null;
+        Object ro = null;
 
-    @Override
-    public Object visit(FuncNode node) {
-        return null;
+        if(node.GetLeftChild() != null)
+            lo = visit(node.GetLeftChild());
+        if(node.GetRightChild() != null)
+            lo = visit(node.GetRightChild());
+
+        return "ExprNode: " + lo.toString() +' ' + ro.toString();
     }
 
     @Override
     public Object visit(IDNode node) {
-        return null;
+        String ext = "";
+
+        if(node._extension != null)
+            ext = visit(node._extension).toString();
+
+        return node._id + ext;
     }
 
     @Override
     public Object visit(IfNode node) {
-        return null;
+        String body = visit(node.GetBody()).toString();
+        String cond = visit(node.GetCondition()).toString();
+        String elseIf = visit(node.GetElseIf()).toString();
+        String els = visit(node.GetElse()).toString();
+
+        return "if (" + cond + ") {\n" + body + "}\n" + elseIf + els;
     }
 
     @Override
     public Object visit(LoadNode node) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("import ");
+
+        for (Node n : node.GetChildren()) {
+            String id = ((ProgNode) n)._id;
+            sb.append(id.replace("\"", ""));
+        }
+
+        sb.append(';');
+        return sb.toString();
     }
 
     @Override
     public Object visit(LoopNode node) {
-        return null;
+        String expr = visit(node.GetLeftChild()).toString();
+        String body = visit(node.GetLeftChild()).toString();
+
+        return "while (!" + expr + ") {\n" + body + "}\n";
     }
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        return null;
+        String id = visit(node.GetLeftChild()).toString();
+        StringBuilder sb = new StringBuilder();
+
+        for (Node n : node.GetChildren()) {
+            sb.append(visit(n).toString() + ", ");
+        }
+
+        return id + "(" + sb.toString() + ")";
     }
 
     @Override
     public Object visit(NumLit node) {
-        return null;
+        return node._value;
     }
 
     @Override
     public Object visit(ProgNode node) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("public class " + node._id + " extends AbstractMinecraftRobot {\n");
+
+        for (Node n : node.GetChildren()) {
+            String res = visit(n).toString();
+            if (res != null)
+                sb.append(res + '\n');
+        }
+        sb.append('}');
+
+        return sb.toString();
     }
 
     @Override
     public Object visit(ReturnNode node) {
-        return null;
+        return "return " + visit(node.GetLeftChild()) + ';';
     }
 
     @Override
     public Object visit(SignalNode node) {
-        return null;
+        return "SignalNode: " + visit(node.GetLeftChild()) + " " + visit(node.GetRightChild());
     }
 
     @Override
     public Object visit(StringLit node) {
-        return null;
+        return "StringLit: " + node.text;
     }
 }

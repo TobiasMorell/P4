@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.util.Arrays;
 
+import Visitors.PrettyPrintVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.*;
@@ -35,10 +36,13 @@ public class Compiler {
         ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
         ParseTree tree = parser.prog();// begin parsing at rule 'prog'
         //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
-        showTreeOnGUI(tree, parser);
+        //showTreeOnGUI(tree, parser);
 
         BuildASTVisitor bASTv = new BuildASTVisitor();
         ProgNode pn = (ProgNode) bASTv.visit(tree);
+
+        PrettyPrintVisitor ppv = new PrettyPrintVisitor();
+        System.out.println(ppv.visit(pn));
     }
 
     /*

@@ -4,8 +4,8 @@ import ASTNodes.GeneralNodes.*;
 import Visitors.AbstractVisitor;
 
 public class IDNode extends LeafNode{
-    private String _id;
-    private ExprNode _extension;
+    public String _id;
+    public ExprNode _extension;
     
     public IDNode(String identifier){
         this._id = identifier;

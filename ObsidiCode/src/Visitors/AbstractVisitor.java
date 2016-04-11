@@ -45,7 +45,6 @@ public abstract class AbstractVisitor {
     public abstract Object visit(CoordLit node);
     public abstract Object visit(ElseNode node);
     public abstract Object visit(ExprNode node);
-    public abstract Object visit(FuncNode node);
     public abstract Object visit(IDNode node);
     public abstract Object visit(IfNode node);
     public abstract Object visit(LoadNode node);

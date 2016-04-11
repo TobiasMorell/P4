@@ -1,12 +1,17 @@
 package ASTNodes.SyntaxNodes;
 
 import ASTNodes.GeneralNodes.BinaryNode;
+import ASTNodes.GeneralNodes.NaryNode;
+import ASTNodes.GeneralNodes.Node;
 import Visitors.AbstractVisitor;
 
-public class MethodInvocationNode extends BinaryNode {
+import java.util.ArrayList;
 
-	public MethodInvocationNode(IDNode leftChild, BlockNode rightChild) {
-		super(leftChild, rightChild);
+public class MethodInvocationNode extends NaryNode {
+
+	public MethodInvocationNode(IDNode leftChild, ArrayList<Node> args) {
+		super(args);
+		this._leftmostChild = leftChild;
 	}
 
 	@Override

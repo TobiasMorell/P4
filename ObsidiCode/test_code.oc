@@ -1,8 +1,8 @@
 FIXDISBOT:
+LOAD("HITLERS BEST")
 NUM a = 12
 
 VOID Start()
-  NUM b
-  b = 10
-  a+b
+  NUM b = 10
+  a = a+b
 END Start

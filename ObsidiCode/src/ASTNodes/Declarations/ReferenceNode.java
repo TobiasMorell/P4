@@ -1,20 +1,24 @@
 package ASTNodes.Declarations;
 
+import ASTNodes.GeneralNodes.LeafNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.GeneralNodes.UnaryNode;
+import ASTNodes.SyntaxNodes.ExprNode;
 import ASTNodes.SyntaxNodes.IDNode;
 import Visitors.AbstractVisitor;
 import Visitors.Visitable;
 
-public class ReferenceNode extends UnaryNode {
+public class ReferenceNode extends LeafNode {
+	Type type;
+	IDNode referencedIdentifier;
 
 	public IDNode GetId()
 	{
-		return (IDNode) this._leftmostChild;
+		return referencedIdentifier;
 	}
 	
 	public ReferenceNode(String id) {
-		super(new IDNode(id));
+		this.referencedIdentifier = new IDNode(id);
 	}
 
 	@Override

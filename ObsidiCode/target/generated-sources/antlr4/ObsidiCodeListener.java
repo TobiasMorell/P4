@@ -231,29 +231,15 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stmtDeclaration}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
+	 * Enter a parse tree produced by {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
+	void enterStatement(ObsidiCodeParser.StatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stmtDeclaration}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
+	 * Exit a parse tree produced by {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code stmtSkip}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stmtSkip}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
+	void exitStatement(ObsidiCodeParser.StatementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code noSubLambda}
 	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.

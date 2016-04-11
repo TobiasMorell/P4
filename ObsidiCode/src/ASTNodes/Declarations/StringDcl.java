@@ -10,10 +10,10 @@ import Visitors.Visitable;
  * Created by Gedesnegl on 29-03-2016.
  */
 public class StringDcl extends DeclarationNode {
-    public StringDcl(Node leftChild, ExprNode rightChild) {
+    public StringDcl(Node leftChild, Node rightChild) {
         super(Node.Type.string, (IDNode)leftChild, rightChild);
     }
-    public StringDcl(String id, ExprNode rightChild)
+    public StringDcl(String id, Node rightChild)
     {
         super(Type.string, new IDNode(id), rightChild);
     }

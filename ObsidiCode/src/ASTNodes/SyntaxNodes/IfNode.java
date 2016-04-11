@@ -57,7 +57,6 @@ public class IfNode extends NaryNode{
 	
 	public IfNode(ArrayList<Node> childNodes) {
 		super(childNodes);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

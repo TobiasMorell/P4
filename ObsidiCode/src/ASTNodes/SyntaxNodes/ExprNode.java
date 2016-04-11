@@ -9,7 +9,7 @@ import Visitors.AbstractVisitor;
  */
 public class ExprNode extends BinaryNode{
 
-	public ExprNode(ExprNode leftChild, ExprNode rightChild) {
+	public ExprNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
 		// TODO Auto-generated constructor stub
 	}

@@ -144,19 +144,11 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stmtDeclaration}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
+	 * Visit a parse tree produced by {@link ObsidiCodeParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code stmtSkip}
-	 * labeled alternative in {@link ObsidiCodeParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx);
+	T visitStatement(ObsidiCodeParser.StatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code noSubLambda}
 	 * labeled alternative in {@link ObsidiCodeParser#stmtNoSub}.

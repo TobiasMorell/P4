@@ -149,15 +149,15 @@ blockStmtList
 	|	stmt=statement '\n'
 	;
 statement
-	:	t=typePrefix dcl=variableDclList		#stmtDeclaration
-	|	skipNoSub=stmtNoSub				#stmtSkip
-	|	skipIf=ifStmt					#stmtSkip
-	|	skipLoop=loopStmt				#stmtSkip
+	:	t=typePrefix dcl=variableDclList
+	|	skipNoSub=stmtNoSub
+	|	skipIf=ifStmt
+	|	skipLoop=loopStmt
 	;
 stmtNoSub
 	:	/*lambda*/						#noSubLambda
 	|	skipSignal=signalStmt			#noSubSkip
-	|	skipExpr=exprStmt					#noSubSkip
+	|	skipExpr=exprStmt				#noSubSkip
 	|	'BREAK'							#noSubBrk
 	|	'RETURN' expr=expression		#noSubRet
 	;

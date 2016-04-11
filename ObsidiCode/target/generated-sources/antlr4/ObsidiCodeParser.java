@@ -1569,20 +1569,17 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public StatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_statement; }
-	 
-		public StatementContext() { }
-		public void copyFrom(StatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class StmtSkipContext extends StatementContext {
+		public TypePrefixContext t;
+		public VariableDclListContext dcl;
 		public StmtNoSubContext skipNoSub;
 		public IfStmtContext skipIf;
 		public LoopStmtContext skipLoop;
+		public TypePrefixContext typePrefix() {
+			return getRuleContext(TypePrefixContext.class,0);
+		}
+		public VariableDclListContext variableDclList() {
+			return getRuleContext(VariableDclListContext.class,0);
+		}
 		public StmtNoSubContext stmtNoSub() {
 			return getRuleContext(StmtNoSubContext.class,0);
 		}
@@ -1592,42 +1589,21 @@ public class ObsidiCodeParser extends Parser {
 		public LoopStmtContext loopStmt() {
 			return getRuleContext(LoopStmtContext.class,0);
 		}
-		public StmtSkipContext(StatementContext ctx) { copyFrom(ctx); }
+		public StatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStmtSkip(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStmtSkip(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStmtSkip(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class StmtDeclarationContext extends StatementContext {
-		public TypePrefixContext t;
-		public VariableDclListContext dcl;
-		public TypePrefixContext typePrefix() {
-			return getRuleContext(TypePrefixContext.class,0);
-		}
-		public VariableDclListContext variableDclList() {
-			return getRuleContext(VariableDclListContext.class,0);
-		}
-		public StmtDeclarationContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterStmtDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitStmtDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStmtDeclaration(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1643,13 +1619,12 @@ public class ObsidiCodeParser extends Parser {
 			case COORD:
 			case BOOL:
 			case LIST:
-				_localctx = new StmtDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(258);
-				((StmtDeclarationContext)_localctx).t = typePrefix();
+				((StatementContext)_localctx).t = typePrefix();
 				setState(259);
-				((StmtDeclarationContext)_localctx).dcl = variableDclList(0);
+				((StatementContext)_localctx).dcl = variableDclList(0);
 				}
 				break;
 			case T__2:
@@ -1664,28 +1639,25 @@ public class ObsidiCodeParser extends Parser {
 			case TRUE:
 			case FALSE:
 			case Identifier:
-				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(261);
-				((StmtSkipContext)_localctx).skipNoSub = stmtNoSub();
+				((StatementContext)_localctx).skipNoSub = stmtNoSub();
 				}
 				break;
 			case T__14:
-				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(262);
-				((StmtSkipContext)_localctx).skipIf = ifStmt();
+				((StatementContext)_localctx).skipIf = ifStmt();
 				}
 				break;
 			case T__20:
 			case T__22:
-				_localctx = new StmtSkipContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(263);
-				((StmtSkipContext)_localctx).skipLoop = loopStmt();
+				((StatementContext)_localctx).skipLoop = loopStmt();
 				}
 				break;
 			default:

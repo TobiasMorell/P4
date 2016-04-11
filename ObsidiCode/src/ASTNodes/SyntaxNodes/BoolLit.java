@@ -7,7 +7,7 @@ import Visitors.AbstractVisitor;
  * Created by Gedesnegl on 31-03-2016.
  */
 public class BoolLit extends ExprNode {
-	private String value;
+	public String value;
 	public BoolLit(String spelling) {
 		super(null, null);
 		this.value = spelling;

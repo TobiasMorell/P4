@@ -22,6 +22,7 @@ public class MethodDcl extends UnaryNode {
 	public void AddBody(BlockNode body)
 	{
 		this._leftmostChild = body;
+		body._parent = this;
 	}
 
 	public MethodDcl(String id, ArrayList<Node> params, Type t, BlockNode body)

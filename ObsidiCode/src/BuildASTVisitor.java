@@ -15,7 +15,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		for (Node decl : bn.GetStatements())
 		{
 			IDNode id = null;
-			ExprNode initialization = null;
+			Node initialization = null;
 			
 			//Remove the node from the list and replace it with a declaration with a type
 			bn.GetStatements().remove(decl);
@@ -30,7 +30,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			else if (decl instanceof AssignNode)
 			{
 				AssignNode an = (AssignNode) decl;
-				initialization = (ExprNode) an.GetRightChild();
+				initialization = an.GetRightChild();
+				id = ((ReferenceNode) decl.GetLeftChild()).GetId();
 			}
 			
 			switch(type) {
@@ -53,7 +54,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitProg(ObsidiCodeParser.ProgContext ctx) {
 		ProgNode pn = (ProgNode) visit(ctx.roboDcl());
-		pn.AddNode(visit(ctx.loads()));
+		Node load = visit(ctx.loads());
+		if (load != null)
+			pn.AddNode(load);
+		pn.AddNode(visit(ctx.roboBodyDcl()));
 		
 		return pn;
 	}
@@ -82,7 +86,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitTypeName(ObsidiCodeParser.TypeNameContext ctx) {
-		ReferenceNode ref = new ReferenceNode( ctx.id.getText() );
+		String id = ctx.id.getText();
+		ReferenceNode ref = new ReferenceNode( id );
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.TypeNameContext)
 			visit(ctx.parent);
@@ -209,7 +214,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitVariableInitializer(ObsidiCodeParser.VariableInitializerContext ctx) {
 		Node n = visit(ctx.expr);
 		
-		if(n instanceof AssignNode || n instanceof IDNode)
+		if(n instanceof AssignNode || n instanceof ReferenceNode)
 		{
 			return n;
 		}
@@ -278,14 +283,20 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 				t = null;
 			}
 		}
+
+		ArrayList<Node> params;
+		if(bn != null)
+			params = bn.GetChildren();
+		else
+			params = new ArrayList<Node>();
 			
-		return new MethodDcl(ctx.declarator.id.getText(), bn.GetStatements(), t, null);
+		return new MethodDcl(ctx.declarator.id.getText(), params, t, null);
 	}
 
 	@Override
 	public Node visitMethodDeclarator(ObsidiCodeParser.MethodDeclaratorContext ctx) {
 		//Find the params and return them (id is handled in visitMethodHeader
-		return (BlockNode) visit(ctx.params);
+		return visit(ctx.params);
 	}
 
 	@Override
@@ -330,22 +341,23 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	}
 
 	@Override
-	public Node visitStmtDeclaration(ObsidiCodeParser.StmtDeclarationContext ctx) {
-		BlockNode bn = (BlockNode) visit(ctx.dcl);
-		
-		giveContextToNodes(bn, ctx.t.type.getType());
-		
-		return super.visitStmtDeclaration(ctx);
-	}
+	public Node visitStatement(ObsidiCodeParser.StatementContext ctx) {
+		if(ctx.t != null)
+		{
+			BlockNode bn = (BlockNode) visit(ctx.dcl);
+			giveContextToNodes(bn, ctx.t.type.getType());
 
-	@Override
-	public Node visitStmtSkip(ObsidiCodeParser.StmtSkipContext ctx) {
-		if(ctx.skipIf != null)
-			return visit(ctx.skipIf);
-		else if(ctx.skipLoop != null)
-			return visit(ctx.skipLoop);
+			return bn;
+		}
 		else
-			return visit(ctx.skipNoSub);
+		{
+			if(ctx.skipIf != null)
+				return visit(ctx.skipIf);
+			else if(ctx.skipLoop != null)
+				return visit(ctx.skipLoop);
+			else
+				return visit(ctx.skipNoSub);
+		}
 	}
 
 	@Override
@@ -395,27 +407,35 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitMethodInvocation(ObsidiCodeParser.MethodInvocationContext ctx) {
-		IDNode id = (IDNode) visit(ctx.id);
+		ReferenceNode id = (ReferenceNode) visit(ctx.id);
 		
 		BlockNode args = (BlockNode) visit(ctx.args);
-		
-		return new MethodInvocationNode(id, args);
+		ArrayList<Node> argList;
+		if(args == null)
+			argList = new ArrayList<>();
+		else
+			argList = args.GetChildren();
+
+		return new MethodInvocationNode(id.GetId(), argList);
 	}
 
 	@Override
 	public Node visitIfStmt(ObsidiCodeParser.IfStmtContext ctx) {
-		ExprNode expr = (ExprNode) visit(ctx.expr);
+		Node expr = visit(ctx.expr);
 		BlockNode body = (BlockNode) visit(ctx.body);
 		IfNode elseIf = (IfNode) visit(ctx.elseIfStmt);
-		ElseNode elseN = (ElseNode) visit(ctx.elseStmt);
+		BlockNode elseRes = (BlockNode) visit(ctx.elseStmt);
 		
 		ArrayList<Node> listOfIfNodes = new ArrayList<Node>();
 		listOfIfNodes.add(expr);
 		listOfIfNodes.add(body);
 		if(elseIf != null)
 			listOfIfNodes.add(elseIf);
-		if(elseN != null)
-			listOfIfNodes.add(elseN);
+		if(elseRes != null)
+		{
+			ElseNode en = new ElseNode(elseRes);
+			listOfIfNodes.add(elseRes);
+		}
 		
 		return new IfNode(listOfIfNodes);
 	}
@@ -505,7 +525,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitFormalParams(ObsidiCodeParser.FormalParamsContext ctx) {
-		return visit(ctx.list);
+		if(ctx.list != null)
+			return visit(ctx.list);
+
+		return null;
 	}
 
 	@Override
@@ -564,8 +587,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitAssignment(ObsidiCodeParser.AssignmentContext ctx) {
 		//Generate a node for lhs and rhs
-		IDNode lhs = (IDNode) visit(ctx.lhs);
-		ExprNode expr = (ExprNode) visit(ctx.expr);
+		Node lhs = visit(ctx.lhs);
+		Node expr = visit(ctx.expr);
 		
 		return new AssignNode(lhs, expr);
 	}

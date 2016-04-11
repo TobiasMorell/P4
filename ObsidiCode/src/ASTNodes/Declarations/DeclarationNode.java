@@ -12,7 +12,7 @@ public class DeclarationNode extends BinaryNode{
 
 	public Type type;
 
-	public DeclarationNode(Type t, IDNode leftChild, ExprNode rightChild) {
+	public DeclarationNode(Type t, IDNode leftChild, Node rightChild) {
 		super(leftChild, rightChild);
 		type = t;
 	}

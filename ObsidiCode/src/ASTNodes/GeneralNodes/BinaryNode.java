@@ -20,7 +20,7 @@ public abstract class BinaryNode extends Node {
     public BinaryNode (Node leftChild, Node rightChild){
         this._leftmostChild = leftChild;
         this.rightChild =  rightChild;
-        leftChild._parent = this;
-        rightChild._parent = this;
+        if(leftChild != null) leftChild._parent = this;
+        if(rightChild != null) rightChild._parent = this;
     }
 }

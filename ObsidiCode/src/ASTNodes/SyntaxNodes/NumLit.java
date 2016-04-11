@@ -4,7 +4,7 @@ import ASTNodes.GeneralNodes.*;
 import Visitors.AbstractVisitor;
 
 public class NumLit extends LeafNode{
-	private float _value;
+	public float _value;
 	public NumLit(float val){
 		this._value = val;
 	}

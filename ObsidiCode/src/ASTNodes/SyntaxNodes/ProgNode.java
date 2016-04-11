@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Gedesnegl on 29-03-2016.
  */
 public class ProgNode extends NaryNode {
-    String _id;
+    public String _id;
 
     public ProgNode(ArrayList<Node> stmts, String id){
         super(stmts);

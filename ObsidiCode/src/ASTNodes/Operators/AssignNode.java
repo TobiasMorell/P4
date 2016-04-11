@@ -6,8 +6,8 @@ import ASTNodes.SyntaxNodes.IDNode;
 import Visitors.AbstractVisitor;
 
 public class AssignNode extends BinaryNode{
-	public AssignNode(IDNode id, ExprNode expr){
-		super(id,expr);
+	public AssignNode(Node lhs, Node rhs){
+		super(lhs,rhs);
 	}
 
 	@Override

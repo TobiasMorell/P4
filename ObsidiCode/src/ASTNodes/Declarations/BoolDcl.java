@@ -10,10 +10,10 @@ import Visitors.Visitable;
  * Created by Gedesnegl on 29-03-2016.
  */
 public class BoolDcl extends DeclarationNode{
-    public BoolDcl(Node leftChild, ExprNode rightChild) {
+    public BoolDcl(Node leftChild, Node rightChild) {
         super(Node.Type.bool, (IDNode)leftChild, rightChild);
     }
-    public BoolDcl(String id, ExprNode rightChild)
+    public BoolDcl(String id, Node rightChild)
     {
         super(Type.bool, new IDNode(id), rightChild);
     }
