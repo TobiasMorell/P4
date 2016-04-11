@@ -2,12 +2,14 @@ package ASTNodes.Operators;
 
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.Node;
+import ASTNodes.SyntaxNodes.ExprNode;
 import Visitors.AbstractVisitor;
 
-public class LessNode extends BinaryNode {
+public class LessNode extends ExprNode {
 
 	public LessNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
+		t = Type.bool;
 	}
 
 	@Override

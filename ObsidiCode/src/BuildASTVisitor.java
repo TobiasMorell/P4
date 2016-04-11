@@ -334,15 +334,15 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx) {
 		BlockNode bn;
-		if(ctx.getChild(0) instanceof ObsidiCodeParser.BlockStmtListContext){
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.BlockStmtListContext)
 			bn = (BlockNode) visit(ctx.list);
-			bn.AddNode(visit(ctx.stmt));
-		}
 		else
-		{
 			bn = new BlockNode();
-			bn.AddNode(visit(ctx.stmt));
-		}
+
+		Node res = visit(ctx.stmt);
+		if(res != null)
+			bn.AddNode(res);
+
 		return bn;
 	}
 
@@ -450,7 +450,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitElseIf(ObsidiCodeParser.ElseIfContext ctx) {
 		//Generate nodes for each of the parts of the else-if
 		IfNode recursion = (IfNode) visit(ctx.recursion);
-		ExprNode condition = (ExprNode) visit(ctx.expr);
+		Node condition = visit(ctx.expr);
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Add to list
@@ -458,7 +458,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		if(recursion != null)
 			al.add(recursion);
 		al.add(condition);
-		al.add(body);
+		if(body != null)
+			al.add(body);
 		
 		return new IfNode(al);
 	}

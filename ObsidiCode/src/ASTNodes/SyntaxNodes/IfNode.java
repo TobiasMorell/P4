@@ -2,6 +2,7 @@ package ASTNodes.SyntaxNodes;
 
 import java.util.ArrayList;
 
+import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.NaryNode;
 import ASTNodes.GeneralNodes.Node;
 import Visitors.AbstractVisitor;
@@ -33,12 +34,14 @@ public class IfNode extends NaryNode{
 		return null;
 	}
 	
-	public ExprNode GetCondition()
+	public Node GetCondition()
 	{
 		for(Node n : children)
 		{
 			if(n instanceof ExprNode)
-				return (ExprNode) n;
+				return n;
+			else if (n instanceof ReferenceNode)
+				return n;
 		}
 		
 		return null;

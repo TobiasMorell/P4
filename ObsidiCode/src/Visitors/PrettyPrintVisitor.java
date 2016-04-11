@@ -7,8 +7,11 @@ import ASTNodes.SyntaxNodes.*;
 
 import java.util.ArrayList;
 
+//Slet ; i metode parametre
+//Find ud af hvorfor repeats laver to conditions
+
 /**
- * Created by Nete on 09-03-2016.
+ * Created by SW409F16 on 09-03-2016.
  */
 public class PrettyPrintVisitor extends AbstractVisitor {
     @Override
@@ -22,21 +25,21 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
         id = node.GetLeftChild().Accept(this).toString();
         if(node.GetRightChild() != null)
-            id += " = " + visit(node.GetRightChild()) + ';';
+            id += " = " + visit(node.GetRightChild());
 
 
-        return "boolean " + id;
+        return "boolean " + id + ';';
     }
 
     @Override
     public Object visit(CoordDcl node) {
         String dcl;
 
-        dcl = visit(node.GetLeftChild()).toString();
+        dcl = "Coord " + visit(node.GetLeftChild()).toString();
         if(node.GetRightChild() != null)
-            dcl += " = " + visit(node.GetRightChild()) + ';';
+            dcl += " = " + visit(node.GetRightChild());
 
-        return dcl;
+        return dcl + ';';
     }
 
     @Override
@@ -45,9 +48,9 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
         dcl = node.GetLeftChild().Accept(this).toString();
         if(node.GetRightChild() != null)
-            dcl += " = " + visit(node.GetRightChild()) + ';';
+            dcl += " = " + visit(node.GetRightChild());
 
-        return dcl;
+        return dcl + ';';
     }
 
     @Override
@@ -85,7 +88,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
         //Append ID and params
         sb.append(node.id);
-        appendParams(sb, node.parameters);
+        sb.append(createParamsString(node.parameters));
         sb.append("{\n");
         sb.append(visit(node.GetLeftChild()));
         sb.append("}\n");
@@ -93,8 +96,9 @@ public class PrettyPrintVisitor extends AbstractVisitor {
         return sb.toString();
     }
 
-    private void appendParams(StringBuilder sb, ArrayList<Node> parameters)
+    private String createParamsString(ArrayList<Node> parameters)
     {
+        StringBuilder sb = new StringBuilder();
         sb.append('(');
         for (int i = 0; i < parameters.size(); i++) {
             if(i != 0)
@@ -102,6 +106,8 @@ public class PrettyPrintVisitor extends AbstractVisitor {
             sb.append(visit(parameters.get(i)));
         }
         sb.append(')');
+
+        return sb.toString().replace(";", "");
     }
 
     @Override
@@ -119,7 +125,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringDcl node) {
-        String id = visit(node.GetLeftChild()).toString();
+        String id = "String " + visit(node.GetLeftChild()).toString();
         if(node.GetRightChild() != null)
             id += " = " + visit(node.GetRightChild()) + ';';
         return id;
@@ -266,7 +272,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolLit node) {
-        return "BoolLit: "+ node.value;
+        return node.value.toLowerCase();
     }
 
     @Override
@@ -276,25 +282,34 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordLit node) {
-        return "CoordLit: ("+ node.x + ", " + node.y + ", " + node.z + ")";
+        return "new Coord("+ node.x + ", " + node.y + ", " + node.z + ")";
     }
 
     @Override
     public Object visit(ElseNode node) {
-        return "Else node:\n" + visit(node.GetLeftChild());
+        StringBuilder sb = new StringBuilder();
+        sb.append("else {\n");
+
+        for (Node n : ((BlockNode) node.GetLeftChild()).GetStatements())
+        {
+            sb.append(visit(n));
+        }
+
+        sb.append("}\n");
+
+        return sb.toString();
     }
 
     @Override
     public Object visit(ExprNode node) {
-        Object lo = null;
-        Object ro = null;
+        StringBuilder sb = new StringBuilder();
 
         if(node.GetLeftChild() != null)
-            lo = visit(node.GetLeftChild());
+            sb.append( visit(node.GetLeftChild()) );
         if(node.GetRightChild() != null)
-            lo = visit(node.GetRightChild());
+            sb.append(visit(node.GetRightChild()));
 
-        return "ExprNode: " + lo.toString() +' ' + ro.toString();
+        return sb.toString();
     }
 
     @Override
@@ -309,12 +324,22 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
-        String body = visit(node.GetBody()).toString();
-        String cond = visit(node.GetCondition()).toString();
-        String elseIf = visit(node.GetElseIf()).toString();
-        String els = visit(node.GetElse()).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("if (");
+        sb.append(visit(node.GetCondition()));
+        sb.append(") { \n");
+        if(node.GetBody() != null)
+            sb.append(visit(node.GetBody()));
+        sb.append("}\n");
 
-        return "if (" + cond + ") {\n" + body + "}\n" + elseIf + els;
+        if(node.GetElseIf() != null) {
+            sb.append("else ");
+            sb.append(visit(node.GetElseIf()));
+        }
+        if(node.GetElse() != null)
+            sb.append(visit(node.GetElse()));
+
+        return sb.toString();
     }
 
     @Override
@@ -333,10 +358,21 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
-        String expr = visit(node.GetLeftChild()).toString();
-        String body = visit(node.GetLeftChild()).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("while (!");
+        sb.append(visit(node.GetLeftChild()));
+        sb.append(") {\n");
 
-        return "while (!" + expr + ") {\n" + body + "}\n";
+        ArrayList<Node> stmts = ((BlockNode) node.GetRightChild()).GetChildren();
+
+        for (Node n : stmts)
+        {
+            sb.append(visit(n));
+        }
+
+        sb.append("}\n");
+
+        return sb.toString();
     }
 
     @Override
@@ -344,11 +380,19 @@ public class PrettyPrintVisitor extends AbstractVisitor {
         String id = visit(node.GetLeftChild()).toString();
         StringBuilder sb = new StringBuilder();
 
-        for (Node n : node.GetChildren()) {
-            sb.append(visit(n).toString() + ", ");
+        sb.append(id);
+        sb.append("(");
+
+        ArrayList<Node> args = node.GetChildren();
+        for (int i = 0; i < args.size(); i++) {
+            if(i != 0)
+                sb.append(", ");
+            sb.append(visit(args.get(i)).toString());
         }
 
-        return id + "(" + sb.toString() + ")";
+        sb.append(");\n");
+
+        return sb.toString();
     }
 
     @Override
@@ -378,11 +422,24 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(SignalNode node) {
-        return "SignalNode: " + visit(node.GetLeftChild()) + " " + visit(node.GetRightChild());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Signal ");
+        sb.append(visit(node.GetLeftChild()));
+        sb.append(" (");
+
+        ArrayList<Node> args = ((BlockNode) node.GetRightChild()).GetChildren();
+        for (int i = 0; i < args.size(); i++) {
+            if(i > 0)
+                sb.append(", ");
+            sb.append(visit(args.get(i)));
+        }
+        sb.append(");");
+
+        return sb.toString();
     }
 
     @Override
     public Object visit(StringLit node) {
-        return "StringLit: " + node.text;
+        return node.text;
     }
 }

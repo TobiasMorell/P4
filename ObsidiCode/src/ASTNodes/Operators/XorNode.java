@@ -2,12 +2,13 @@ package ASTNodes.Operators;
 
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.Node;
+import ASTNodes.SyntaxNodes.ExprNode;
 import Visitors.AbstractVisitor;
 
 /**
  * Created by Gedesnegl on 29-03-2016.
  */
-public class XorNode extends BinaryNode {
+public class XorNode extends ExprNode {
     public XorNode(Node leftChild, Node rightChild) {
         super(leftChild, rightChild);
         t = Type.bool;
