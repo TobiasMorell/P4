@@ -25,6 +25,19 @@ public class SymbolTable {
     Scopedisplay[depth] bliver brugt til at adde og slette symboler i den pågælende dybte/index,.
     Samtidig viser bogen et hashtable ved siden af hvor symboler aldrig slettes.
     Dette kan muligvis bruges når der skal laves multipass.
+
+    291 bogen. hashtab til lookup, scope til list til nuværende level, sikkert så den hurtigere kan abandon scope
+
+    var er bare en nested liste af symboler med samme navn, så når der kommer et nyt med samme navn,
+    bliver den gamle slettet og peget på af den nye (assigned til den nyes var field).
+    Dvs at hashtable sletter symboler, men dem som tager deres plads holder en reference til dem.
+    Det bare en kosteffektiv måde at gøre det på.
+
+    Btw Multipass er vi genere vores shit i flere phases
+    Foreksempel laver vi først laver vi inputtet til tokenstream, så til et ast, og derefter modified ast og så til
+    assembly modsat syntax directed translation hvor alt gennemgås på engang, chapter 7 i fischer.
+    Btw godt eksempel af et mega simpelt symb tab for syntax directed translation i THE DRAGON BOOK.
+
     Det meget spøjse er Lasse ansigt. Side 292
      */
 
@@ -120,6 +133,9 @@ public class SymbolTable {
 
     /**
      * Closes current scope and deletes all Symbols contained.
+     *
+     * Ikke særlig effektiv kører igennem hele tablet.
+     *
      */
     private void CloseScope() {
         int i = 0;
@@ -133,3 +149,9 @@ public class SymbolTable {
 
 }
 
+/* Lasse Rant
+
+Ser fint ud, mangler persistent data structure methods, classes, det vil vi gerne beholde efter scope ender.
+Muligvis vise forskel igennem typer, methods ... ah det kommer i bogen 298 og frem.
+
+*/
