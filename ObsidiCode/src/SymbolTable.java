@@ -46,7 +46,7 @@ public class SymbolTable {
             //if(Symbol == null) error
             //elseerror
         }else if(node instanceof MethodDcl){
-            
+
         }
 
     }
@@ -63,7 +63,9 @@ public class SymbolTable {
             ProcessNode(((BinaryNode)node).GetLeftChild());
             ProcessNode(((BinaryNode)node).GetRightChild());
         }else if(node instanceof NaryNode){
-            ((NaryNode) node).GetChildren().forEach(this::ProcessNode);
+            for (Node n: ((NaryNode)node).GetChildren()) {
+                ProcessNode(n);
+            }
         }
 
         if(node instanceof BlockNode){
