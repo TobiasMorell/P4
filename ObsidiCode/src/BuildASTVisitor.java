@@ -33,6 +33,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 				initialization = an.GetRightChild();
 				id = ((ReferenceNode) decl.GetLeftChild()).GetId();
 			}
+			else if (decl instanceof ReferenceNode)
+			{
+				ReferenceNode rn = (ReferenceNode) decl;
+				id = rn.GetId();
+				initialization = null;
+			}
 			
 			switch(type) {
 			case ObsidiCodeParser.NUM:
