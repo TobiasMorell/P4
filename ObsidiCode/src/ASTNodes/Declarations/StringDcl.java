@@ -9,13 +9,13 @@ import Visitors.Visitable;
 /**
  * Created by Gedesnegl on 29-03-2016.
  */
-public class StringDcl extends BinaryNode {
-    public StringDcl(Node leftChild, Node rightChild) {
-        super((IDNode)leftChild, rightChild);
+public class StringDcl extends DeclarationNode {
+    public StringDcl(Node leftChild, ExprNode rightChild) {
+        super(Node.Type.string, (IDNode)leftChild, rightChild);
     }
-    public StringDcl(String id, Node rightChild)
+    public StringDcl(String id, ExprNode rightChild)
     {
-        super(new IDNode(id), rightChild);
+        super(Type.string, new IDNode(id), rightChild);
     }
 
     @Override

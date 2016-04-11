@@ -1,3 +1,4 @@
+import ASTNodes.Declarations.DeclarationNode;
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.NaryNode;
@@ -30,9 +31,9 @@ public class SymbolTable {
         //Check weather to put something in the SymbolTable
         if (node instanceof BlockNode) {
             OpenScope();
-        }else if(node instanceof DclNode){
+        }else if(node instanceof DeclarationNode){
             String id = ((IDNode)node.GetLeftChild()).GetID();
-            EnterSymbol(id, ((DclNode)node).GetType());
+            EnterSymbol(id, ((DeclarationNode)node).GetType());
         }else if(node instanceof ReferenceNode){
             //Symbol = Symboltable.retrieveSymbol(node.name)
             //if(Symbol == null) error

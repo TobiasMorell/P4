@@ -9,13 +9,13 @@ import Visitors.Visitable;
 /**
  * Created by Gedesnegl on 29-03-2016.
  */
-public class CoordDcl extends BinaryNode {
-    public CoordDcl(Node leftChild, Node rightChild) {
-        super((IDNode)leftChild, rightChild);
+public class CoordDcl extends DeclarationNode {
+    public CoordDcl(Node leftChild, ExprNode rightChild) {
+        super(Node.Type.coord, (IDNode)leftChild, rightChild);
     }
-    public CoordDcl(String id, Node rightChild)
+    public CoordDcl(String id, ExprNode rightChild)
     {
-        super(new IDNode(id), rightChild);
+        super(Type.coord, new IDNode(id), rightChild);
     }
 
     @Override

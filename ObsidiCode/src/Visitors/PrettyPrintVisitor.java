@@ -10,6 +10,11 @@ import ASTNodes.SyntaxNodes.*;
  */
 public class PrettyPrintVisitor extends AbstractVisitor {
     @Override
+    public Object visit(Node n) {
+        return n.Accept(this);
+    }
+
+    @Override
     public Object visit(BoolDcl node) {
         Object lo, ro;
 

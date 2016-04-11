@@ -15,7 +15,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		for (Node decl : bn.GetStatements())
 		{
 			IDNode id = null;
-			Node initialization = null;
+			ExprNode initialization = null;
 			
 			//Remove the node from the list and replace it with a declaration with a type
 			bn.GetStatements().remove(decl);
@@ -30,7 +30,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			else if (decl instanceof AssignNode)
 			{
 				AssignNode an = (AssignNode) decl;
-				initialization = an.GetRightChild();
+				initialization = (ExprNode) an.GetRightChild();
 			}
 			
 			switch(type) {
@@ -120,7 +120,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		System.out.println("The name of the program is: " + robotName); //<------- for TESTING 
 
 		System.out.println("Initializing list...");
-		List<Node> stmts = new ArrayList<>(10);
+		ArrayList<Node> stmts = new ArrayList<>(10);
 
 		return new ProgNode(stmts, robotName);
 	}

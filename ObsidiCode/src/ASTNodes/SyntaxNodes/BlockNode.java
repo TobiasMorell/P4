@@ -8,12 +8,12 @@ import java.util.List;
 
 public class BlockNode extends NaryNode{
 	
-	public List<Node> GetStatements()
+	public ArrayList<Node> GetStatements()
 	{
 		return this.children;
 	}
 
-    public BlockNode(List<Node> stmts){
+    public BlockNode(ArrayList<Node> stmts){
         super(stmts);
     }
     
@@ -22,7 +22,7 @@ public class BlockNode extends NaryNode{
     	super(new ArrayList<Node>());
     }
     
-    public BlockNode(String id, List<Node> stmts)
+    public BlockNode(String id, ArrayList<Node> stmts)
     {
     	super(stmts);
     	this._leftmostChild = new IDNode(id);

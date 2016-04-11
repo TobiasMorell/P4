@@ -9,13 +9,13 @@ import Visitors.Visitable;
 /**
  * Created by Gedesnegl on 29-03-2016.
  */
-public class BoolDcl extends BinaryNode{
-    public BoolDcl(Node leftChild, Node rightChild) {
-        super((IDNode)leftChild, rightChild);
+public class BoolDcl extends DeclarationNode{
+    public BoolDcl(Node leftChild, ExprNode rightChild) {
+        super(Node.Type.bool, (IDNode)leftChild, rightChild);
     }
-    public BoolDcl(String id, Node rightChild)
+    public BoolDcl(String id, ExprNode rightChild)
     {
-        super(new IDNode(id), rightChild);
+        super(Type.bool, new IDNode(id), rightChild);
     }
 
     @Override

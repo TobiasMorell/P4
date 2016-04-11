@@ -9,9 +9,9 @@ import ASTNodes.GeneralNodes.Node;
  * Created by Nete on 08-03-2016.
  */
 public abstract class NaryNode extends Node {
-    protected List<Node> children;
+    protected ArrayList<Node> children;
 
-    public NaryNode(List<Node> childNodes)
+    public NaryNode(ArrayList<Node> childNodes)
     {
         for (int i = 0; i < childNodes.size(); i++) {
             Node n = childNodes.get(i);
