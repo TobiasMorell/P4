@@ -46,12 +46,11 @@ public class PrettyPrintVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(HearDcl node) {
-        Object lo, ro;
+        Object lo;
 
         lo = node.GetLeftChild().Accept(this);
-        ro = node.GetRightChild().Accept(this);
 
-        return lo.toString() + ", HearDcl [" + ro.toString() + ']';
+        return "HearDcl" + ", id: " + node.id + ", params: " + node.parameters + "body: " + lo;
     }
 
     @Override

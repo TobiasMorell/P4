@@ -1,5 +1,4 @@
 FIXDISBOT:
-LOAD("I-ARE-IDIOT-BOT")
 NUM a = 12
 
 VOID Start()

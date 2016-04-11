@@ -5,7 +5,7 @@ import Visitors.Visitable;
 public abstract class Node implements Visitable
 {
     public enum Type{
-        num, string, coord, bool
+        num, string, coord, bool, Void
     }
     public Node _parent;
     protected Node _leftmostChild;

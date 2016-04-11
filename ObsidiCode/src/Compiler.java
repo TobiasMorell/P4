@@ -35,6 +35,7 @@ public class Compiler {
         ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
         ParseTree tree = parser.prog();// begin parsing at rule 'prog'
         //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        showTreeOnGUI(tree, parser);
 
         BuildASTVisitor bASTv = new BuildASTVisitor();
         ProgNode pn = (ProgNode) bASTv.visit(tree);
@@ -43,7 +44,7 @@ public class Compiler {
     /*
      * FOR TESTING ONLY - show AST in GUI, but doesn't work with large trees
      */
-    private void showTreeOnGUI(ParseTree tree, ObsidiCodeParser parser)
+    private static void showTreeOnGUI(ParseTree tree, ObsidiCodeParser parser)
     {
         JFrame frame = new JFrame("ObsidiCode Tree Viewer");
         JPanel panel = new JPanel();

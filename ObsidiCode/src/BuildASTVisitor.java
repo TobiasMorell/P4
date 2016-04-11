@@ -248,51 +248,44 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx) {
-		return new MethodDcl(visit(ctx.header), visit(ctx.body));
+		MethodDcl dcl = (MethodDcl) visit(ctx.header);
+		dcl.AddBody((BlockNode) visit(ctx.body));
+		return dcl;
 	}
 
 	@Override
 	public Node visitMethodHeader(ObsidiCodeParser.MethodHeaderContext ctx) {
-		Node declIdentifier;
+		Node.Type t;
 		BlockNode bn = (BlockNode) visit(ctx.declarator); //Stores identifier and params
-		IDNode id = (IDNode) bn.GetLeftChild();
-		BlockNode params = new BlockNode(bn.GetStatements());
 		
 		if(ctx.getChild(0).getText().equals("VOID"))
-			declIdentifier = new DeclarationNode(id, params);
+			t = Node.Type.Void;
 		else {
 			switch(ctx.t.type.getType()){
 			case ObsidiCodeParser.NUM:
-				declIdentifier = new NumDcl(id, params);
+				t = Node.Type.num;
 				break;
 			case ObsidiCodeParser.STRING:
-				declIdentifier = new StringDcl(id, params);
+				t = Node.Type.string;
 				break;
 			case ObsidiCodeParser.COORD:
-				declIdentifier = new CoordDcl(id, params);
+				t = Node.Type.coord;
 				break;
 			case ObsidiCodeParser.BOOL:
-				declIdentifier = new BoolDcl(id, params);
+				t = Node.Type.bool;
 				break;
 			default :
-				declIdentifier = new IDNode("Couldn't parse the node!"); //Really bad error handling, should be fixed
+				t = null;
 			}
 		}
 			
-		return declIdentifier;
+		return new MethodDcl(ctx.declarator.id.getText(), bn.GetStatements(), t, null);
 	}
 
 	@Override
 	public Node visitMethodDeclarator(ObsidiCodeParser.MethodDeclaratorContext ctx) {
-		//Instantiate block node with method id as left child
-		BlockNode bn = new BlockNode(ctx.id.getText(), new ArrayList<Node>());
-		
-		//Find the params and add them to the bn variable
-		BlockNode tempParams = (BlockNode) visit(ctx.params);
-		for (Node n : tempParams.GetStatements())
-			bn.AddNode(n);
-		
-		return bn;
+		//Find the params and return them (id is handled in visitMethodHeader
+		return (BlockNode) visit(ctx.params);
 	}
 
 	@Override
@@ -303,9 +296,6 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitHearDcl(ObsidiCodeParser.HearDclContext ctx) {
-		//Much like the method conversion part
-		IDNode id = new IDNode(ctx.id.getText());
-		
 		//Find parameters
 		BlockNode params = (BlockNode) visit(ctx.params);
 		
@@ -313,7 +303,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Return a new HearDcl, which collects all the found information
-		return new HearDcl(new DeclarationNode(id, params), body);
+		return new HearDcl(ctx.id.getText(), params.GetStatements(), body);
 	}
 
 	@Override
@@ -540,7 +530,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitParam(ObsidiCodeParser.ParamContext ctx) {
-		Node decl = new DeclarationNode(null, null);
+		Node decl = null;
 		switch(ctx.t.type.getType()){
 		case ObsidiCodeParser.NUM:
 			decl = new NumDcl(ctx.id.getText(), null);

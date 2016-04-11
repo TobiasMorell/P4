@@ -6,10 +6,12 @@ import ASTNodes.SyntaxNodes.BlockNode;
 import Visitors.AbstractVisitor;
 import Visitors.Visitable;
 
-public class HearDcl extends BinaryNode {
+import java.util.ArrayList;
 
-	public HearDcl(DeclarationNode leftChild, BlockNode rightChild) {
-		super(leftChild, rightChild);
+public class HearDcl extends MethodDcl {
+
+	public HearDcl(String id, ArrayList<Node> params, BlockNode body) {
+		super(id, params, Type.Void, body);
 	}
 
 	@Override
