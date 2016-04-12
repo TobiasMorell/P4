@@ -17,7 +17,7 @@ import java.util.Hashtable;
  */
 public class SymbolTable {
     ArrayList<Symbol> Elements;
-    int depth = -1;
+    int depth = 0;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
     Symbol prevsym = null;
@@ -62,24 +62,23 @@ public class SymbolTable {
         if (node instanceof BlockNode) {
             //As a new scope is already opened with a method declaration.
             //we choose to check that the parent is not of this type
-            if(!(node._parent instanceof MethodDcl))
-                OpenScope();
-            ProcessChildren(node);
-            CloseScope();
+            OpenScope();
         }else if(node instanceof DeclarationNode){
             String id = ((IDNode)node.GetLeftChild()).GetID();
             EnterSymbol(id, ((DeclarationNode)node).type);
-        }else if(node instanceof ReferenceNode){
+        }else if(node instanceof ReferenceNode) {
             Symbol s = RetrieveSymbol(((ReferenceNode) node).GetId().GetID());
-            if(s == null)
-                MakeError("Symbol \"" +s.name+ "\" does not exist");
-        }else if(node instanceof MethodDcl){
-            OpenScope();
-            ProcessChildren(node);
-            //As MethodDcl Always has a Blocknode in it, Scope will automatically be closed
-        }else{
-            ProcessChildren(node);
+            if (s == null)
+                MakeError("Symbol \"" + s.name + "\" does not exist");
         }
+        // Make foreach node n : n.GetChildren()) ProcessNde(n)
+        // if(node instanceof BlockNode) symtab.CloseScope();
+
+
+        }
+
+
+
 
     }
 
@@ -154,8 +153,7 @@ public class SymbolTable {
 
     private void OpenScope()
     {
-        depth++;
-        scopeDisplay.add(null);
+        depth++;;
     }
 
     /**
