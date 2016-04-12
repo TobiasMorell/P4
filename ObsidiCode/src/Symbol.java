@@ -34,5 +34,8 @@ public class Symbol {
         this.depth = depth;
     }
 
-
+    @Override
+    public int hashCode() {
+        return (depth + name).hashCode();
+    }
 }

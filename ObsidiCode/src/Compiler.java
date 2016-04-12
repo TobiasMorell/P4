@@ -42,6 +42,7 @@ public class Compiler {
         ProgNode pn = (ProgNode) bASTv.visit(tree);
 
         PrettyPrintVisitor ppv = new PrettyPrintVisitor();
+        SymbolTable st = new SymbolTable(pn);
         System.out.println(ppv.visit(pn));
     }
 

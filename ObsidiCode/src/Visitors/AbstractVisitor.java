@@ -1,7 +1,7 @@
 package Visitors;
 
 import ASTNodes.Declarations.*;
-import ASTNodes.GeneralNodes.Node;
+import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 
@@ -55,4 +55,17 @@ public abstract class AbstractVisitor {
     public abstract Object visit(ReturnNode node);
     public abstract Object visit(SignalNode node);
     public abstract Object visit(StringLit node);
+
+    protected void VisitChildren(Node n) {}
+    protected void VisitChildren(BinaryNode n) {
+        visit(n.GetLeftChild());
+        visit(n.GetRightChild());
+    }
+    protected void VisitChildren(UnaryNode n) {
+        visit(n.GetLeftChild());
+    }
+    protected void VisitChildren(NaryNode n) {
+        for (Node node: n.GetChildren()) {visit(node);}
+    }
+    protected void VisitChildren(LeafNode n) {}
 }

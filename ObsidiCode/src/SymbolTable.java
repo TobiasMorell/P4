@@ -19,6 +19,7 @@ public class SymbolTable {
     int depth = 0;
 
     public SymbolTable(ProgNode ASTRoot){
+        System.out.println("Generating Symbol table");
         ProcessNode(ASTRoot);
     }
     /*
@@ -47,6 +48,7 @@ public class SymbolTable {
      */
     private void ProcessNode(Node node) {
         //Check weather to put something in the SymbolTable
+        System.out.println("Processing Node");
         if (node instanceof BlockNode) {
             //As a new scope is already opened with a method declaration.
             //we choose to check that the parent is not of this type
@@ -65,6 +67,8 @@ public class SymbolTable {
             OpenScope();
             ProcessChildren(node);
             //As MethodDcl Always has a Blocknode in it, Scope will automatically be closed
+        }else{
+            ProcessChildren(node);
         }
 
     }
