@@ -10,6 +10,7 @@ import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.ProgNode;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by Gedesnegl on 08-04-2016.
@@ -17,8 +18,17 @@ import java.util.ArrayList;
 public class SymbolTable {
     ArrayList<Symbol> Elements;
     int depth = 0;
+    Symbol scopeDisplay[];
+    Hashtable HashTable;
+    Symbol prevsym = null;
+    Symbol sym = null;
+    Symbol newsym = null;
+    Symbol oldsym = null;
 
-    public SymbolTable(ProgNode ASTRoot){
+    public SymbolTable(ProgNode ASTRoot)
+    {
+        HashTable = new Hashtable();
+        scopeDisplay = new Symbol[];
         ProcessNode(ASTRoot);
     }
     /*
@@ -103,15 +113,22 @@ public class SymbolTable {
 
 
 
-    private void EnterSymbol(String id, Node.Type type) {
-        Symbol oldSymbol = RetrieveSymbol(id);
-        if(oldSymbol != null && oldSymbol.depth == depth){
-            MakeError("Symbol \"" + id + "\" has already been initialized in this scope");
-        }else{
-            Symbol newSymbol = new Symbol(id, type, null, 0, depth);
-            Elements.add(newSymbol);
-        }
+    private void EnterSymbol(String id, Node.Type type)
+    {
+        oldsym = RetrieveSymbol(id);
+        if (oldsym != null && oldsym.depth == depth) MakeError("Symbol \"" + id + "\" has already been initialized in this scope");
 
+        newsym = new Symbol(id, type, scopeDisplay[depth], null, depth);
+        //mangler at sætte hashvalue
+        scopeDisplay[depth] = newsym;
+        if(oldsym == null) HashTable.put(newsym.getName(), newsym);
+        else
+        {
+            HashTable.remove(oldsym);
+            HashTable.put(newsym.getName(), newsym);
+
+        }
+        newsym.var = oldsym;
     }
 
     /**
@@ -120,15 +137,21 @@ public class SymbolTable {
      * @return
      */
     private Symbol RetrieveSymbol(String id) {
-        for (int i = Elements.size(); i > 0; i--) {
-            if (Elements.get(i).name == id)
-                return Elements.get(i);
+        sym = (Symbol)HashTable.get(id);
+        while(sym != null)
+        {
+            if(sym.name == id) return(sym);
+
+            //I bogen gør de bagefter sym = sym.getHashValue();
+
         }
         return null;
     }
 
-    private void OpenScope() {
+    private void OpenScope()
+    {
         depth++;
+        scopeDisplay[depth] = null;
     }
 
     /**
@@ -138,14 +161,22 @@ public class SymbolTable {
      *
      */
     private void CloseScope() {
-        int i = 0;
-        for (Symbol s :Elements) {
-            if(s.depth == depth)
-                Elements.remove(i);
-            i++;
-        }
+        //Needs to be improved so all variabes in the same depth are removed, can be done through the level field;
+        Symbol c = scopeDisplay[depth];
+        prevsym = c.var;
+        HashTable.remove(c);
+        if(prevsym != null) HashTable.put(prevsym.getName(),prevsym);
         depth--;
     }
+
+    private Boolean DeclaredLocally(String name)
+    {
+        sym = RetrieveSymbol(name);
+        if(sym != null && sym.depth == depth) { return true;     }
+        else return false;
+    }
+
+
 
 }
 
@@ -155,3 +186,5 @@ Ser fint ud, mangler persistent data structure methods, classes, det vil vi gern
 Muligvis vise forskel igennem typer, methods ... ah det kommer i bogen 298 og frem.
 
 */
+
+//TODO: all except open,
