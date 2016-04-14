@@ -33,7 +33,7 @@ public class Symbol {
     Symbol var, level;
     int depth, hashvalue;
 
-    public Symbol(String name, Attributes type, Symbol level, int hashValue, int depth){
+    public Symbol(String name, Node.Type type, Symbol level, int hashValue, int depth){
         this.name = name;
         this.type = type;
         this.level = level;

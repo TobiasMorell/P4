@@ -1,5 +1,4 @@
 import ASTNodes.Declarations.DeclarationNode;
-import ASTNodes.Declarations.MethodDcl;
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.NaryNode;
@@ -16,7 +15,8 @@ import java.util.Hashtable;
  * Created by Gedesnegl on 08-04-2016.
  */
 public class SymbolTable {
-    ArrayList<Symbol> Elements;
+    ArrayList<Symbol> symbols;
+    ArrayList<Func> functions;
     int depth = 0;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
@@ -29,7 +29,7 @@ public class SymbolTable {
     {
         HashTable = new Hashtable();
         scopeDisplay = new ArrayList<Symbol>();
-        Elements = new ArrayList<Symbol>();
+        symbols = new ArrayList<Symbol>();
         ProcessNode(ASTRoot);
     }
     /*
@@ -76,11 +76,6 @@ public class SymbolTable {
 
 
         }
-
-
-
-
-    }
 
     /**
      * Prints a simple error message and exits the compiler afterwards.
