@@ -1,6 +1,7 @@
 package Visitors;
 
 import ASTNodes.Declarations.*;
+import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
@@ -51,6 +52,11 @@ public class SymbolVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringDcl node) {
+        return null;
+    }
+
+    @Override
+    public Object visit(ListDcl node) {
         return null;
     }
 
@@ -136,6 +142,11 @@ public class SymbolVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BlockNode node) {
+        return null;
+    }
+
+    @Override
+    public Object visit(CollectionNode node) {
         return null;
     }
 
