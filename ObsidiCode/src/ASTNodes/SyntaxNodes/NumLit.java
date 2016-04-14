@@ -3,9 +3,10 @@ package ASTNodes.SyntaxNodes;
 import ASTNodes.GeneralNodes.*;
 import Visitors.AbstractVisitor;
 
-public class NumLit extends LeafNode{
+public class NumLit extends ExprNode{
 	public float _value;
 	public NumLit(float val){
+		super(null, null);
 		this._value = val;
 	}
 

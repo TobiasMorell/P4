@@ -1,4 +1,5 @@
 // Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -15,6 +16,20 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProg(ObsidiCodeParser.ProgContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#literal}.
 	 * @param ctx the parse tree
@@ -33,20 +48,6 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code nonLambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#roboDcl}.
 	 * @param ctx the parse tree
@@ -108,6 +109,12 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHearDcl(ObsidiCodeParser.HearDclContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#methodHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -125,12 +132,6 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMethodBody(ObsidiCodeParser.MethodBodyContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHearDcl(ObsidiCodeParser.HearDclContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#block}.
 	 * @param ctx the parse tree

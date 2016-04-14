@@ -1,4 +1,5 @@
 // Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -16,6 +17,30 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProg(ObsidiCodeParser.ProgContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code nonLambdaLoad}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#literal}.
 	 * @param ctx the parse tree
@@ -46,30 +71,6 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 */
-	void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 */
-	void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code nonLambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 */
-	void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code nonLambdaLoad}
-	 * labeled alternative in {@link ObsidiCodeParser#loads}.
-	 * @param ctx the parse tree
-	 */
-	void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#roboDcl}.
 	 * @param ctx the parse tree
@@ -171,6 +172,16 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitMethodDcl(ObsidiCodeParser.MethodDclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
+	 * @param ctx the parse tree
+	 */
+	void enterHearDcl(ObsidiCodeParser.HearDclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
+	 * @param ctx the parse tree
+	 */
+	void exitHearDcl(ObsidiCodeParser.HearDclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#methodHeader}.
 	 * @param ctx the parse tree
 	 */
@@ -200,16 +211,6 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethodBody(ObsidiCodeParser.MethodBodyContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
-	 * @param ctx the parse tree
-	 */
-	void enterHearDcl(ObsidiCodeParser.HearDclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#hearDcl}.
-	 * @param ctx the parse tree
-	 */
-	void exitHearDcl(ObsidiCodeParser.HearDclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#block}.
 	 * @param ctx the parse tree

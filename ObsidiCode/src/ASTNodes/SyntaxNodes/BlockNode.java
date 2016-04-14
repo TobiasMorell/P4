@@ -7,12 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockNode extends NaryNode{
-	
-	public ArrayList<Node> GetStatements()
-	{
-		return this.children;
-	}
-
     public BlockNode(ArrayList<Node> stmts){
         super(stmts);
     }

@@ -1,6 +1,8 @@
 grammar ObsidiCode;
 
-//Fragment rules for lexer
+
+
+//Fragment rules for lexer - must be part of another lexical rule
 fragment NameStartChar
         :       'A'..'Z' | 'a'..'z';
 fragment NameChar
@@ -11,7 +13,7 @@ fragment NameChar
 fragment Num
         :       '0'..'9';
 
-//Regex for the scanner:
+//Literals are defined by regular expressions:
 NumLit
 	:	Num+ ('.'Num+)?;
 CoordLit
@@ -19,10 +21,14 @@ CoordLit
 StringLit
 	:	'"'~('"')*'"';
 
+//Tells ANTLR to skip white-space
 WS
-	:	[\t\r' ']+ -> skip;
+	:	[\t' ']+ -> skip;
+//Define newline separator (used here as statement end)
+NEWLINE
+    :   [\n\r];
 
-//Comments
+//Define comments
 COMMENT
 	:	'/*' .*? '*/' -> skip
 	;
@@ -30,6 +36,7 @@ EOLCOMMENT
 	:	'//' .*? '\n' -> skip
 	;
 
+//Reserved type keywords
 NUM: 'NUM';
 STRING: 'STRING';
 COORD: 'COORD';
@@ -37,27 +44,37 @@ BOOL: 'BOOL';
 VOID: 'VOID';
 LIST: 'LIST';
 
+//Reserved equivalence keywords
 EQ_MOD_IS: 'IS';
 EQ_MOD_NOT: 'NOT';
 
+//Reserved relational keywords
 RELATIONAL_KEY_LT: 'LESS_THAN';
 RELATIONAL_KEY_GT: 'GREATER_THAN';
 RELATIONAL_KEY_LTE: 'LESS_THAN_EQUAL';
 RELATIONAL_KEY_GTE: 'GREATHER_THAN_EQUAL';
 
+//Reserved operators
 OP_PLUS: '+';
 OP_MINUS: '-';
 OP_MULT: '*';
 OP_DIV: '/';
 
+//Reserved boolean keywords
 TRUE: 'TRUE';
 FALSE: 'FALSE';
 
+//Identifier lexical rule
 Identifier
     :	NameStartChar NameChar*;
 
+//Start rule and 'imports':
 prog
 	:	roboDcl loads roboBodyDcl;
+loads
+    :	recursion=loads 'LOAD' '(' load_id=StringLit ')' NEWLINE   #nonLambdaLoad
+    |	/*lambda*/                                                 #lambdaLoad
+    ;
 //Types and literals:
 literal
 	:	NumLit 
@@ -70,7 +87,6 @@ typeName
 	:	id=Identifier
 	|	parent=typeName '.' id=Identifier
 	;
-
 typePrefix
 	:	type='NUM'
 	|   type='BOOL'
@@ -79,28 +95,21 @@ typePrefix
 	|   type='LIST'
 	;
 
-loads
-	:	recursion=loads 'LOAD' '(' load_id=StringLit ')' '\n'   #nonLambdaLoad
-	|	/*lambda*/                                              #lambdaLoad
-	;
-
 //Declarations
 roboDcl
-	:	id=Identifier':''\n'
+	:	id=Identifier':'NEWLINE
 	;
 roboBodyDcl
 	:	recursion=roboBodyDcl dcl=memberDcl
 	|	dcl=memberDcl	
 	;
-
 memberDcl
 	:	dcl=fieldDcl
 	|	met_dcl=methodDcl
-	|	'\n'
+	|	NEWLINE
 	;
-
 fieldDcl
-	:	t=typePrefix dcl_list=variableDclList '\n';
+	:	t=typePrefix dcl_list=variableDclList NEWLINE;
 variableDclList
 	:	single=variableDcl
 	|	list=variableDclList ',' single=variableDcl
@@ -120,23 +129,22 @@ litList
 	:	list=litList ',' single=primary
 	|	single=primary
 	;
-
-//method stuff
 methodDcl
 	:	header=methodHeader body=methodBody
 	|	hearDcl
 	;
+hearDcl
+	:	'HEAR' id=Identifier '(' params=formalParams ')' NEWLINE body=block 'END HEAR'
+	;
+//Parts of method declarations
 methodHeader
 	:	(t=typePrefix | 'VOID') declarator=methodDeclarator
 	;
 methodDeclarator
-	:	id=Identifier '(' params=formalParams ')' '\n'
+	:	id=Identifier '(' params=formalParams ')' NEWLINE
 	;
 methodBody
 	:	body=block 'END' ?Identifier
-	;
-hearDcl
-	:	'HEAR' id=Identifier '(' params=formalParams ')' '\n' body=block 'END HEAR'
 	;
 
 //Statements
@@ -145,8 +153,8 @@ block
 	|	//lambda
 	;
 blockStmtList
-	:	list=blockStmtList stmt=statement '\n'
-	|	stmt=statement '\n'
+	:	list=blockStmtList stmt=statement NEWLINE
+	|	stmt=statement NEWLINE
 	;
 statement
 	:	t=typePrefix dcl=variableDclList
@@ -172,28 +180,28 @@ exprStmt
 methodInvocation
 	:	id=typeName '(' args=formalArgs ')'
 	;
-
+//if statements
 ifStmt
-	:	'IF' '(' expr=expression ')' '\n' body=block 'END IF' elseIfStmt=elseIfOpt elseStmt=elseOpt
+	:	'IF' '(' expr=expression ')' NEWLINE body=block 'END IF' elseIfStmt=elseIfOpt elseStmt=elseOpt
 	;
 elseIfOpt
-	:	recursion=elseIfOpt '\n' 'ELSE IF' '(' expr=expression ')' '\n' body=block 'END ELSEIF'	#elseIf
-	|	/*lambda*/																				#noElseIf
+	:	recursion=elseIfOpt NEWLINE 'ELSE IF' '(' expr=expression ')' NEWLINE body=block 'END ELSEIF'	#elseIf
+	|	/*lambda*/																				        #noElseIf
 	;
 elseOpt
-	:	'\n' 'ELSE' '\n' body=block 'END ELSE'													#else
-	|	/*lambda*/																				#noElse
+	:	NEWLINE 'ELSE' NEWLINE body=block 'END ELSE'													#else
+	|	/*lambda*/																				        #noElse
 	;
-
+//loop statements
 loopStmt
 	:	rep=repeatStmt
 	|	ever=foreverStmt
 	;
 repeatStmt
-	:	'REPEAT UNTIL' '(' expr=expression ')' '\n' body=block 'END REPEAT'
+	:	'REPEAT UNTIL' '(' expr=expression ')' NEWLINE body=block 'END REPEAT'
 	;
 foreverStmt
-	:	'FOREVER' '\n' body=block 'END FOREVER'
+	:	'FOREVER' NEWLINE body=block 'END FOREVER'
 	;
 
 //Args and params
@@ -233,7 +241,7 @@ listOpt
 	:	'[' expr=expression ']'		
 	|	/*lambda*/
 	;
-
+//Boolean
 conditionalExpression
 	:	or=conditionOrExpression;
 conditionOrExpression
@@ -260,6 +268,7 @@ relationalExpressionEnd
 	|	relational_key='GREATER_THAN' add=additiveExpression
 	|	relational_key='LESS_THAN_EQUAL' add=additiveExpression
 	|	relational_key='GREATER_THAN_EQUAL' add=additiveExpression;
+//Arithmetic
 additiveExpression
 	:	mult=multiExpr
 	|	add=additiveExpression add_end=additiveExpressionEnd;
@@ -278,6 +287,6 @@ unaryExpr
 primary
 	:	literal					#primaryLiteral
 	|	'(' expression ')'		#parenExpr
-	|	lhs=leftHandSide			#primaryIdRef
+	|	lhs=leftHandSide		#primaryIdRef
 	|	methodInvocation		#primaryMethodInvoc
 ;

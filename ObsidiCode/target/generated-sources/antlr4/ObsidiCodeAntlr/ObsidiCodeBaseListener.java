@@ -1,4 +1,5 @@
 // Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+package ObsidiCodeAntlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -22,6 +23,30 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProg(ObsidiCodeParser.ProgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -58,30 +83,6 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTypePrefix(ObsidiCodeParser.TypePrefixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -207,6 +208,18 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHearDcl(ObsidiCodeParser.HearDclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHearDcl(ObsidiCodeParser.HearDclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMethodHeader(ObsidiCodeParser.MethodHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -238,18 +251,6 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethodBody(ObsidiCodeParser.MethodBodyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterHearDcl(ObsidiCodeParser.HearDclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitHearDcl(ObsidiCodeParser.HearDclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,3 +1,5 @@
+package Visitors;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -5,20 +7,21 @@ import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
+import ObsidiCodeAntlr.*;
 
 //The generic type must be the super class of the returned node, in this case Node.
-public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
+public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
-	private void giveContextToNodes(BlockNode bn, int type)
+	private void giveContextToNodes(CollectionNode declarations, int type)
 	{
 		//This switch could be implemented a lot better with generics, give it a go!
-		for (Node decl : bn.GetStatements())
+		for (Node decl : declarations.GetChildren())
 		{
 			IDNode id = null;
 			Node initialization = null;
 			
 			//Remove the node from the list and replace it with a declaration with a type
-			bn.GetStatements().remove(decl);
+			declarations.GetChildren().remove(decl);
 			
 			//Found an IDNode, meaning there's no initialization
 			if(decl instanceof IDNode)
@@ -42,16 +45,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 			
 			switch(type) {
 			case ObsidiCodeParser.NUM:
-				bn.AddNode(new NumDcl(id, initialization));
+				declarations.AddNode(new NumDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.STRING:
-				bn.AddNode(new StringDcl(id, initialization));
+				declarations.AddNode(new StringDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.BOOL:
-				bn.AddNode(new BoolDcl(id, initialization));
+				declarations.AddNode(new BoolDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.COORD:
-				bn.AddNode(new CoordDcl(id, initialization));
+				declarations.AddNode(new CoordDcl(id, initialization));
 				break;
 			}
 		}
@@ -138,17 +141,14 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitRoboBodyDcl(ObsidiCodeParser.RoboBodyDclContext ctx) {
-		BlockNode bn;
+		CollectionNode bn;
 		
-		if(ctx.getChild(0) instanceof ObsidiCodeParser.RoboBodyDclContext){
+		if(ctx.getChild(0) instanceof ObsidiCodeParser.RoboBodyDclContext)
 			//There are still more global-scope declarations to be processed
-			bn = (BlockNode) visit(ctx.recursion);
-		}
+			bn = (CollectionNode) visit(ctx.recursion);
 		else
-		{
 			//The last node is being processed, create new list
-			bn = new BlockNode(new ArrayList<Node>());
-		}
+			bn = new CollectionNode();
 		
 		//Add both nodes of the given context, if they're not empty statements
 		Node n = visit(ctx.dcl);
@@ -173,16 +173,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {		
 		//Find the identifier and value of given declaration
-		BlockNode bn = (BlockNode) visit(ctx.dcl_list);
+		CollectionNode decls = (CollectionNode) visit(ctx.dcl_list);
 		
-		giveContextToNodes(bn, ctx.t.type.getType());
+		giveContextToNodes(decls, ctx.t.type.getType());
 		
-		return bn;
+		return decls;
 	}
 
 	@Override
 	public Node visitVariableDclList(ObsidiCodeParser.VariableDclListContext ctx) {
-		BlockNode declarations;
+		CollectionNode declarations;
 		
 		/*The strategy used here (and all of the other recursively defined rules is
 		 *to have the base case (here the rule variableDclList -> variableDcl) generate a BlockNode to
@@ -192,16 +192,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		 *thing to do now is to add the primary and return the BlockNode.
 		*/
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableDclContext)
-		{
 			//Only one declaration left
-			declarations = new BlockNode();
-			declarations.AddNode(visit(ctx.single));
-		}
-		else {
+			declarations = new CollectionNode();
+		else
 			//still more declarations to process
-			declarations = (BlockNode) visit(ctx.list);
-			declarations.AddNode(visit(ctx.single));
-		}
+			declarations = (CollectionNode) visit(ctx.list);
+		declarations.AddNode(visit(ctx.single));
 			
 		return declarations;
 	}
@@ -210,10 +206,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitVariableDcl(ObsidiCodeParser.VariableDclContext ctx) {
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableInitializerContext)
 			return visit(ctx.var_init);
-		else {
-			//Still needs code to initialize lists!!!
-			return null; //Actually some list!
-		}
+		else
+			return new ListDcl(Node.Type.List, new IDNode(ctx.id.getText()), (CollectionNode) visit(ctx.list_init));
 	}
 
 	@Override
@@ -232,29 +226,25 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitListInitializer(ObsidiCodeParser.ListInitializerContext ctx) {
-		return visit(ctx.list);
-		
-		//Again still need code to process lists.
+		if(ctx.getChild(0) != null)
+			return visit(ctx.list);
+
+		return null;
 	}
 
 	@Override
 	public Node visitLitList(ObsidiCodeParser.LitListContext ctx) {
-		BlockNode bn;
+		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.PrimaryContext)
-		{
 			//Last variable of the list
-			bn = new BlockNode();
-			bn.AddNode(visit(ctx.single));
-		}
+			cn = new CollectionNode();
 		else
-		{
-			bn = (BlockNode) visit(ctx.list);
+			cn = (CollectionNode) visit(ctx.list);
 			//Omit the comma
-			bn.AddNode(visit(ctx.single));
-		}
-		
-		return bn;
+		cn.AddNode(visit(ctx.single));
+
+		return cn;
 	}
 
 	@Override
@@ -267,7 +257,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitMethodHeader(ObsidiCodeParser.MethodHeaderContext ctx) {
 		Node.Type t;
-		BlockNode bn = (BlockNode) visit(ctx.declarator); //Stores identifier and params
+		CollectionNode cn = (CollectionNode) visit(ctx.declarator); //Stores params
 		
 		if(ctx.getChild(0).getText().equals("VOID"))
 			t = Node.Type.Void;
@@ -291,11 +281,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		}
 
 		ArrayList<Node> params;
-		if(bn != null)
-			params = bn.GetChildren();
+		if(cn != null)
+			params = cn.GetChildren();
 		else
 			params = new ArrayList<Node>();
-			
+
+		//null is the body, added higher in the tree
 		return new MethodDcl(ctx.declarator.id.getText(), params, t, null);
 	}
 
@@ -314,13 +305,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	@Override
 	public Node visitHearDcl(ObsidiCodeParser.HearDclContext ctx) {
 		//Find parameters
-		BlockNode params = (BlockNode) visit(ctx.params);
+		CollectionNode params = (CollectionNode) visit(ctx.params);
 		
 		//Find the body
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Return a new HearDcl, which collects all the found information
-		return new HearDcl(ctx.id.getText(), params.GetStatements(), body);
+		return new HearDcl(ctx.id.getText(), params.GetChildren(), body);
 	}
 
 	@Override
@@ -350,10 +341,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitStatement(ObsidiCodeParser.StatementContext ctx) {
 		if(ctx.t != null)
 		{
-			BlockNode bn = (BlockNode) visit(ctx.dcl);
-			giveContextToNodes(bn, ctx.t.type.getType());
+			CollectionNode cn = (CollectionNode) visit(ctx.dcl);
+			giveContextToNodes(cn, ctx.t.type.getType());
 
-			return bn;
+			return cn;
 		}
 		else
 		{
@@ -397,7 +388,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 		IDNode id = new IDNode(ctx.id.getText());
 		
 		//Find all the arguments and store them in a block node
-		BlockNode args = (BlockNode) visit(ctx.arguments);
+		CollectionNode args = (CollectionNode) visit(ctx.arguments);
 		
 		return new SignalNode(id, args);
 	}
@@ -415,7 +406,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 	public Node visitMethodInvocation(ObsidiCodeParser.MethodInvocationContext ctx) {
 		ReferenceNode id = (ReferenceNode) visit(ctx.id);
 		
-		BlockNode args = (BlockNode) visit(ctx.args);
+		CollectionNode args = (CollectionNode) visit(ctx.args);
 		ArrayList<Node> argList;
 		if(args == null)
 			argList = new ArrayList<>();
@@ -519,15 +510,15 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitArgsList(ObsidiCodeParser.ArgsListContext ctx) {
-		BlockNode bn;
+		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ArgsListContext)
-			bn = (BlockNode) visit(ctx.argsList());
+			cn = (CollectionNode) visit(ctx.argsList());
 		else
-			bn = new BlockNode();
-		bn.AddNode(visit(ctx.expression()));
+			cn = new CollectionNode();
+		cn.AddNode(visit(ctx.expression()));
 		
-		return bn;
+		return cn;
 	}
 
 	@Override
@@ -540,22 +531,18 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node>{
 
 	@Override
 	public Node visitParamsList(ObsidiCodeParser.ParamsListContext ctx) {
-		BlockNode bn;
+		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ParamContext)
-		{
 			//Only one param, instantiate list and add parameter
-			bn = new BlockNode();
-			bn.AddNode(visit(ctx.p));
-		}
+			cn = new CollectionNode();
 		else
-		{
 			//Recurse to find all params and add the current
-			bn = (BlockNode) visit(ctx.list);
-			bn.AddNode(visit(ctx.p));
-		}
-		
-		return bn;
+			cn = (CollectionNode) visit(ctx.list);
+
+		cn.AddNode(visit(ctx.p));
+
+		return cn;
 	}
 
 	@Override

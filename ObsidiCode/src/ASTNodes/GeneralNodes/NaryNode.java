@@ -23,12 +23,11 @@ public abstract class NaryNode extends Node {
     
     public void AddNode(Node n)
     {
-    	if(children != null)
-    		children.add(n);
-    	else {
+    	if(children == null)
     		children = new ArrayList<Node>();
-    		children.add(n);
-    	}
+
+        children.add(n);
+        n._parent = this;
     }
 
     public ArrayList<Node> GetChildren(){

@@ -1,6 +1,7 @@
 package Visitors;
 
 import ASTNodes.Declarations.*;
+import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
@@ -17,6 +18,37 @@ public class PrettyPrintVisitor extends AbstractVisitor {
     @Override
     public Object visit(Node n) {
         return n.Accept(this);
+    }
+
+    @Override
+    public Object visit(ListDcl node) {
+        String id = ((IDNode)node.GetLeftChild())._id;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("ArrayList<Object> ");
+        sb.append(id);
+        sb.append(" = new ArrayList<Object>();");
+
+        for (Node n : ((CollectionNode) node.GetRightChild()).GetChildren()) {
+            sb.append(id);
+            sb.append(".add(");
+            sb.append(visit(n));
+            sb.append(");\n");
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public Object visit(CollectionNode node) {
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Node> members = node.GetChildren();
+
+        for (int i = 0; i < members.size(); i++) {
+            sb.append(visit(members.get(i)).toString() + '\n');
+        }
+
+        return sb.toString();
     }
 
     @Override
@@ -290,7 +322,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
         StringBuilder sb = new StringBuilder();
         sb.append("else {\n");
 
-        for (Node n : ((BlockNode) node.GetLeftChild()).GetStatements())
+        for (Node n : ((BlockNode) node.GetLeftChild()).GetChildren())
         {
             sb.append(visit(n));
         }
@@ -427,7 +459,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
         sb.append(visit(node.GetLeftChild()));
         sb.append(" (");
 
-        ArrayList<Node> args = ((BlockNode) node.GetRightChild()).GetChildren();
+        ArrayList<Node> args = ((CollectionNode) node.GetRightChild()).GetChildren();
         for (int i = 0; i < args.size(); i++) {
             if(i > 0)
                 sb.append(", ");

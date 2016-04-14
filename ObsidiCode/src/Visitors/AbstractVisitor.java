@@ -21,6 +21,7 @@ public abstract class AbstractVisitor {
     public abstract Object visit(NumDcl node);
     public abstract Object visit(ReferenceNode node);
     public abstract Object visit(StringDcl node);
+    public abstract Object visit(ListDcl node);
 
     public abstract Object visit(GreaterEqualNode node);
     public abstract Object visit(LessEqualNode node);
@@ -40,6 +41,7 @@ public abstract class AbstractVisitor {
     public abstract Object visit(XorNode node);
 
     public abstract Object visit(BlockNode node);
+    public abstract Object visit(CollectionNode node);
     public abstract Object visit(BoolLit node);
     public abstract Object visit(BreakNode node);
     public abstract Object visit(CoordLit node);
