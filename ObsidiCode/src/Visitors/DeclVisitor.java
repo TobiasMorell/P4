@@ -9,7 +9,7 @@ import ASTNodes.SyntaxNodes.*;
 /**
  * Created by Gedesnegl on 12-04-2016.
  */
-public class SymbolVisitor extends AbstractVisitor {
+public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(Node n) {
         return n.Accept(this);
