@@ -9,6 +9,7 @@ import ASTNodes.GeneralNodes.UnaryNode;
 import ASTNodes.SyntaxNodes.BlockNode;
 import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.ProgNode;
+import Visitors.DeclVisitor;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -22,17 +23,14 @@ public class SymbolTable {
     int depth = 0;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
-    Symbol prevsym = null;
-    Symbol sym = null;
-    Symbol newsym = null;
-    Symbol oldsym = null;
+    public DeclVisitor dclvisitor;
 
     public SymbolTable(ProgNode ASTRoot)
     {
         HashTable = new Hashtable();
         scopeDisplay = new ArrayList<Symbol>();
         symbols = new ArrayList<Symbol>();
-        ProcessNode(ASTRoot);
+        dclvisitor = new DeclVisitor(this);
     }
     /*
     Scopedisplay[depth] bliver brugt til at adde og slette symboler i den pågælende dybte/index,.
@@ -115,11 +113,11 @@ public class SymbolTable {
 
     public void EnterSymbol(String id, Node.Type type)
     {
-        oldsym = RetrieveSymbol(id);
+        Symbol oldsym = RetrieveSymbol(id);
         if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\"" +
                 " of type "+ type.toString() + " has already been initialized in this scope");
 
-        newsym = new Symbol(id, type, scopeDisplay.get(depth), 0, depth);
+        Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), 0, depth);
         //mangler at sætte hashvalue
         scopeDisplay.set(depth, newsym);
         if(oldsym == null) HashTable.put(newsym.getName(), newsym);
@@ -138,7 +136,7 @@ public class SymbolTable {
      * @return
      */
     public Symbol RetrieveSymbol(String id) {
-        sym = (Symbol)HashTable.get(id);
+        Symbol sym = (Symbol)HashTable.get(id);
         while(sym != null)
         {
             if(sym.name == id) return(sym);
@@ -165,7 +163,7 @@ public class SymbolTable {
         if(!scopeDisplay.isEmpty()) {
             Symbol c = scopeDisplay.get(depth);
             if (c != null) {
-                prevsym = c.var;
+                Symbol prevsym = c.var;
                 HashTable.remove(c);
                 if (prevsym != null)
                     HashTable.put(prevsym.getName(), prevsym);
@@ -176,7 +174,7 @@ public class SymbolTable {
 
     public Boolean DeclaredLocally(String name)
     {
-        sym = RetrieveSymbol(name);
+        Symbol sym = RetrieveSymbol(name);
         if(sym != null && sym.depth == depth) { return true;     }
         else return false;
     }
