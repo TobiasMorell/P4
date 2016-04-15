@@ -7,8 +7,7 @@ public class TopDeclVisitor {
 
     public void Visit(VariableListDeclaring vld)
     {
-        typeVisitor = new TypeVisitor();
-        vld
+
 
 
 
