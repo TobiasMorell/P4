@@ -24,9 +24,11 @@ public class SymbolTable {
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
     public DeclVisitor dclvisitor;
+    public ProgNode _ASTRoot;
 
     public SymbolTable(ProgNode ASTRoot)
     {
+        _ASTRoot = ASTRoot;
         HashTable = new Hashtable();
         scopeDisplay = new ArrayList<Symbol>();
         symbols = new ArrayList<Symbol>();

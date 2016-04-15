@@ -43,8 +43,10 @@ public class Compiler {
         BuildASTVisitor bASTv = new BuildASTVisitor();
         ProgNode pn = (ProgNode) bASTv.visit(tree);
 
-        PrettyPrintVisitor ppv = new PrettyPrintVisitor();
         SymbolTable st = new SymbolTable(pn);
+
+        PrettyPrintVisitor ppv = new PrettyPrintVisitor();
+
         System.out.println(ppv.visit(pn));
     }
 
