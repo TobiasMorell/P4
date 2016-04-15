@@ -1,3 +1,5 @@
+package SymbolTable;
+
 import ASTNodes.GeneralNodes.Node;
 
 public class Symbol {

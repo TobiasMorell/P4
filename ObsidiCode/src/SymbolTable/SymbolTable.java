@@ -1,3 +1,5 @@
+package SymbolTable;
+
 import ASTNodes.Declarations.DeclarationNode;
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.BinaryNode;
@@ -57,7 +59,7 @@ public class SymbolTable {
      * @param node
      */
     private void ProcessNode(Node node) {
-        //Check weather to put something in the SymbolTable
+        //Check weather to put something in the SymbolTable.SymbolTable
         System.out.println("Processing Node");
         if (node instanceof BlockNode) {
             //As a new scope is already opened with a method declaration.
@@ -69,7 +71,7 @@ public class SymbolTable {
         }else if(node instanceof ReferenceNode) {
             Symbol s = RetrieveSymbol(((ReferenceNode) node).GetId().GetID());
             if (s == null)
-                MakeError("Symbol \"" + s.name + "\" does not exist");
+                MakeError("SymbolTable.Symbol \"" + s.name + "\" does not exist");
         }
         // Make foreach node n : n.GetChildren()) ProcessNde(n)
         // if(node instanceof BlockNode) symtab.CloseScope();
@@ -114,7 +116,7 @@ public class SymbolTable {
     private void EnterSymbol(String id, Node.Type type)
     {
         oldsym = RetrieveSymbol(id);
-        if (oldsym != null && oldsym.depth == depth) MakeError("Symbol \"" + id + "\" has already been initialized in this scope");
+        if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\" has already been initialized in this scope");
 
         newsym = new Symbol(id, type, scopeDisplay.get(depth), 0, depth);
         //mangler at sætte hashvalue

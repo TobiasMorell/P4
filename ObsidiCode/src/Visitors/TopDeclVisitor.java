@@ -1,3 +1,5 @@
+package Visitors;
+
 /**
  * Created by Lasse on 14/04/2016.
  */

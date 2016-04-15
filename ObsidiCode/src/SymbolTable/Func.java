@@ -1,3 +1,5 @@
+package SymbolTable;
+
 import ASTNodes.Declarations.DeclarationNode;
 import ASTNodes.Declarations.MethodDcl;
 import ASTNodes.GeneralNodes.Node;
