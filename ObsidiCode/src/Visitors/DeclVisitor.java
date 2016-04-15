@@ -5,11 +5,22 @@ import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
+import SymbolTable.SymbolTable;
+import SymbolTable.Func;
 
 /**
  * Created by Gedesnegl on 12-04-2016.
  */
 public class DeclVisitor extends AbstractVisitor {
+    SymbolTable _table;
+
+    /***
+     * @param Table The symboltable that the visitor should fill
+     */
+    public DeclVisitor(SymbolTable Table){
+        _table = Table;
+    }
+
     @Override
     public Object visit(Node n) {
         return n.Accept(this);
@@ -17,11 +28,13 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolDcl node) {
+        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.bool);
         return null;
     }
 
     @Override
     public Object visit(CoordDcl node) {
+        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.coord);
         return null;
     }
 
@@ -32,16 +45,21 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(HearDcl node) {
+        _table.functions.add(new Func(node));
+        visit(node.GetLeftChild());
         return null;
     }
 
     @Override
     public Object visit(MethodDcl node) {
+        _table.functions.add(new Func(node));
+        visit(node.GetLeftChild());
         return null;
     }
 
     @Override
     public Object visit(NumDcl node) {
+        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.num);
         return null;
     }
 
@@ -52,11 +70,14 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringDcl node) {
+        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.string);
         return null;
     }
 
+
     @Override
     public Object visit(ListDcl node) {
+        //To be implemented
         return null;
     }
 
@@ -77,6 +98,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(AssignNode node) {
+
         return null;
     }
 
@@ -142,11 +164,19 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BlockNode node) {
+        _table.OpenScope();
+        for (Node child : node.GetChildren()) {
+            visit(child);
+        }
+        _table.CloseScope();
         return null;
     }
 
     @Override
     public Object visit(CollectionNode node) {
+        for (Node child : node.GetChildren()) {
+            visit(child);
+        }
         return null;
     }
 
@@ -182,6 +212,9 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
+        for (Node child : node.GetChildren()) {
+            visit(child);
+        }
         return null;
     }
 
@@ -192,6 +225,9 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
+        for (Node child : ((BlockNode)node.GetRightChild()).GetChildren()) {
+            visit(child);
+        }
         return null;
     }
 
@@ -207,6 +243,9 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ProgNode node) {
+        for (Node child : node.GetChildren()) {
+            visit(child);
+        }
         return null;
     }
 

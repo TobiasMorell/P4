@@ -17,8 +17,8 @@ import java.util.Hashtable;
  * Created by Gedesnegl on 08-04-2016.
  */
 public class SymbolTable {
-    ArrayList<Symbol> symbols;
-    ArrayList<Func> functions;
+    public ArrayList<Symbol> symbols;
+    public ArrayList<Func> functions;
     int depth = 0;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
@@ -83,7 +83,7 @@ public class SymbolTable {
      * Prints a simple error message and exits the compiler afterwards.
      * @param s Error message
      */
-    private void MakeError(String s) {
+    public void MakeError(String s) {
         System.out.println(s);
         System.exit(-1);
     }
@@ -113,10 +113,11 @@ public class SymbolTable {
 
 
 
-    private void EnterSymbol(String id, Node.Type type)
+    public void EnterSymbol(String id, Node.Type type)
     {
         oldsym = RetrieveSymbol(id);
-        if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\" has already been initialized in this scope");
+        if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\"" +
+                " of type "+ type.toString() + " has already been initialized in this scope");
 
         newsym = new Symbol(id, type, scopeDisplay.get(depth), 0, depth);
         //mangler at sætte hashvalue
@@ -136,7 +137,7 @@ public class SymbolTable {
      * @param id String name of the symbol.
      * @return
      */
-    private Symbol RetrieveSymbol(String id) {
+    public Symbol RetrieveSymbol(String id) {
         sym = (Symbol)HashTable.get(id);
         while(sym != null)
         {
@@ -148,7 +149,7 @@ public class SymbolTable {
         return null;
     }
 
-    private void OpenScope()
+    public void OpenScope()
     {
         depth++;;
     }
@@ -159,7 +160,7 @@ public class SymbolTable {
      * Ikke særlig effektiv kører igennem hele tablet.
      *
      */
-    private void CloseScope() {
+    public void CloseScope() {
         //Needs to be improved so all variabes in the same depth are removed, can be done through the level field;
         if(!scopeDisplay.isEmpty()) {
             Symbol c = scopeDisplay.get(depth);
@@ -173,7 +174,7 @@ public class SymbolTable {
         depth--;
     }
 
-    private Boolean DeclaredLocally(String name)
+    public Boolean DeclaredLocally(String name)
     {
         sym = RetrieveSymbol(name);
         if(sym != null && sym.depth == depth) { return true;     }
