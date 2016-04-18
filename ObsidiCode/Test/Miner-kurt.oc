@@ -1,0 +1,77 @@
+Mining_Robot_Kurt:
+
+LIST MinedList = "IronOre", "DiamondOre" END MinedList
+LIST BlocksToMine
+COORD MiningCoord
+
+VOID Start()
+  MiningCoord = (150,12,50) //Lige nu må man ikke lave mellemrum i vores CoordLit!
+  GoTo(MiningCoord)
+  MineArea(4, true)
+END Start
+
+VOID GoTo(COORD TargetCoord)
+  REPEAT UNTIL (Robot.Position IS TargetCoord.Y)
+    IF (TargetCoord.X LESS_THAN Robot.Position.X)
+      Robot.Move("West")
+    END IF
+    ELSE
+      Robot.Move("East")
+    END ELSE
+    IF (TargetCoord.Z LESS_THAN Robot.Position.Z)
+      Robot.Move("South")
+    END IF
+    ELSE
+      Robot.Move("North")
+    END ELSE
+    IF (TargetCoord.Y LESS_THAN Robot.Position.Y)
+      Robot.Dig("Down")
+    END IF
+    ELSE
+      Robot.Jump()
+      Robot.Place("Down")
+    END ELSE
+  END REPEAT
+END GoTo
+
+VOID StripMine(STRING Direction, NUM Length)
+  NUM Count = 0
+  REPEAT UNTIL (Robot.Facing IS Direction) //Robot.Facing returnerer den retning robotten peger atm.
+    Robot.Turn("Left")
+  END REPEAT
+  REPEAT UNTIL (Count IS Length)
+    Robot.Dig()
+    Robot.Move()
+    IF (Robot.Inventory.IsFull())
+      DumpUselessBlocks()
+    END IF
+    Count = Count + 1
+  END REPEAT
+  GoTo(MiningCoord)
+END StripMine
+
+VOID DumpUselessBlocks()
+  Robot.Turn("Back")                //Back vender bare robotten om
+  Robot.Place("Chest")              //Jeg antager bare at den har en chest
+  Robot.DumpInChest(Robot.Inventory.Find(BlocksToMine[1])) //Desværre ser indexering sådan her ud nu
+  Robot.DumpInChest(Robot.Inventory.Find(BlocksToMine[2]))
+  Robot.DumpInventory()             //Ødelægger indholdet i inventory
+  Robot.CollectFromChest("All")     //CollectFromChest tager hvad der er specificeret i () fra chesten
+  Robot.Dig()                       //For at samle chesten op igen
+  Robot.Turn("DOWN FOR WHAT!!? Ø I Ø Ø Ø")
+END DumpUselessBlocks
+
+VOID MineArea(NUM Tunnels, BOOL BothSides)
+  NUM Count = 0
+  StripMine("North", (Count*3))
+  REPEAT UNTIL (Count IS Tunnels)
+    StripMine("West", 150)
+    StripMine("East", 150)
+    MinedList.Add(Robot.Position)
+    REPEAT UNTIL (Robot.Facing IS "North")
+      Robot.Turn("Left")
+      Robot.Move("Forward", 3) //3 er så antallet af skridt der skal gå fremad
+    END REPEAT
+    Count = Count + 1
+  END REPEAT
+END MineArea

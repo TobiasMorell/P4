@@ -21,20 +21,20 @@ CoordLit
 StringLit
 	:	'"'~('"')*'"';
 
+//Define comments
+COMMENT
+	:	'/*' .*? '*/' -> skip
+	;
+EOLCOMMENT
+	:	'//' ~'\n'* -> skip
+	;
+
 //Tells ANTLR to skip white-space
 WS
 	:	[\t' ']+ -> skip;
 //Define newline separator (used here as statement end)
 NEWLINE
     :   [\n\r];
-
-//Define comments
-COMMENT
-	:	'/*' .*? '*/' -> skip
-	;
-EOLCOMMENT
-	:	'//' .*? '\n' -> skip
-	;
 
 //Reserved type keywords
 NUM: 'NUM';
@@ -74,6 +74,7 @@ prog
 loads
     :	recursion=loads 'LOAD' '(' load_id=StringLit ')' NEWLINE   #nonLambdaLoad
     |	/*lambda*/                                                 #lambdaLoad
+    |   NEWLINE                                                       #lambdaLoad
     ;
 //Types and literals:
 literal
@@ -84,8 +85,9 @@ literal
 	|	StringLit
 	;
 typeName
-	:	id=Identifier
-	|	parent=typeName '.' id=Identifier
+	:	id=Identifier                                   #typeNameIdentifier
+	|	parent=typeName '.' id=Identifier               #typeNameIdentifier
+	|   parent=typeName '.' meth=methodInvocation       #typeNameMethodInvoc
 	;
 typePrefix
 	:	type='NUM'

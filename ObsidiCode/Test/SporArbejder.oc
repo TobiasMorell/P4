@@ -1,0 +1,21 @@
+Track_placer:
+
+COORD Destination = (150,70,150)
+
+VOID Start()
+  Robot.HQ.FindChest().Pickup("Tracks")
+  NUM Count = 0
+  REPEAT UNTIL (Robot.Position IS Destination)
+    IF (Count IS 10)
+      Robot.Place("Booster Tracks")
+      Robot.Move("Forward")
+      Count = 0
+    END IF
+    ELSE
+      Robot.Place("Tracks")
+      Robot.Move("Forward")
+      Count = Count + 1
+    END ELSE
+  END REPEAT
+  Robot.Place("Breaker Tracks")
+END Start

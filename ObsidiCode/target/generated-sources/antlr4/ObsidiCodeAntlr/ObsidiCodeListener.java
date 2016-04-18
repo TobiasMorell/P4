@@ -52,15 +52,29 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral(ObsidiCodeParser.LiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#typeName}.
+	 * Enter a parse tree produced by the {@code typeNameMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
 	 * @param ctx the parse tree
 	 */
-	void enterTypeName(ObsidiCodeParser.TypeNameContext ctx);
+	void enterTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#typeName}.
+	 * Exit a parse tree produced by the {@code typeNameMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
 	 * @param ctx the parse tree
 	 */
-	void exitTypeName(ObsidiCodeParser.TypeNameContext ctx);
+	void exitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code typeNameIdentifier}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code typeNameIdentifier}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#typePrefix}.
 	 * @param ctx the parse tree

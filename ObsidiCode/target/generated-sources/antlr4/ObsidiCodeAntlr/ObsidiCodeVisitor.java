@@ -37,11 +37,19 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral(ObsidiCodeParser.LiteralContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#typeName}.
+	 * Visit a parse tree produced by the {@code typeNameMethodInvoc}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypeName(ObsidiCodeParser.TypeNameContext ctx);
+	T visitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code typeNameIdentifier}
+	 * labeled alternative in {@link ObsidiCodeParser#typeName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#typePrefix}.
 	 * @param ctx the parse tree

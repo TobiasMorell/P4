@@ -15,7 +15,7 @@ public class ProgNode extends NaryNode {
 
     public ProgNode(ArrayList<Node> stmts, String id){
         super(stmts);
-        System.out.println("Now creating the ProgNode with name " + id);
+        //System.out.println("Now creating the ProgNode with name " + id);
         _id = id;
     }
 

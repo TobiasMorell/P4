@@ -17,7 +17,11 @@ import java.util.ArrayList;
 public class PrettyPrintVisitor extends AbstractVisitor {
     @Override
     public Object visit(Node n) {
-        return n.Accept(this);
+        if(n != null)
+            return n.Accept(this);
+        else
+            System.out.println("Found a null node, strange...");
+        return "Test for lulz";
     }
 
     @Override
@@ -377,14 +381,15 @@ public class PrettyPrintVisitor extends AbstractVisitor {
     @Override
     public Object visit(LoadNode node) {
         StringBuilder sb = new StringBuilder();
-        sb.append("import ");
 
         for (Node n : node.GetChildren()) {
+            sb.append("import ");
             String id = ((ProgNode) n)._id;
             sb.append(id.replace("\"", ""));
+            sb.append(';');
+            sb.append('\n');
         }
 
-        sb.append(';');
         return sb.toString();
     }
 

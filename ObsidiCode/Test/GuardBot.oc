@@ -1,0 +1,19 @@
+Guard_bot:
+
+LOAD("Archer-bot")
+LOAD("Sword-bot")
+
+VOID Start()
+  Sword_bot.Start()
+  Robot.Aggresion = "Passive"
+END Start
+
+//Override?
+VOID Attack(STRING mob)
+  IF (Robot.Equipped IS "Bow")
+    Archer-bot.Attack(mob)
+  END IF
+  ELSE IF (Robot.Equipped IS "Melee")
+    Sword-bot.Attack(mob)
+  END ELSEIF
+END Attack

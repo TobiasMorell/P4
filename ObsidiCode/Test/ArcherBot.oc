@@ -1,0 +1,25 @@
+Archer_bot:
+LOAD("Search-bot")
+
+VOID Start()
+  Robot.Aggresion = "Aggresive" //Casing?
+
+  STRING mob = "Hostile"
+
+  IF (mob.Aggresion IS "Hostile")
+    Attack(mob)
+  END IF
+END Start
+
+VOID Attack(STRING mob)
+  //Turn towards mob
+  Face(mob)
+
+  NUM counter = 0
+
+  REPEAT UNTIL (counter IS 15)
+    //Use er her det samme som højre-klik!
+    Robot.Equipped.Use()
+    counter = counter + 1
+  END REPEAT
+END Attack

@@ -1,9 +1,7 @@
 TestRobot: 
 LOAD("WalkerBot") //Basic walk functionalitet som GoTo
 
-NUM Count = 0 
-
-COORD MineArea
+NUM Count = 0
 
 VOID START()
     GoTo(MineArea)
@@ -20,6 +18,8 @@ VOID StripMine(NUM Length)
         Count = Count + 1
     END REPEAT
 END StripMine
+
+COORD MineArea
 
 //Tunnels er mængden af tunneller er 
 /* Mine miner den originale tunnel, som alle de andre tunneller skal være på. Og styrer derudover 

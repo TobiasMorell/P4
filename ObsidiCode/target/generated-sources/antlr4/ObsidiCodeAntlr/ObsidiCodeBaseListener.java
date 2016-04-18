@@ -64,13 +64,25 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeName(ObsidiCodeParser.TypeNameContext ctx) { }
+	@Override public void enterTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeName(ObsidiCodeParser.TypeNameContext ctx) { }
+	@Override public void exitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

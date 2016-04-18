@@ -20,7 +20,7 @@ import javax.swing.*;
 public class Compiler {
 	public static void main( String[] args) throws Exception 
     {
-		String work_dir = System.getProperty("user.dir") + '/';
+		String work_dir = System.getProperty("user.dir") + "/Test/";
 		//System.out.println("Working in: " + work_dir);
 		String file_path;
 		

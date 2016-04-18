@@ -1,0 +1,25 @@
+Sword-bot:
+
+#LOAD("Search-bot")
+
+VOID Start()
+  Robot.Aggresion = "Aggresive"
+
+  STRING mob = FindEntityNearby("Hostile")
+
+  IF mob.Aggresion IS "Hostile"
+    Attack(mob)
+  END IF
+END Start
+
+
+void Attack(Entity mob)
+  //Move to the mob
+  REPEAT UNTIL Robot.Position IS mob.Position
+    FaceTowards(mob)
+    Move()
+  END REPEAT
+
+  //Swing svarer til venstre-klik
+  Robot.Equipped.Swing()
+END Attack

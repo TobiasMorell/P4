@@ -1,6 +1,9 @@
 package Visitors;
 
+import java.lang.ref.Reference;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ASTNodes.Declarations.*;
@@ -15,7 +18,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	private void giveContextToNodes(CollectionNode declarations, int type)
 	{
 		//This switch could be implemented a lot better with generics, give it a go!
-		for (Node decl : declarations.GetChildren())
+		CollectionNode updatedDeclarations = new CollectionNode();
+		ArrayList<Node> decls = new ArrayList<Node>();
+
+		for(Node decl : decls)
 		{
 			IDNode id = null;
 			Node initialization = null;
@@ -45,19 +51,21 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			
 			switch(type) {
 			case ObsidiCodeParser.NUM:
-				declarations.AddNode(new NumDcl(id, initialization));
+				updatedDeclarations.AddNode(new NumDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.STRING:
-				declarations.AddNode(new StringDcl(id, initialization));
+				updatedDeclarations.AddNode(new StringDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.BOOL:
-				declarations.AddNode(new BoolDcl(id, initialization));
+				updatedDeclarations.AddNode(new BoolDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.COORD:
-				declarations.AddNode(new CoordDcl(id, initialization));
+				updatedDeclarations.AddNode(new CoordDcl(id, initialization));
 				break;
 			}
 		}
+
+		declarations = updatedDeclarations;
 	}
 	
 	@Override
@@ -94,7 +102,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitTypeName(ObsidiCodeParser.TypeNameContext ctx) {
+	public Node visitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) {
+		return visit(ctx.meth); // Fix dis error monday!
+	}
+
+	@Override
+	public Node visitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx) {
 		String id = ctx.id.getText();
 		ReferenceNode ref = new ReferenceNode( id );
 		
@@ -131,9 +144,9 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
 		String robotName = ctx.id.getText();
-		System.out.println("The name of the program is: " + robotName); //<------- for TESTING 
+		//System.out.println("The name of the program is: " + robotName); //<------- for TESTING
 
-		System.out.println("Initializing list...");
+		//System.out.println("Initializing list...");
 		ArrayList<Node> stmts = new ArrayList<>(10);
 
 		return new ProgNode(stmts, robotName);
@@ -589,13 +602,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLeftHandSide(ObsidiCodeParser.LeftHandSideContext ctx) {
-		ReferenceNode ref = (ReferenceNode) visit(ctx.tn);
+		Node access = visit(ctx.tn);
 		ExprNode optExt = (ExprNode) visit(ctx.ext);
 		
-		if(optExt != null)
-			ref.GetId().AddExtension(optExt);
+		if(access instanceof ReferenceNode && optExt != null)
+			((ReferenceNode) access).GetId().AddExtension(optExt);
 		
-		return ref;
+		return access;
 	}
 
 	@Override
