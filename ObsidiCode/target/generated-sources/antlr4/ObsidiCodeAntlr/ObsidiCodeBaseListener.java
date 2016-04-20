@@ -1,4 +1,4 @@
-// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;

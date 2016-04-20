@@ -22,6 +22,7 @@ public abstract class AbstractVisitor {
     public abstract Object visit(ReferenceNode node);
     public abstract Object visit(StringDcl node);
     public abstract Object visit(ListDcl node);
+    public abstract Object visit(DotNode node);
 
     public abstract Object visit(GreaterEqualNode node);
     public abstract Object visit(LessEqualNode node);

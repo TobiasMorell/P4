@@ -22,6 +22,16 @@ public class DeclVisitor extends AbstractVisitor {
         visit(_table._ASTRoot);
     }
 
+    /***
+     * todo: Implement this method!
+     * @param node a dot node that holds a reference to package/class/variable
+     * @return null
+     */
+    @Override
+    public Object visit(DotNode node) {
+        return null;
+    }
+
     @Override
     public Object visit(Node n) {
         return n.Accept(this);

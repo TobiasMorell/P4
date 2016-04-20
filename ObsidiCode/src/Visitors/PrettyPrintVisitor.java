@@ -44,6 +44,11 @@ public class PrettyPrintVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(DotNode node) {
+        return node.name + '.' + visit(node.GetLeftChild());
+    }
+
+    @Override
     public Object visit(CollectionNode node) {
         StringBuilder sb = new StringBuilder();
         ArrayList<Node> members = node.GetChildren();

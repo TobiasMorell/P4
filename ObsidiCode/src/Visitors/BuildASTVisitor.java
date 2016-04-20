@@ -99,16 +99,16 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) {
-		return visit(ctx.meth); // Fix dis error monday!
+		return new DotNode(visit(ctx.meth), ctx.parent.getText()); // Fix dis error monday!
 	}
 
 	@Override
 	public Node visitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx) {
 		String id = ctx.id.getText();
-		ReferenceNode ref = new ReferenceNode( id );
+		Node ref;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.TypeNameContext)
-			visit(ctx.parent);
+			ref = new DotNode(visit(ctx.parent), id);
 		else
 			ref = new ReferenceNode( ctx.id.getText() );
 		

@@ -16,6 +16,11 @@ public class SemanticsVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(DotNode node) {
+        return null;
+    }
+
+    @Override
     public Object visit(BoolDcl node) {
         return null;
     }

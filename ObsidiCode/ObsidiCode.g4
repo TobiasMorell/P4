@@ -34,7 +34,7 @@ WS
 	:	[\t' ']+ -> skip;
 //Define newline separator (used here as statement end)
 NEWLINE
-    :   '\r' '\n'|'\n'|'\r';
+    :   '\r' '\n' | '\n' | '\r';
 
 //Reserved type keywords
 NUM: 'NUM';

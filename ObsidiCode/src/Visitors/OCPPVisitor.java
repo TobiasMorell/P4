@@ -23,17 +23,21 @@ public class OCPPVisitor extends AbstractVisitor {
     @Override
     public Object visit(BoolDcl node) {
         String lhs = (String) visit(node.GetLeftChild());
-        String init = (String) visit(node.GetRightChild());
 
-        return "BOOL " + lhs + " = " + init + '\n';
+        if(node.GetRightChild() != null)
+            lhs += " = " + (String) visit(node.GetRightChild()) + '\n';
+
+        return "BOOL " + lhs;
     }
 
     @Override
     public Object visit(CoordDcl node) {
         String lhs = (String) visit(node.GetLeftChild());
-        String init = (String) visit(node.GetRightChild());
 
-        return "COORD " + lhs + " = " + init + '\n';
+        if(node.GetRightChild() != null)
+            lhs += " = " + (String) visit(node.GetRightChild()) + '\n';
+
+        return "COORD " + lhs;
     }
 
     @Override
@@ -106,9 +110,15 @@ public class OCPPVisitor extends AbstractVisitor {
         {
             sb.append(" = ");
             sb.append(visit(node.GetRightChild()));
+            sb.append('\n');
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public Object visit(DotNode node) {
+        return node.name + '.' + visit(node.GetLeftChild());
     }
 
     @Override
