@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -124,13 +124,25 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMemberDcl(ObsidiCodeParser.MemberDclContext ctx) { }
+	@Override public void enterMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMemberDcl(ObsidiCodeParser.MemberDclContext ctx) { }
+	@Override public void exitMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

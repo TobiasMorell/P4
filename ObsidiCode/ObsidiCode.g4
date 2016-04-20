@@ -34,7 +34,7 @@ WS
 	:	[\t' ']+ -> skip;
 //Define newline separator (used here as statement end)
 NEWLINE
-    :   [\n\r];
+    :   '\r' '\n'|'\n'|'\r';
 
 //Reserved type keywords
 NUM: 'NUM';
@@ -106,9 +106,9 @@ roboBodyDcl
 	|	dcl=memberDcl	
 	;
 memberDcl
-	:	dcl=fieldDcl
-	|	met_dcl=methodDcl
-	|	NEWLINE
+	:	dcl=fieldDcl            #memberDeclNotLambda
+	|	met_dcl=methodDcl           #memberDeclNotLambda
+	|	NEWLINE                 #memberDclLambda
 	;
 fieldDcl
 	:	t=typePrefix dcl_list=variableDclList NEWLINE;

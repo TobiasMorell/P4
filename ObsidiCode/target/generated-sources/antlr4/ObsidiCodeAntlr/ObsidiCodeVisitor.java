@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -69,11 +69,19 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRoboBodyDcl(ObsidiCodeParser.RoboBodyDclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ObsidiCodeParser#memberDcl}.
+	 * Visit a parse tree produced by the {@code memberDeclNotLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMemberDcl(ObsidiCodeParser.MemberDclContext ctx);
+	T visitMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code memberDclLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ObsidiCodeParser#fieldDcl}.
 	 * @param ctx the parse tree

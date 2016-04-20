@@ -41,6 +41,7 @@ VOID Mine(NUM Tunnels, BOOL BothSides, NUM Distance)
         END IF
         ELSE IF (MinedTunnels IS Tunnels - 2)
             Robot.BreakDance()
+
         END ELSEIF
         ELSE
             Robot.Turn("Left")

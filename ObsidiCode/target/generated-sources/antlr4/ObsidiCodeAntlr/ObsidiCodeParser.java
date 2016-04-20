@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -709,6 +709,17 @@ public class ObsidiCodeParser extends Parser {
 	}
 
 	public static class MemberDclContext extends ParserRuleContext {
+		public MemberDclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_memberDcl; }
+	 
+		public MemberDclContext() { }
+		public void copyFrom(MemberDclContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class MemberDeclNotLambdaContext extends MemberDclContext {
 		public FieldDclContext dcl;
 		public MethodDclContext met_dcl;
 		public FieldDclContext fieldDcl() {
@@ -717,22 +728,35 @@ public class ObsidiCodeParser extends Parser {
 		public MethodDclContext methodDcl() {
 			return getRuleContext(MethodDclContext.class,0);
 		}
-		public TerminalNode NEWLINE() { return getToken(ObsidiCodeParser.NEWLINE, 0); }
-		public MemberDclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_memberDcl; }
+		public MemberDeclNotLambdaContext(MemberDclContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterMemberDcl(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterMemberDeclNotLambda(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitMemberDcl(this);
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitMemberDeclNotLambda(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitMemberDcl(this);
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitMemberDeclNotLambda(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class MemberDclLambdaContext extends MemberDclContext {
+		public TerminalNode NEWLINE() { return getToken(ObsidiCodeParser.NEWLINE, 0); }
+		public MemberDclLambdaContext(MemberDclContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterMemberDclLambda(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitMemberDclLambda(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitMemberDclLambda(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -744,20 +768,23 @@ public class ObsidiCodeParser extends Parser {
 			setState(171);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
+				_localctx = new MemberDeclNotLambdaContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(168);
-				((MemberDclContext)_localctx).dcl = fieldDcl();
+				((MemberDeclNotLambdaContext)_localctx).dcl = fieldDcl();
 				}
 				break;
 			case 2:
+				_localctx = new MemberDeclNotLambdaContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(169);
-				((MemberDclContext)_localctx).met_dcl = methodDcl();
+				((MemberDeclNotLambdaContext)_localctx).met_dcl = methodDcl();
 				}
 				break;
 			case 3:
+				_localctx = new MemberDclLambdaContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(170);

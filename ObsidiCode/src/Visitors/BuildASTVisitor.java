@@ -168,19 +168,21 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitMemberDcl(ObsidiCodeParser.MemberDclContext ctx) {
-		//Find out if it's an empty statement
-		if(ctx.getChild(0).getText().equals("\n"))
-			return null;
-		else if(ctx.getChild(0) instanceof ObsidiCodeParser.FieldDclContext)
-			return visit(ctx.dcl);
-		
+	public Node visitMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx) {
 		//Not an empty statement - parse it!
-		return visit(ctx.met_dcl);
+		if(ctx.met_dcl != null)
+			return visit(ctx.met_dcl);
+
+		return visit(ctx.dcl);
 	}
 
 	@Override
-	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {		
+	public Node visitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx) {
+		return null;
+	}
+
+	@Override
+	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {
 		//Find the identifier and value of given declaration
 		CollectionNode decls = (CollectionNode) visit(ctx.dcl_list);
 		

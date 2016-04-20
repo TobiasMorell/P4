@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/GitHub/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -106,15 +106,29 @@ public interface ObsidiCodeListener extends ParseTreeListener {
 	 */
 	void exitRoboBodyDcl(ObsidiCodeParser.RoboBodyDclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ObsidiCodeParser#memberDcl}.
+	 * Enter a parse tree produced by the {@code memberDeclNotLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
 	 * @param ctx the parse tree
 	 */
-	void enterMemberDcl(ObsidiCodeParser.MemberDclContext ctx);
+	void enterMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ObsidiCodeParser#memberDcl}.
+	 * Exit a parse tree produced by the {@code memberDeclNotLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
 	 * @param ctx the parse tree
 	 */
-	void exitMemberDcl(ObsidiCodeParser.MemberDclContext ctx);
+	void exitMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code memberDclLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
+	 * @param ctx the parse tree
+	 */
+	void enterMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code memberDclLambda}
+	 * labeled alternative in {@link ObsidiCodeParser#memberDcl}.
+	 * @param ctx the parse tree
+	 */
+	void exitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ObsidiCodeParser#fieldDcl}.
 	 * @param ctx the parse tree
