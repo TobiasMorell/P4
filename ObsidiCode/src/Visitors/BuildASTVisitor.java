@@ -17,17 +17,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	private void giveContextToNodes(CollectionNode declarations, int type)
 	{
-		//This switch could be implemented a lot better with generics, give it a go!
-		CollectionNode updatedDeclarations = new CollectionNode();
+		//A list to store declarations of correct type
 		ArrayList<Node> decls = new ArrayList<Node>();
 
-		for(Node decl : decls)
+		for(Node decl : declarations.GetChildren())
 		{
 			IDNode id = null;
 			Node initialization = null;
-			
-			//Remove the node from the list and replace it with a declaration with a type
-			declarations.GetChildren().remove(decl);
 			
 			//Found an IDNode, meaning there's no initialization
 			if(decl instanceof IDNode)
@@ -51,21 +47,21 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			
 			switch(type) {
 			case ObsidiCodeParser.NUM:
-				updatedDeclarations.AddNode(new NumDcl(id, initialization));
+				decls.add(new NumDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.STRING:
-				updatedDeclarations.AddNode(new StringDcl(id, initialization));
+				decls.add(new StringDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.BOOL:
-				updatedDeclarations.AddNode(new BoolDcl(id, initialization));
+				decls.add(new BoolDcl(id, initialization));
 				break;
 			case ObsidiCodeParser.COORD:
-				updatedDeclarations.AddNode(new CoordDcl(id, initialization));
+				decls.add(new CoordDcl(id, initialization));
 				break;
 			}
 		}
 
-		declarations = updatedDeclarations;
+		declarations.SetChildren(decls);
 	}
 	
 	@Override
@@ -444,7 +440,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		if(elseRes != null)
 		{
 			ElseNode en = new ElseNode(elseRes);
-			listOfIfNodes.add(elseRes);
+			listOfIfNodes.add(en);
 		}
 		
 		return new IfNode(listOfIfNodes);
@@ -476,7 +472,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitElse(ObsidiCodeParser.ElseContext ctx) {
 		//Generate nodes for all parts of the statement
-		BlockNode bn = (BlockNode) visit(ctx.body);
+		BlockNode bn = (BlockNode) visit(ctx.body) ;
 		
 		return bn;
 	}

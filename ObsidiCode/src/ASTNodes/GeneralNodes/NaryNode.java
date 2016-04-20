@@ -1,5 +1,6 @@
 package ASTNodes.GeneralNodes;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,11 @@ public abstract class NaryNode extends Node {
         }
 
         this.children = childNodes;
+    }
+
+    public void SetChildren(ArrayList<Node> aln)
+    {
+        this.children = aln;
     }
     
     public void AddNode(Node n)

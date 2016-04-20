@@ -19,4 +19,22 @@ public class CoordLit extends LeafNode{
         return v.visit(this);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        String x = Float.toString(this.x);
+        String y = Float.toString(this.y);
+        String z = Float.toString(this.z);
+
+        sb.append('(');
+        sb.append(x);
+        sb.append(',');
+        sb.append(y);
+        sb.append(',');
+        sb.append(z);
+        sb.append(")");
+
+        return sb.toString();
+    }
 }

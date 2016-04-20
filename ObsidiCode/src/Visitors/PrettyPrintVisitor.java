@@ -20,8 +20,8 @@ public class PrettyPrintVisitor extends AbstractVisitor {
         if(n != null)
             return n.Accept(this);
         else
-            System.out.println("Found a null node, strange...");
-        return "Test for lulz";
+            System.out.println("Found a null node, AST not supposed to have empty nodes!");
+        return "FAULTY NODE!";
     }
 
     @Override

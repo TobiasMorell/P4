@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.util.Arrays;
 
 import SymbolTable.SymbolTable;
+import Visitors.OCPPVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.*;
@@ -20,6 +21,8 @@ import javax.swing.*;
 public class Compiler {
 	public static void main( String[] args) throws Exception 
     {
+        //todo: Implementer, så dotting gemmes!
+
 		String work_dir = System.getProperty("user.dir") + "/Test/";
 		//System.out.println("Working in: " + work_dir);
 		String file_path;
@@ -43,9 +46,10 @@ public class Compiler {
         BuildASTVisitor bASTv = new BuildASTVisitor();
         ProgNode pn = (ProgNode) bASTv.visit(tree);
 
-        SymbolTable st = new SymbolTable(pn);
+        //SymbolTable st = new SymbolTable(pn);
 
-        PrettyPrintVisitor ppv = new PrettyPrintVisitor();
+        OCPPVisitor ppv = new OCPPVisitor();
+        //PrettyPrintVisitor ppv = new PrettyPrintVisitor();
 
         System.out.println(ppv.visit(pn));
     }

@@ -74,7 +74,7 @@ prog
 loads
     :	recursion=loads 'LOAD' '(' load_id=StringLit ')' NEWLINE   #nonLambdaLoad
     |	/*lambda*/                                                 #lambdaLoad
-    |   NEWLINE                                                       #lambdaLoad
+    |   NEWLINE                                                    #lambdaLoad
     ;
 //Types and literals:
 literal
@@ -240,7 +240,7 @@ assignment
 leftHandSide
 	:	tn=typeName ext=listOpt;
 listOpt
-	:	'[' expr=expression ']'		
+	:	'[' expr=expression ']'		//<--- Only temporary!
 	|	/*lambda*/
 	;
 //Boolean
