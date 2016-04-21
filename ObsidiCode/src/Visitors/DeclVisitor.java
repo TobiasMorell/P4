@@ -39,12 +39,14 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolDcl node) {
+        System.out.println("Visiting BoolDcl" + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.bool);
         return null;
     }
 
     @Override
     public Object visit(CoordDcl node) {
+        System.out.println("Visiting CoordDcl " + _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.coord);
         return null;
     }
@@ -56,6 +58,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(HearDcl node) {
+        System.out.println("Visiting HearDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.functions.add(new Func(node));
         visit(node.GetLeftChild());
         return null;
@@ -63,6 +66,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodDcl node) {
+        System.out.println("Visiting MethodDcl " + node.id +" "+ _table.depth);
         _table.functions.add(new Func(node));
         visit(node.GetLeftChild());
         return null;
@@ -70,17 +74,20 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumDcl node) {
+        System.out.println("Visiting NumDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.num);
         return null;
     }
 
     @Override
     public Object visit(ReferenceNode node) {
+        System.out.println("Visiting Reference " + node.GetId()._id +" "+ _table.depth);
         return null;
     }
 
     @Override
     public Object visit(StringDcl node) {
+        System.out.println("Visiting StringDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.string);
         return null;
     }
@@ -88,7 +95,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ListDcl node) {
-        //To be implemented
+        System.out.println("Visiting ListDcl "+ ((IDNode)node.GetLeftChild())._id +" " + _table.depth);
         return null;
     }
 
@@ -109,7 +116,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(AssignNode node) {
-
+        System.out.println("Visiting AssignNode " + _table.depth);
         return null;
     }
 
@@ -175,6 +182,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BlockNode node) {
+        System.out.println("Visiting BlockNode " + _table.depth);
         _table.OpenScope();
         for (Node child : node.GetChildren()) {
             visit(child);
@@ -185,6 +193,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CollectionNode node) {
+        System.out.println("Visiting Collection " + _table.depth);
         for (Node child : node.GetChildren()) {
             visit(child);
         }
@@ -213,6 +222,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ExprNode node) {
+        System.out.println("Visiting Expr " + _table.depth);
         return null;
     }
 
@@ -223,27 +233,32 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
-        for (Node child : node.GetChildren()) {
-            visit(child);
+        System.out.println("Visiting IfNode " + _table.depth);
+        if(node != null) {
+            visit(node.GetBody());
+            visit(node.GetElseIf());
+            visit(node.GetElse());
         }
         return null;
     }
 
     @Override
     public Object visit(LoadNode node) {
+        System.out.println("Visiting Load " + _table.depth);
         return null;
     }
 
     @Override
     public Object visit(LoopNode node) {
-        for (Node child : ((BlockNode)node.GetRightChild()).GetChildren()) {
-            visit(child);
-        }
+        System.out.println("Visiting LoopNode " + _table.depth);
+        visit(node.GetLeftChild());
+        visit(node.GetRightChild());
         return null;
     }
 
     @Override
     public Object visit(MethodInvocationNode node) {
+        System.out.println("Visiting Invocation " + "with name: "+ ((IDNode)node.GetLeftChild())._id +" "+_table.depth);
         return null;
     }
 
@@ -254,7 +269,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ProgNode node) {
-        System.out.print("Visiting Prognode");
+        System.out.println("Visiting Prognode " + _table.depth);
+        _table.OpenScope();
         for (Node child : node.GetChildren()) {
             visit(child);
         }

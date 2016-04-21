@@ -20,7 +20,7 @@ import java.util.Hashtable;
 public class SymbolTable {
     public ArrayList<Symbol> symbols;
     public ArrayList<Func> functions;
-    int depth = 0;
+    public int depth = -1;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
     public DeclVisitor dclvisitor;
@@ -30,8 +30,9 @@ public class SymbolTable {
     {
         _ASTRoot = ASTRoot;
         HashTable = new Hashtable();
-        scopeDisplay = new ArrayList<Symbol>();
-        symbols = new ArrayList<Symbol>();
+        scopeDisplay = new ArrayList<>();
+        symbols = new ArrayList<>();
+        functions = new ArrayList<>();
         dclvisitor = new DeclVisitor(this);
     }
     /*
@@ -118,8 +119,7 @@ public class SymbolTable {
         Symbol oldsym = RetrieveSymbol(id);
         if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\"" +
                 " of type "+ type.toString() + " has already been initialized in this scope");
-
-        Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), 0, depth);
+        Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), depth);
         //mangler at sætte hashvalue
         scopeDisplay.set(depth, newsym);
         if(oldsym == null) HashTable.put(newsym.getName(), newsym);
@@ -141,7 +141,7 @@ public class SymbolTable {
         Symbol sym = (Symbol)HashTable.get(id);
         while(sym != null)
         {
-            if(sym.name == id) return(sym);
+            if(sym.name.equals(id)) return(sym);
 
             //I bogen gør de bagefter sym = sym.getHashValue();
 
@@ -151,7 +151,8 @@ public class SymbolTable {
 
     public void OpenScope()
     {
-        depth++;;
+        depth++;
+        scopeDisplay.add(null);
     }
 
     /**
@@ -162,14 +163,16 @@ public class SymbolTable {
      */
     public void CloseScope() {
         //Needs to be improved so all variabes in the same depth are removed, can be done through the level field;
-        if(!scopeDisplay.isEmpty()) {
+        scopeDisplay.trimToSize();
+        if(scopeDisplay.size()>depth) {
             Symbol c = scopeDisplay.get(depth);
             if (c != null) {
                 Symbol prevsym = c.var;
-                HashTable.remove(c);
+                HashTable.remove(c.name); //todo: Det hér virker nok ikke.
                 if (prevsym != null)
                     HashTable.put(prevsym.getName(), prevsym);
             }
+            scopeDisplay.remove(depth);
         }
         depth--;
     }

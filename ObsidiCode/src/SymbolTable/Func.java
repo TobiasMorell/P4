@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Created by Gedesnegl on 14-04-2016.
  */
 public class Func {
+    public String name;
     public Node.Type returnType;
     public ArrayList<Node.Type> parameters;
 
@@ -21,7 +22,9 @@ public class Func {
      * @param methodNode The AST node that represents the method
      */
     public Func(MethodDcl methodNode){
+            parameters = new ArrayList<>();
             returnType = methodNode.type;
+            name = methodNode.id;
             for (Node n :methodNode.parameters) {
                 DeclarationNode N = (DeclarationNode)n;
                 parameters.add(N.type);
