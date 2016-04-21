@@ -162,7 +162,7 @@ public class SymbolTable {
      */
     public void CloseScope() {
         //Needs to be improved so all variabes in the same depth are removed, can be done through the level field;
-        if(!scopeDisplay.isEmpty()) {
+        while(!scopeDisplay.isEmpty()) {
             Symbol c = scopeDisplay.get(depth);
             if (c != null) {
                 Symbol prevsym = c.var;
