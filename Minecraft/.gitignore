@@ -1,19 +1,46 @@
-*.class
-.metadata/
-.recommenders/
-.idea
+#gradle
+.gradle
+gradle.*
+build
+build.gradle
+gradle-app.settinggradle/
+gradlew
+gradlew.bat
+gradle/
+
+# GMCP plugin
+/minecraft
+
+Fisk/
+build/
+run/
+classes/
+
+run/usercache.json
+
+#forge
+CREDITS-fml.txt
+LICENSE-fml.txt
+Minecraft*.txt
+README.txt
+forge-*-changelog.txt
+
+#Paulscode
+Paulscode *.txt
+
+# eclipse
+.settings
+.metadata
 .classpath
 .project
-.iml
-ObsidiCode/build/
+bin
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# intellij
+out
+*.idea
+*.iml
 
-# Package Files #
-*.jar
-*.war
-*.ear
+/run
+java_pid*.hprof
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+/repo/
