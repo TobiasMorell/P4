@@ -6,6 +6,17 @@
 .project
 .iml
 ObsidiCode/build/
+Minecraft/build/
+Minecraft/run/
+Minecraft/classes/
+Minecraft/gradle
+Minecraft/.idea
+Minecraft/.gradle
+Minecraft/.git
+Minecraft/Paulscode IBXM Library License.txt
+Minecraft/Paulscode SoundSystem CodecIBXM License.txt
+Minecraft/README.txt
+
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
