@@ -12,8 +12,6 @@ import java.lang.reflect.Method;
 public class Compiler {
     public Test outputClass = new Test();
     public void inputTask(String fileToCompile) {
-        //String fileToCompile = "DynamicClass.java";
-
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         int compilationResult = compiler.run(null, null, null, fileToCompile);

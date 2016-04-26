@@ -21,7 +21,7 @@ public class Test {
         player = playerIn;
     }
 
-    public void Talk(String msg){
+    public static void Talk(String msg){
         player.addChatMessage(new ChatComponentText("\247f" + msg));
     }
 

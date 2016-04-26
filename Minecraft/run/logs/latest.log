@@ -1,32 +1,32 @@
-[08:02:30] [Client thread/INFO]: Setting user: Player74
-[08:02:32] [Client thread/INFO]: LWJGL Version: 2.9.4
-[08:02:35] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:obsidiskrivemaskine
-[08:02:35] [Client thread/ERROR]: Couldn't initialize twitch stream
-[08:02:35] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[08:02:35] [Thread-8/INFO]: Initializing LWJGL OpenAL
-[08:02:35] [Thread-8/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[08:02:35] [Thread-8/INFO]: OpenAL initialized.
-[08:02:35] [Sound Library Loader/INFO]: Sound engine started
-[08:02:37] [Client thread/INFO]: Created: 16x16 textures-atlas
-[08:02:38] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:obsidiskrivemaskine
-[08:02:38] [Client thread/INFO]: SoundSystem shutting down...
-[08:02:38] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
-[08:02:38] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[08:02:38] [Thread-10/INFO]: Initializing LWJGL OpenAL
-[08:02:38] [Thread-10/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[08:02:38] [Thread-10/INFO]: OpenAL initialized.
-[08:02:39] [Sound Library Loader/INFO]: Sound engine started
-[08:02:39] [Client thread/INFO]: Created: 512x512 textures-atlas
-[08:02:41] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[08:02:57] [Server thread/INFO]: Starting integrated minecraft server version 1.8.9
-[08:02:57] [Server thread/INFO]: Generating keypair
-[08:02:57] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[08:02:57] [Server thread/INFO]: Preparing start region for level 0
-[08:02:57] [Server thread/INFO]: Changing view distance to 9, from 10
-[08:02:57] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[08:02:58] [Server thread/INFO]: Player74[local:E:23fef998] logged in with entity id 11 at (250752.75612918858, 64.49064323361056, 656.2990399204729)
-[08:02:58] [Server thread/INFO]: Player74 joined the game
-[08:02:59] [pool-2-thread-1/WARN]: Couldn't look up profile properties for com.mojang.authlib.GameProfile@5178aff5[id=e8d9e895-aa3b-3a25-8dde-f1e015a97510,name=Player74,properties={},legacy=false]
+[08:14:29] [Client thread/INFO]: Setting user: Player128
+[08:14:31] [Client thread/INFO]: LWJGL Version: 2.9.4
+[08:14:33] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:obsidiskrivemaskine
+[08:14:33] [Client thread/ERROR]: Couldn't initialize twitch stream
+[08:14:33] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[08:14:33] [Thread-8/INFO]: Initializing LWJGL OpenAL
+[08:14:33] [Thread-8/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[08:14:33] [Thread-8/INFO]: OpenAL initialized.
+[08:14:34] [Sound Library Loader/INFO]: Sound engine started
+[08:14:35] [Client thread/INFO]: Created: 16x16 textures-atlas
+[08:14:36] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:obsidiskrivemaskine
+[08:14:36] [Client thread/INFO]: SoundSystem shutting down...
+[08:14:36] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[08:14:36] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[08:14:36] [Thread-10/INFO]: Initializing LWJGL OpenAL
+[08:14:36] [Thread-10/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[08:14:36] [Thread-10/INFO]: OpenAL initialized.
+[08:14:37] [Sound Library Loader/INFO]: Sound engine started
+[08:14:37] [Client thread/INFO]: Created: 512x512 textures-atlas
+[08:14:39] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[08:14:40] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[08:14:41] [Server thread/INFO]: Starting integrated minecraft server version 1.8.9
+[08:14:41] [Server thread/INFO]: Generating keypair
+[08:14:41] [Server thread/INFO]: Preparing start region for level 0
+[08:14:41] [Server thread/INFO]: Changing view distance to 9, from 10
+[08:14:42] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[08:14:42] [Server thread/INFO]: Player128[local:E:8ff63003] logged in with entity id 11 at (250750.91506271678, 63.37798836699763, 656.085870275478)
+[08:14:42] [Server thread/INFO]: Player128 joined the game
+[08:14:43] [pool-2-thread-1/WARN]: Couldn't look up profile properties for com.mojang.authlib.GameProfile@6300f346[id=7dc80f62-93ab-31a4-97b1-46f4b80402c9,name=Player128,properties={},legacy=false]
 com.mojang.authlib.exceptions.AuthenticationException: The client has sent too many requests within a certain amount of time
 	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:65) ~[YggdrasilAuthenticationService.class:?]
 	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fillGameProfile(YggdrasilMinecraftSessionService.java:175) [YggdrasilMinecraftSessionService.class:?]
@@ -48,35 +48,22 @@ com.mojang.authlib.exceptions.AuthenticationException: The client has sent too m
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_95]
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_95]
 	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_95]
-[08:03:09] [Server thread/INFO]: Saving and pausing game...
-[08:03:09] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:03:09] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:03:09] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:03:13] [Server thread/INFO]: Saving and pausing game...
-[08:03:13] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:03:13] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:03:13] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:03:19] [Client thread/INFO]: [CHAT] §fCompilation Failed
-[08:03:23] [Server thread/INFO]: Saving and pausing game...
-[08:03:23] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:03:23] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:03:23] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:03:40] [Server thread/INFO]: Saving and pausing game...
-[08:03:40] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:03:40] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:03:40] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:04:44] [Client thread/INFO]: [CHAT] §fCompilation Failed
-[08:04:44] [Server thread/INFO]: Saving and pausing game...
-[08:04:44] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:04:44] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:04:44] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:05:02] [Server thread/INFO]: Stopping server
-[08:05:02] [Server thread/INFO]: Saving players
-[08:05:02] [Server thread/INFO]: Saving worlds
-[08:05:02] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
-[08:05:02] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
-[08:05:02] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
-[08:05:03] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[08:05:03] [Client thread/INFO]: Stopping!
-[08:05:03] [Client thread/INFO]: SoundSystem shutting down...
-[08:05:04] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[08:14:45] [Server thread/INFO]: Saving and pausing game...
+[08:14:45] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
+[08:14:45] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
+[08:14:45] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
+[08:14:49] [Client thread/INFO]: [CHAT] §fHej
+[08:14:59] [Server thread/INFO]: Saving and pausing game...
+[08:14:59] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
+[08:14:59] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
+[08:14:59] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
+[08:15:00] [Server thread/INFO]: Stopping server
+[08:15:00] [Server thread/INFO]: Saving players
+[08:15:00] [Server thread/INFO]: Saving worlds
+[08:15:00] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Overworld
+[08:15:00] [Server thread/INFO]: Saving chunks for level 'fflatworld'/Nether
+[08:15:00] [Server thread/INFO]: Saving chunks for level 'fflatworld'/The End
+[08:15:01] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[08:15:02] [Client thread/INFO]: Stopping!
+[08:15:02] [Client thread/INFO]: SoundSystem shutting down...
+[08:15:02] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

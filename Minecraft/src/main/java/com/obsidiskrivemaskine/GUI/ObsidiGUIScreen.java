@@ -55,16 +55,7 @@ public class ObsidiGUIScreen extends GuiScreen
     }
 
     void saveFile(){
-        //Keeping old files
         File testFile = new File("DynamicClass.java");
-        File oldFile = new File("OldDynamic" + ++i + ".java");
-        if (testFile.exists())
-            while(oldFile.exists()) {
-                oldFile = new File("OldDynamic" + ++i + ".java");
-            }
-            if (testFile.renameTo(oldFile))
-                 testFile = new File("DynamicClass.java");
-
         try {
             obsidiFileWriter = new FileWriter(testFile);
             obsidiFileWriter.write(text.toString());
