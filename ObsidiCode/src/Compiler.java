@@ -39,7 +39,7 @@ public class Compiler {
         CommonTokenStream tokens = new CommonTokenStream(lex);
 
         ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
-        ParseTree tree = parser.prog();// begin parsing at rule 'prog'
+        ParseTree tree = parser.prog(); // begin parsing at rule 'prog'
         //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         //showTreeOnGUI(tree, parser);
 
