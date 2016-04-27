@@ -52,11 +52,6 @@ public class DeclVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(DeclarationNode node) {
-        return null;
-    }
-
-    @Override
     public Object visit(HearDcl node) {
         System.out.println("Visiting HearDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.functions.add(new Func(node));
@@ -171,7 +166,7 @@ public class DeclVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(XandNode node) {
+    public Object visit(XnorNode node) {
         return null;
     }
 

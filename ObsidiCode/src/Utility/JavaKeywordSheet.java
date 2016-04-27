@@ -1,0 +1,36 @@
+package Utility;
+
+/**
+ * Created by morell on 4/27/16.
+ */
+public class JavaKeywordSheet extends AbstractKeywordSheet {
+
+
+    public JavaKeywordSheet()
+    {
+        BOOLEAN = "boolean";
+        STRING = "String";
+        INT = "int";
+        FLOAT = "float";
+        COORD = "Vector3d";
+        ACCESS = "public";
+        VOID = "void";
+        LIST = "ArrayList<Object>";
+        NEW = "new";
+        CLASS_ACCESS = ".";
+        ADD_TO_LIST = "add";
+        LESS_THAN = "<";
+        GREATER_THAN = ">";
+        LESS_THAN_EQUAL = "<=";
+        GREATER_THAN_EQUAL = ">=";
+        EQUAL = "==";
+        PLUS = "+";
+        MINUS = "-";
+        MULT = "*";
+        DIV = "/";
+        AND = "&&";
+        OR = "||";
+        ASSIGN = "=";
+        NOT = "!";
+    }
+}

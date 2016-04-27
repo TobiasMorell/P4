@@ -41,14 +41,6 @@ public class OCPPVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(DeclarationNode node) {
-        String lhs = (String) visit(node.GetLeftChild());
-        String init = (String) visit(node.GetRightChild());
-
-        return "UNKNOWN DECLARATION " + lhs + " = " + init + '\n';
-    }
-
-    @Override
     public Object visit(HearDcl node) {
         String id = node.id;
         StringBuilder sb = new StringBuilder();
@@ -311,7 +303,7 @@ public class OCPPVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(XandNode node) {
+    public Object visit(XnorNode node) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(" XAND ");

@@ -1,0 +1,56 @@
+package Utility;
+
+import ASTNodes.GeneralNodes.Node;
+import ASTNodes.SyntaxNodes.ProgNode;
+import ObsidiCodeAntlr.ObsidiCodeLexer;
+import ObsidiCodeAntlr.ObsidiCodeParser;
+import Visitors.BuildASTVisitor;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.io.*;
+
+/**
+ * Created by morell on 4/27/16.
+ */
+public class AntlrASTBuilder {
+    private final String workingDir;
+
+    public AntlrASTBuilder()
+    {
+        workingDir = System.getProperty("user.dir") + "/Test/";
+    }
+
+    public Node Compile(String file)
+    {
+        try {
+            //Open file-reader and create an input stream for ANTLR
+            FileInputStream fis = new FileInputStream(workingDir + file);
+            ANTLRInputStream ais = new ANTLRInputStream(fis);
+
+            //Create a lexer and token stream
+            ObsidiCodeLexer lex = new ObsidiCodeLexer(ais);
+            CommonTokenStream tokens = new CommonTokenStream(lex);
+
+            //Create parser and start parsing
+            ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
+            ParseTree tree = parser.prog(); //<--Specify the start-rule of the parser
+
+            //Close file-stream!
+            fis.close();
+
+            //Finally build the AST and return it
+            BuildASTVisitor bASTv = new BuildASTVisitor();
+            return bASTv.visit(tree);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("The given file was not found:\n" + workingDir + file);
+        }
+        catch (IOException e) {
+            System.out.println("Could not open input-stream to read source-file.");
+        }
+
+        return null;
+    }
+}

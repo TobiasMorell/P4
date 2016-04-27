@@ -26,11 +26,6 @@ public class JvmCodeVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(DeclarationNode node) {
-        return null;
-    }
-
-    @Override
     public Object visit(HearDcl node) {
         return null;
     }
@@ -136,7 +131,7 @@ public class JvmCodeVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(XandNode node) {
+    public Object visit(XnorNode node) {
         return null;
     }
 
