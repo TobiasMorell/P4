@@ -1,6 +1,6 @@
 package com.obsidiskrivemaskine.GUI;
 
-import com.obsidiskrivemaskine.Test;
+import com.obsidiskrivemaskine.AbstractRobot;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
  * Created by esben on 14/04/16.
  */
 public class Compiler {
-    public Test outputClass = new Test();
     public void inputTask(String fileToCompile) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
@@ -19,7 +18,7 @@ public class Compiler {
         if (compilationResult == 0) {
             LoadClass();
         } else {
-            outputClass.Talk("Compilation Failed");
+            AbstractRobot.talk("Compilation Failed");
         }
     }
 

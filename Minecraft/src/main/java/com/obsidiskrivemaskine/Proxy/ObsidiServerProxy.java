@@ -1,6 +1,5 @@
 package com.obsidiskrivemaskine.Proxy;
 
-import com.obsidiskrivemaskine.GUI.CustomCow;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**

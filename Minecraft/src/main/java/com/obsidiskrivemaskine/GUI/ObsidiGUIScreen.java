@@ -128,10 +128,8 @@ public class ObsidiGUIScreen extends GuiScreen
                 if (isAllowedCharacters())
                 {
                    // System.out.println(org.lwjgl.input.Keyboard.getEventKey());
-
                     text.deleteCharAt(cursorLocation);
                     text.insert(cursorLocation, org.lwjgl.input.Keyboard.getEventCharacter());
-                    System.out.println(org.lwjgl.input.Keyboard.getEventKey());
                     cursorLocation++;
                     text.insert(cursorLocation, cursor); // moving cursor
                 }

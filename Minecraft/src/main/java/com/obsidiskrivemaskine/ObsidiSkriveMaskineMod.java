@@ -1,7 +1,7 @@
 package com.obsidiskrivemaskine;
 
-import com.obsidiskrivemaskine.GUI.CustomCow;
-import com.obsidiskrivemaskine.block.KurtSkriveMaskineBlock;
+import com.obsidiskrivemaskine.GUI.RobotEntity;
+import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
 import com.obsidiskrivemaskine.Handler.ObsidiGuiHandler;
 import com.obsidiskrivemaskine.Proxy.ObsidiServerProxy;
 import net.minecraft.block.Block;
@@ -34,7 +34,7 @@ public class ObsidiSkriveMaskineMod
     @EventHandler
     public void preinit (FMLPreInitializationEvent event)
     {
-        obsidiblock = new KurtSkriveMaskineBlock().setUnlocalizedName("ObsidiSkriveMaskineBlock").setCreativeTab(CreativeTabs.tabRedstone);
+        obsidiblock = new ObsidiSkriveMaskineBlock().setUnlocalizedName("ObsidiSkriveMaskineBlock").setCreativeTab(CreativeTabs.tabRedstone);
         kurtguiid = 1;
     }
 
@@ -44,7 +44,7 @@ public class ObsidiSkriveMaskineMod
         registerBlocks();
         registerHandlers();
 
-        CustomCow.RegisterEntity();
+        RobotEntity.RegisterEntity();
     }
 
     @EventHandler
