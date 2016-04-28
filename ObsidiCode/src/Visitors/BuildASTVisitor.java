@@ -218,7 +218,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableInitializerContext)
 			return visit(ctx.var_init);
 		else
-			return new ListDcl(Node.Type.List, new IDNode(ctx.id.getText()), (CollectionNode) visit(ctx.list_init));
+			return new ListDcl(new IDNode(ctx.id.getText()), (CollectionNode) visit(ctx.list_init));
 	}
 
 	@Override

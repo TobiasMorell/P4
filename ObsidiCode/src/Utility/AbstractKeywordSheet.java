@@ -28,4 +28,9 @@ public abstract class AbstractKeywordSheet {
     public String OR;
     public String ASSIGN;
     public String NOT;
+    public String CLASS;
+    public String EXTENSION;
+    public String BLOCK_OPEN;
+    public String BLOCK_CLOSE;
+    public String STATEMENT_END;
 }

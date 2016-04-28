@@ -12,6 +12,8 @@ import Utility.JavaSourceBuffer;
  * Created by morell on 4/26/16.
  */
 public class JavaCodeVisitor extends AbstractVisitor {
+    //todo: Implement use of SymbolTable, must also use the approach defined by Arne & Lee
+
     private StringBuilder codeBuilder = new StringBuilder();
     private String robotName;
     AbstractKeywordSheet keywords;
@@ -24,6 +26,22 @@ public class JavaCodeVisitor extends AbstractVisitor {
     public JavaSourceBuffer GetSourceCode()
     {
         return new JavaSourceBuffer(robotName, codeBuilder.toString());
+    }
+
+    private void emitHeader()
+    {
+        codeBuilder.append("package CompiledRobots;\n");
+        codeBuilder.append("import Java.Util.ArrayList;\n");
+        codeBuilder.append("import Utility.Coord;\n\n");
+        codeBuilder.append(keywords.ACCESS);
+        codeBuilder.append(' ');
+        codeBuilder.append(keywords.CLASS);
+        codeBuilder.append(' ');
+        codeBuilder.append(robotName);
+        codeBuilder.append(' ');
+        codeBuilder.append(keywords.EXTENSION);
+        codeBuilder.append(" {\n");
+
     }
 
     @Override

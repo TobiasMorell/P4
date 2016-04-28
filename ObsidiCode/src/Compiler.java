@@ -1,26 +1,11 @@
-import java.awt.*;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.util.Arrays;
 
 import ASTNodes.GeneralNodes.Node;
 import SymbolTable.SymbolTable;
 import Utility.AntlrASTBuilder;
 import Utility.JavaKeywordSheet;
 import Visitors.JavaCodeVisitor;
-import Visitors.OCPPVisitor;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.*;
-import ObsidiCodeAntlr.*;
 
-import ASTNodes.SyntaxNodes.ProgNode;
-import Visitors.BuildASTVisitor;
-import Visitors.PrettyPrintVisitor;
-
-import org.antlr.v4.runtime.tree.gui.TreeViewer;
-import javax.swing.*;
+import java.util.ArrayList;
 
 public class Compiler {
 	public static void main( String[] args) throws Exception 
