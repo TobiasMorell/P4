@@ -13,7 +13,7 @@ import Utility.JavaSourceBuffer;
  */
 public class JavaCodeVisitor extends AbstractVisitor {
     private StringBuilder codeBuilder = new StringBuilder();
-    private final String robotName;
+    private String robotName;
     AbstractKeywordSheet keywords;
 
     public JavaCodeVisitor (AbstractKeywordSheet keywords)
@@ -376,6 +376,7 @@ public class JavaCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ProgNode node) {
+        this.robotName = node._id;
         return null;
     }
 
