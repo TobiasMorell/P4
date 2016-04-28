@@ -5,8 +5,6 @@ import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 
-import java.net.IDN;
-
 /**
  * Created by morell on 4/10/16.
  */
@@ -15,7 +13,6 @@ public abstract class AbstractVisitor {
 
     public abstract Object visit(BoolDcl node);
     public abstract Object visit(CoordDcl node);
-    public abstract Object visit(DeclarationNode node);
     public abstract Object visit(HearDcl node);
     public abstract Object visit(MethodDcl node);
     public abstract Object visit(NumDcl node);
@@ -38,7 +35,7 @@ public abstract class AbstractVisitor {
     public abstract Object visit(OrNode node);
     public abstract Object visit(PlusNode node);
     public abstract Object visit(UnaryMinusNode node);
-    public abstract Object visit(XandNode node);
+    public abstract Object visit(XnorNode node);
     public abstract Object visit(XorNode node);
 
     public abstract Object visit(BlockNode node);

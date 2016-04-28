@@ -24,9 +24,9 @@ public class SymbolTable {
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
     public DeclVisitor dclvisitor;
-    public ProgNode _ASTRoot;
+    public Node _ASTRoot;
 
-    public SymbolTable(ProgNode ASTRoot)
+    public SymbolTable(Node ASTRoot)
     {
         _ASTRoot = ASTRoot;
         HashTable = new Hashtable();

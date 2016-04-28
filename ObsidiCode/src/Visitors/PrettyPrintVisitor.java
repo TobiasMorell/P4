@@ -84,17 +84,6 @@ public class PrettyPrintVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(DeclarationNode node) {
-        String dcl;
-
-        dcl = node.GetLeftChild().Accept(this).toString();
-        if(node.GetRightChild() != null)
-            dcl += " = " + visit(node.GetRightChild());
-
-        return dcl + ';';
-    }
-
-    @Override
     public Object visit(HearDcl node) {
         Object lo;
 
@@ -284,7 +273,7 @@ public class PrettyPrintVisitor extends AbstractVisitor {
     }
 
     @Override
-    public Object visit(XandNode node) {
+    public Object visit(XnorNode node) {
         Object lo = visit(node.GetLeftChild());
         Object ro = visit(node.GetRightChild());
 
