@@ -1,76 +1,27 @@
-import java.awt.*;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.util.Arrays;
 
+import ASTNodes.GeneralNodes.Node;
 import SymbolTable.SymbolTable;
-import Visitors.OCPPVisitor;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.*;
-import ObsidiCodeAntlr.*;
+import Utility.AntlrASTBuilder;
+import Utility.JavaKeywordSheet;
+import Visitors.JavaCodeVisitor;
 
-import ASTNodes.SyntaxNodes.ProgNode;
-import Visitors.BuildASTVisitor;
-import Visitors.PrettyPrintVisitor;
-
-import org.antlr.v4.runtime.tree.gui.TreeViewer;
-import javax.swing.*;
+import java.util.ArrayList;
 
 public class Compiler {
 	public static void main( String[] args) throws Exception 
     {
-        //todo: Implementer, så dotting gemmes!
+        AntlrASTBuilder astBuilder = new AntlrASTBuilder();
+        Node root = astBuilder.Compile("esben_test.oc"); //<-- write file to compile here!
 
-		String work_dir = System.getProperty("user.dir") + "/Test/";
-		//System.out.println("Working in: " + work_dir);
-		String file_path;
-		
-		System.out.println("Please specify name of the file to parse:\n");
-		BufferedReader rb = new BufferedReader(new InputStreamReader(System.in));
-		
-		file_path = rb.readLine();
+        //OCPPVisitor ppv = new OCPPVisitor(); <-- Un-comment to print ObsidiCode
+        //PrettyPrintVisitor ppv = new PrettyPrintVisitor(); <-- Un-comment to print java-code
+        //System.out.println(ppv.visit(pn)); <-- this writes the code to console.
 
-        ANTLRInputStream ais = new ANTLRInputStream( new FileInputStream( work_dir + file_path));
+        //Build the symbol table
+        SymbolTable st = new SymbolTable(root);
 
-        ObsidiCodeLexer lex = new ObsidiCodeLexer(ais);
+        //Compile either to java or java-byte code
+        JavaCodeVisitor jcv = new JavaCodeVisitor(new JavaKeywordSheet());
 
-        CommonTokenStream tokens = new CommonTokenStream(lex);
-
-        ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
-        ParseTree tree = parser.prog(); // begin parsing at rule 'prog'
-        //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
-        //showTreeOnGUI(tree, parser);
-
-        BuildASTVisitor bASTv = new BuildASTVisitor();
-        ProgNode pn = (ProgNode) bASTv.visit(tree);
-
-
-
-        OCPPVisitor ppv = new OCPPVisitor();
-        //PrettyPrintVisitor ppv = new PrettyPrintVisitor();
-
-        System.out.println(ppv.visit(pn));
-
-        SymbolTable st = new SymbolTable(pn);
-    }
-
-    /*
-     * FOR TESTING ONLY - show AST in GUI, but doesn't work with large trees
-     */
-    private static void showTreeOnGUI(ParseTree tree, ObsidiCodeParser parser)
-    {
-        JFrame frame = new JFrame("ObsidiCode Tree Viewer");
-        JPanel panel = new JPanel();
-        TreeViewer viewr = new TreeViewer(Arrays.asList(
-                parser.getRuleNames()),tree);
-        viewr.setScale(1.5);//scale a little
-        panel.add(viewr);
-        frame.add(panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(screenSize.width,screenSize.height);
-        frame.setVisible(true);
     }
 }

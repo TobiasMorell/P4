@@ -1,6 +1,5 @@
 package com.obsidiskrivemaskine.Proxy;
 
-import com.obsidiskrivemaskine.GUI.CustomCow;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
