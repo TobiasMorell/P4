@@ -11,14 +11,6 @@ import java.util.ArrayList;
  * Created by morell on 4/19/16.
  */
 public class OCPPVisitor extends AbstractVisitor {
-    @Override
-    public Object visit(Node n) {
-        if(n != null)
-            return n.Accept(this);
-        else
-            System.out.println("Found a null node, AST not supposed to have empty nodes!");
-        return "FAULTY NODE!";
-    }
 
     @Override
     public Object visit(BoolDcl node) {

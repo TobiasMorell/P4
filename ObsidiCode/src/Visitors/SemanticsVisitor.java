@@ -10,10 +10,6 @@ import ASTNodes.SyntaxNodes.*;
  * Created by Gedesnegl on 15-04-2016.
  */
 public class SemanticsVisitor extends AbstractVisitor {
-    @Override
-    public Object visit(Node n) {
-        return null;
-    }
 
     @Override
     public Object visit(DotNode node) {

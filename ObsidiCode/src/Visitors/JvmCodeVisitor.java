@@ -11,11 +11,6 @@ import ASTNodes.SyntaxNodes.*;
  */
 public class JvmCodeVisitor extends AbstractVisitor {
     @Override
-    public Object visit(Node n) {
-        return null;
-    }
-
-    @Override
     public Object visit(BoolDcl node) {
         return null;
     }

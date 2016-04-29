@@ -1,7 +1,7 @@
 TestRobot: 
 LOAD("WalkerBot") //Basic walk functionalitet som GoTo
 
-NUM Count = 0
+NUM Count = 10 + 50
 
 VOID START()
     GoTo(MineArea)

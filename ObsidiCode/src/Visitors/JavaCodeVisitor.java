@@ -44,9 +44,6 @@ public class JavaCodeVisitor extends AbstractVisitor {
 
     }
 
-    @Override
-    public Object visit(Node n) {  return n.Accept(this);  }
-
     private void visitDeclarationGeneric(DeclarationNode node, String type)
     {
         //Append type-name

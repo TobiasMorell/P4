@@ -107,7 +107,7 @@ roboBodyDcl
 	;
 memberDcl
 	:	dcl=fieldDcl            #memberDeclNotLambda
-	|	met_dcl=methodDcl           #memberDeclNotLambda
+	|	met_dcl=methodDcl       #memberDeclNotLambda
 	|	NEWLINE                 #memberDclLambda
 	;
 fieldDcl
