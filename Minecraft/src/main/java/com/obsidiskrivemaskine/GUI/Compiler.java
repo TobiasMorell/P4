@@ -1,6 +1,7 @@
 package com.obsidiskrivemaskine.GUI;
 
 import com.obsidiskrivemaskine.AbstractRobot;
+import com.obsidiskrivemaskine.SyncRobot;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -26,15 +27,13 @@ public class Compiler {
     public void LoadClass(){
         try
         {
+            /* Should not be necessary.*/
             Class[] argTypes = new Class[1];
             argTypes[0] = String[].class;
 
-            Class <?> newClass = newClassLoader();
-            Method mainMethod = newClass.getDeclaredMethod("main", argTypes);
-            Object[] argListForInvokedMain = new Object[1];
-            argListForInvokedMain[0] = new String[0];
-            // Place whatever args you want to pass into other class's main here.
-            mainMethod.invoke(null, argListForInvokedMain);
+            SyncRobot syncRobot = newClassLoader();
+            Method mainMethod = syncRobot.getClass().getDeclaredMethod("run");
+            mainMethod.invoke(syncRobot);
         }
         catch (Exception e)
         {
@@ -42,15 +41,13 @@ public class Compiler {
         }
     }
 
-    public static Class <?> newClassLoader() {
-        Class[] argTypes = new Class[1];
-        argTypes[0] = String[].class;
+    public static SyncRobot newClassLoader() {
         ClassLoader parentClassLoader = DynamicSuperClassLoader.class.getClassLoader();
         DynamicSuperClassLoader classLoader;
         classLoader = new DynamicSuperClassLoader(parentClassLoader);
         try {
-            Class <?> clas = classLoader.loadClass("DynamicClass");
-            return clas;
+            Class <? extends SyncRobot> clas = classLoader.loadClass("DynamicClass");
+            return clas.newInstance();
         }
         catch (Exception e){
             System.out.println("Class loading failed");
