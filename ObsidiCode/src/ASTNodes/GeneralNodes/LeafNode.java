@@ -5,7 +5,7 @@ package ASTNodes.GeneralNodes;
  */
 
 public abstract class LeafNode extends Node {
-    protected Type t;
+
     public LeafNode(){
         this._leftmostChild = null;
     }

@@ -1,5 +1,8 @@
 
+import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.GeneralNodes.Node;
+import ASTNodes.Operators.AssignNode;
+import ASTNodes.SyntaxNodes.NumLit;
 import SymbolTable.SymbolTable;
 import Utility.AntlrASTBuilder;
 import Utility.JavaKeywordSheet;
@@ -16,6 +19,11 @@ public class Compiler {
         //OCPPVisitor ppv = new OCPPVisitor(); <-- Un-comment to print ObsidiCode
         //PrettyPrintVisitor ppv = new PrettyPrintVisitor(); <-- Un-comment to print java-code
         //System.out.println(ppv.visit(pn)); <-- this writes the code to console.
+
+        ReferenceNode ref = new ReferenceNode("Test");
+        NumLit nl = new NumLit(12.4f);
+        AssignNode an = new AssignNode(ref, nl);
+        System.out.printf("Result of CheckBoolean %b");
 
         //Build the symbol table
         SymbolTable st = new SymbolTable(root);
