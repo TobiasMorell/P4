@@ -9,6 +9,9 @@ import TypeChecking.Symbol;
 import TypeChecking.SymbolTable;
 import TypeChecking.Func;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Gedesnegl on 12-04-2016.
  */
@@ -166,6 +169,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(PlusNode node) {
+        Node.Type t;
+
         return null;
     }
 
@@ -206,7 +211,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolLit node) {
-        return null;
+        System.out.println("Visiting BoolLit ");
+        return Node.Type.bool;
     }
 
     @Override
@@ -216,7 +222,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordLit node) {
-        return null;
+        System.out.println("Visiting CoordLit ");
+        return Node.Type.coord;
     }
 
     @Override
@@ -263,13 +270,17 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(MethodInvocationNode node) {
         System.out.println("Visiting Invocation " + "with name: "+ ((IDNode)node.GetLeftChild())._id +" "+_table.depth);
+        ArrayList<Node.Type> types = new ArrayList<>();
+        for (Node n: node.GetChildren()) {
+            types.add((Node.Type)visit(n));
+        }
         return null;
     }
 
     @Override
     public Object visit(NumLit node) {
         System.out.println("Visiting NumLit ");
-        return null;
+        return Node.Type.num;
     }
 
     @Override
@@ -294,14 +305,27 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringLit node) {
-        return null;
+        System.out.println("Visiting stringLit ");
+        return Node.Type.string;
     }
 
+    /***
+     * This method gets the value type returned by a given expression.
+     * @param node The Exprnode to be type checked
+     * @return The type of the expression
+     */
     private Node.Type GetExpressionType(Node node) {
         Node.Type t;
         if(!(node instanceof ExprNode)){
+            if(node instanceof MethodInvocationNode){
+                //_table.
+            }
             _table.MakeError("This must be an expression");
-        }else{
+        }
+        ExprNode n = (ExprNode)node;
+        t = n.type;
+
+        if(t == Node.Type.unknown){
 
         }
         return Node.Type.num;

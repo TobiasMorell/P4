@@ -8,10 +8,12 @@ import ASTNodes.GeneralNodes.Node;
 import ASTNodes.GeneralNodes.UnaryNode;
 import ASTNodes.SyntaxNodes.BlockNode;
 import ASTNodes.SyntaxNodes.IDNode;
+import ASTNodes.SyntaxNodes.MethodInvocationNode;
 import Visitors.DeclVisitor;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Created by Gedesnegl on 08-04-2016.
@@ -143,6 +145,25 @@ public class SymbolTable {
             if(sym.name.equals(id)) return(sym);
 
         }
+        return null;
+    }
+
+    public Func RetrieveMethod(MethodInvocationNode refNode, ArrayList<Node.Type> types){
+        String name = ((IDNode)refNode.GetLeftChild())._id;
+        for (Func F : functions) {
+            if(name.equals(F.name) && types.size() == F.parameters.size() ){
+                for (int i = 0; i < F.parameters.size(); i++) {
+                    if (F.parameters.get(i) != types.get(i)){
+                        MakeError("Invalid parameters in " + name);
+                        return null;
+                    }
+                }
+                return F;
+            }else{
+                MakeError("Invalid Method invocation: " + name);
+            }
+        }
+        MakeError("This shouldn't happen...");
         return null;
     }
 

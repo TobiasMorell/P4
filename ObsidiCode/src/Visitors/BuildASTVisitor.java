@@ -14,6 +14,7 @@ import ObsidiCodeAntlr.*;
 
 //The generic type must be the super class of the returned node, in this case Node.
 public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
+	public static int line = 0;
 
 	private void giveContextToNodes(CollectionNode declarations, int type)
 	{

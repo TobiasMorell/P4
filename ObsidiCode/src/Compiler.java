@@ -28,6 +28,5 @@ public class Compiler {
 
         //Compile either to java or java-byte code
         JavaCodeVisitor jcv = new JavaCodeVisitor(new JavaKeywordSheet());
-
     }
 }
