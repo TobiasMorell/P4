@@ -15,14 +15,6 @@ import java.util.ArrayList;
  * Created by SW409F16 on 09-03-2016.
  */
 public class PrettyPrintVisitor extends AbstractVisitor {
-    @Override
-    public Object visit(Node n) {
-        if(n != null)
-            return n.Accept(this);
-        else
-            System.out.println("Found a null node, AST not supposed to have empty nodes!");
-        return "FAULTY NODE!";
-    }
 
     @Override
     public Object visit(ListDcl node) {

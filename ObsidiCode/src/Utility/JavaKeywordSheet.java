@@ -32,5 +32,10 @@ public class JavaKeywordSheet extends AbstractKeywordSheet {
         OR = "||";
         ASSIGN = "=";
         NOT = "!";
+        CLASS = "class";
+        EXTENSION = "extends SyncRobot";
+        BLOCK_CLOSE = "}";
+        BLOCK_OPEN = "{";
+        STATEMENT_END = ";";
     }
 }

@@ -9,7 +9,10 @@ import ASTNodes.SyntaxNodes.*;
  * Created by morell on 4/10/16.
  */
 public abstract class AbstractVisitor {
-    public abstract Object visit(Node n);
+    public Object visit(Node n)
+    {
+        return n.Accept(this);
+    }
 
     public abstract Object visit(BoolDcl node);
     public abstract Object visit(CoordDcl node);

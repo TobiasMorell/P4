@@ -28,3 +28,10 @@ Minecraft/README.txt
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+Minecraft/.gradle/2.7/taskArtifacts/cache.properties.lock
+*.bin
+Minecraft/.gradle/2.7/taskArtifacts/cache.properties.lock
+Minecraft/.gradle/gradle.log
+Minecraft/.gradle/2.7/taskArtifacts/cache.properties.lock
+*.bin
+Minecraft/.gradle/gradle.log

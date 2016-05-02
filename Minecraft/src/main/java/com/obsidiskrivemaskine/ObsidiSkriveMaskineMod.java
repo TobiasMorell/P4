@@ -1,6 +1,6 @@
 package com.obsidiskrivemaskine;
 
-import com.obsidiskrivemaskine.GUI.RobotEntity;
+import com.obsidiskrivemaskine.Entity.RobotEntity;
 import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
 import com.obsidiskrivemaskine.Handler.ObsidiGuiHandler;
 import com.obsidiskrivemaskine.Proxy.ObsidiServerProxy;
@@ -43,7 +43,6 @@ public class ObsidiSkriveMaskineMod
     {
         registerBlocks();
         registerHandlers();
-
         RobotEntity.RegisterEntity();
     }
 

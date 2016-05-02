@@ -2,6 +2,7 @@ package com.obsidiskrivemaskine.block;
 
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.AbstractRobot;
+import com.obsidiskrivemaskine.SyncRobot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +41,7 @@ public class ObsidiSkriveMaskineBlock extends Block
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         player.openGui(ObsidiSkriveMaskineMod.INSTANCE, ObsidiSkriveMaskineMod.kurtguiid, world, pos.getX(), pos.getY(), pos.getZ());
-        AbstractRobot.hack(world, player);
+        SyncRobot.hack(world, player);
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
     }
 }
