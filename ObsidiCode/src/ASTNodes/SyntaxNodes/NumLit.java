@@ -8,6 +8,7 @@ public class NumLit extends ExprNode{
 	public NumLit(float val){
 		super(null, null);
 		this._value = val;
+		type = Type.num;
 	}
 
 	@Override

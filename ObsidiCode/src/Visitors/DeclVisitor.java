@@ -5,8 +5,9 @@ import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
-import SymbolTable.SymbolTable;
-import SymbolTable.Func;
+import TypeChecking.Symbol;
+import TypeChecking.SymbolTable;
+import TypeChecking.Func;
 
 /**
  * Created by Gedesnegl on 12-04-2016.
@@ -71,12 +72,20 @@ public class DeclVisitor extends AbstractVisitor {
     public Object visit(NumDcl node) {
         System.out.println("Visiting NumDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.num);
+        if(node.GetRightChild() != null) {
+            Node.Type t = GetExpressionType(node.GetRightChild());
+        }
         return null;
     }
+
 
     @Override
     public Object visit(ReferenceNode node) {
         System.out.println("Visiting Reference " + node.GetId()._id +" "+ _table.depth);
+        Symbol s = _table.RetrieveSymbol(node.GetId()._id);
+        if(s != null) {
+            return s.getType();
+        }
         return null;
     }
 
@@ -259,6 +268,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumLit node) {
+        System.out.println("Visiting NumLit ");
         return null;
     }
 
@@ -285,5 +295,15 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(StringLit node) {
         return null;
+    }
+
+    private Node.Type GetExpressionType(Node node) {
+        Node.Type t;
+        if(!(node instanceof ExprNode)){
+            _table.MakeError("This must be an expression");
+        }else{
+
+        }
+        return Node.Type.num;
     }
 }

@@ -1,4 +1,4 @@
-package SymbolTable;
+package TypeChecking;
 
 import ASTNodes.GeneralNodes.Node;
 

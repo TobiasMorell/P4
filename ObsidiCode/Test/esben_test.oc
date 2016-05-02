@@ -16,6 +16,7 @@ VOID StripMine(NUM Length)
         Robot.Dig() 
         Robot.Move() 
         Count = Count + 1
+        georg = 3+8
     END REPEAT
 END StripMine
 

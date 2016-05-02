@@ -1,6 +1,6 @@
 package Types;
 
-import SymbolTable.SymbolTable;
+import TypeChecking.SymbolTable;
 
 /**
  * Created by Lasse on 14/04/2016.

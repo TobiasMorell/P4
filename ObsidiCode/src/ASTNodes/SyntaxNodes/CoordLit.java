@@ -6,12 +6,14 @@ import Visitors.AbstractVisitor;
 /**
  * Created by Gedesnegl on 31-03-2016.
  */
-public class CoordLit extends LeafNode{
+public class CoordLit extends ExprNode{
     public float x, y, z;
     public CoordLit(String[] coords){
+        super(null,null);
         this.x = Float.parseFloat(coords[0]);
         this.y = Float.parseFloat(coords[1]);
         this.z = Float.parseFloat(coords[2]);
+        type = Type.coord;
     }
 
     @Override

@@ -11,6 +11,7 @@ public class BoolLit extends ExprNode {
 	public BoolLit(String spelling) {
 		super(null, null);
 		this.value = spelling;
+		type = Type.bool;
 	}
 
 	@Override

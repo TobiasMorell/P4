@@ -33,7 +33,7 @@ public abstract class AbstractRobot {
         if (direction.equalsIgnoreCase("east"))
             Robot.getNavigator().tryMoveToXYZ(Robot.posX + 1, Robot.posY, Robot.posZ, 0.8);
         else if(direction.equalsIgnoreCase("west"))
-            Robot.getNavigator().tryMoveToXYZ(Robot.posX - 10, Robot.posY, Robot.posZ, 0.8);
+            Robot.getNavigator().tryMoveToXYZ(Robot.posX - 1, Robot.posY, Robot.posZ, 0.8);
         else if(direction.equalsIgnoreCase("north"))
             Robot.getNavigator().tryMoveToXYZ(Robot.posX, Robot.posY, Robot.posZ - 1, 0.8);
         else if(direction.equalsIgnoreCase("south"))
@@ -61,6 +61,7 @@ public abstract class AbstractRobot {
             if(inventory[i].getDisplayName().equals(itemName)) {
                 Robot.addItemToInventory(inventory[i]);
                 inventory[i] = null;
+                break;
             }
         }
     }

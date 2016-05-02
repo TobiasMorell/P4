@@ -1,4 +1,4 @@
-package SymbolTable;
+package TypeChecking;
 
 import ASTNodes.Declarations.DeclarationNode;
 import ASTNodes.Declarations.ReferenceNode;
@@ -8,7 +8,6 @@ import ASTNodes.GeneralNodes.Node;
 import ASTNodes.GeneralNodes.UnaryNode;
 import ASTNodes.SyntaxNodes.BlockNode;
 import ASTNodes.SyntaxNodes.IDNode;
-import ASTNodes.SyntaxNodes.ProgNode;
 import Visitors.DeclVisitor;
 
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class SymbolTable {
      * @param node
      */
     private void ProcessNode(Node node) {
-        //Check weather to put something in the SymbolTable.SymbolTable
+        //Check weather to put something in the TypeChecking.TypeChecking
         System.out.println("Processing Node");
         if (node instanceof BlockNode) {
             //As a new scope is already opened with a method declaration.
@@ -72,7 +71,7 @@ public class SymbolTable {
         }else if(node instanceof ReferenceNode) {
             Symbol s = RetrieveSymbol(((ReferenceNode) node).GetId().GetID());
             if (s == null)
-                MakeError("SymbolTable.Symbol \"" + s.name + "\" does not exist");
+                MakeError("TypeChecking.Symbol \"" + s.name + "\" does not exist");
         }
         // Make foreach node n : n.GetChildren()) ProcessNde(n)
         // if(node instanceof BlockNode) symtab.CloseScope();
@@ -117,7 +116,7 @@ public class SymbolTable {
     public void EnterSymbol(String id, Node.Type type)
     {
         Symbol oldsym = RetrieveSymbol(id);
-        if (oldsym != null && oldsym.depth == depth) MakeError("SymbolTable.Symbol \"" + id + "\"" +
+        if (oldsym != null && oldsym.depth == depth) MakeError("TypeChecking.Symbol \"" + id + "\"" +
                 " of type "+ type.toString() + " has already been initialized in this scope");
         Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), depth);
         //mangler at sætte hashvalue
@@ -142,8 +141,6 @@ public class SymbolTable {
         while(sym != null)
         {
             if(sym.name.equals(id)) return(sym);
-
-            //I bogen gør de bagefter sym = sym.getHashValue();
 
         }
         return null;
