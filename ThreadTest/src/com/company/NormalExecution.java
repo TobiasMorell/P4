@@ -20,6 +20,7 @@ public class NormalExecution extends Thread {
 
             try {
                 synchronized (this) { wait(1000); }
+                //Wait for my turn skal ligges ind ved alle kald til Minecraft-spillet
                 mutex.WaitForMyTurn(THREAD_ID);
                 System.out.println("Normal execution.");
             } catch (InterruptedException e)

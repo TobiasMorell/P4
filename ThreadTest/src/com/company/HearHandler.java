@@ -23,11 +23,6 @@ public class HearHandler extends Thread {
         mutex.SwitchTurns();
     }
 
-    public boolean MustHandleSignal()
-    {
-        return !signalQueue.isEmpty();
-    }
-
     @Override
     public void run() {
         while(true) {

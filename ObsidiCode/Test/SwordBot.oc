@@ -1,21 +1,21 @@
-Sword-bot:
+SwordBot:
 
-#LOAD("Search-bot")
+LOAD("Search-bot")
 
 VOID Start()
   Robot.Aggresion = "Aggresive"
 
   STRING mob = FindEntityNearby("Hostile")
 
-  IF mob.Aggresion IS "Hostile"
+  IF (mob.Aggresion IS "Hostile")
     Attack(mob)
   END IF
 END Start
 
 
-void Attack(Entity mob)
+VOID Attack(STRING mob)
   //Move to the mob
-  REPEAT UNTIL Robot.Position IS mob.Position
+  REPEAT UNTIL (Robot.Position IS mob.Position)
     FaceTowards(mob)
     Move()
   END REPEAT
