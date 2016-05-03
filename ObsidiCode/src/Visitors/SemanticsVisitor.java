@@ -1,19 +1,18 @@
 package Visitors;
 
 import ASTNodes.Declarations.*;
-import ASTNodes.GeneralNodes.CollectionNode;
-import ASTNodes.GeneralNodes.LeafNode;
-import ASTNodes.GeneralNodes.Node;
-import ASTNodes.GeneralNodes.UnaryNode;
+import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
+
+import javax.print.attribute.standard.MediaSize;
 
 /**
  * Created by Gedesnegl on 15-04-2016.
  */
 public class SemanticsVisitor extends AbstractVisitor {
 
-
+    private int breakable;
     @Override
     public Object visit(DotNode node) {
         return null;
@@ -300,6 +299,7 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BlockNode node) {
+
         return null;
     }
 
@@ -315,6 +315,12 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BreakNode node) {
+        if(breakable > 0){
+            //Allow the break-node
+        }
+        else{
+            //Throw exception, break not allowed since its not inside a loop or if
+        }
         return null;
     }
 
@@ -325,6 +331,9 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ElseNode node) {
+        breakable++;
+        visit(node.GetLeftChild());
+        breakable--;
         return null;
     }
 
@@ -340,6 +349,9 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
+        breakable++;
+        visit(node.GetBody());
+        breakable--;
         return null;
     }
 
@@ -350,6 +362,9 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
+        breakable++;
+        visit(node.GetRightChild());
+        breakable--;
         return null;
     }
 
@@ -365,6 +380,8 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ProgNode node) {
+        //Since the Prog Node is the beginning of the program it makes sense to initialize our breakable var here
+        breakable = 0;
         return null;
     }
 

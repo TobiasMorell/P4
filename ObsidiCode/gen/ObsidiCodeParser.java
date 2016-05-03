@@ -1,5 +1,4 @@
 // Generated from /home/ohshi/Workspace/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
-package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
