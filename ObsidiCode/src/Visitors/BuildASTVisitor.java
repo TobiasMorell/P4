@@ -148,10 +148,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
 		String robotName = ctx.id.getText();
-		//System.out.println("The name of the program is: " + robotName); //<------- for TESTING
-
-		//System.out.println("Initializing list...");
-		ArrayList<Node> stmts = new ArrayList<>(10);
+		ArrayList<Node> stmts = new ArrayList<>();
 		line++;
 		return new ProgNode(stmts, robotName);
 	}

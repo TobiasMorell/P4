@@ -24,7 +24,7 @@ public class JavaSourceCompiler {
 
         try {
             //Open an out-stream for code output
-            FileWriter codeOutput = new FileWriter(targetDir, false);
+            FileWriter codeOutput = new FileWriter(targetDir, false); //false means override existing file
             //Compile and store in the output-stream
             JavaCompiler.CompilationTask task = compiler.getTask(codeOutput, null, diagnostics, null, null, compilationUnits);
 
@@ -55,6 +55,7 @@ public class JavaSourceCompiler {
             sb.append(", position " + diagnostic.getPosition());
             sb.append(": ");
             sb.append(diagnostic.getMessage(null));
+            sb.append('\n');
         }
 
         return sb.toString();

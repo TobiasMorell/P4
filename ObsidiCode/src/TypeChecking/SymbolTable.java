@@ -167,6 +167,11 @@ public class SymbolTable {
         return null;
     }
 
+    public Func[] RetrieveAllMethodsWithName(String s)
+    {
+        
+    }
+
     public void OpenScope()
     {
         depth++;
