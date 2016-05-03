@@ -169,7 +169,7 @@ public class SymbolTable {
 
     public Func[] RetrieveAllMethodsWithName(String s)
     {
-        
+
     }
 
     public void OpenScope()
