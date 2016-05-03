@@ -3,7 +3,7 @@ package ASTNodes.SyntaxNodes;
 import ASTNodes.GeneralNodes.*;
 import Visitors.AbstractVisitor;
 
-public class IDNode extends LeafNode{
+public class  IDNode extends LeafNode{
     public String _id;
     public ExprNode _extension;
     

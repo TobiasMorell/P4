@@ -46,6 +46,7 @@ public class SemanticsVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReferenceNode node) {
+
         return null;
     }
 
@@ -78,7 +79,7 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(AssignNode node) {
         if(node.GetLeftChild() instanceof ReferenceNode)
         {
-
+            ((ReferenceNode) node.GetLeftChild()).set_isValue(true);
         }
         node.GetRightChild();
 
@@ -89,6 +90,13 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(DivNode node) {
         Node.Type lhs = node.GetLeftChild().getT();
         Node.Type rhs = node.GetRightChild().getT();
+
+        if(node.GetLeftChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetLeftChild()).set_isValue(true);
+        }
+        else if(node.GetRightChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetRightChild()).set_isValue(true);
+        }
         if(lhs == rhs && lhs == Node.Type.string){
             //Todo remove all instancees of rhs from lhs
             node.setT(Node.Type.string);
@@ -132,6 +140,12 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(MinusNode node) {
         Node.Type lhs   = node.GetLeftChild().getT();
         Node.Type rhs   = node.GetRightChild().getT();
+        if(node.GetLeftChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetLeftChild()).set_isValue(true);
+        }
+        else if(node.GetRightChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetRightChild()).set_isValue(true);
+        }
         if(lhs == rhs && lhs == Node.Type.string){
             //Todo remove all instances of rhs from lhs
             node.setT(Node.Type.string);
@@ -158,6 +172,12 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(MultNode node) {
         Node.Type lhs = node.GetLeftChild().getT();
         Node.Type rhs = node.GetRightChild().getT();
+        if(node.GetLeftChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetLeftChild()).set_isValue(true);
+        }
+        else if(node.GetRightChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetRightChild()).set_isValue(true);
+        }
         if(lhs == Node.Type.string && rhs == Node.Type.string){
             //Todo Create a string with
             node.setT(Node.Type.string);
@@ -203,7 +223,12 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(PlusNode node) {
         Node lhs = node.GetLeftChild();
         Node rhs = node.GetRightChild();
-
+        if(node.GetLeftChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetLeftChild()).set_isValue(true);
+        }
+        else if(node.GetRightChild() instanceof ReferenceNode){
+            ((ReferenceNode) node.GetRightChild()).set_isValue(true);
+        }
         if( lhs.isType(Node.Type.string) && rhs.isType(Node.Type.string)){
             //Todo Concatenate rhs to lhs
             node.setT(Node.Type.string);

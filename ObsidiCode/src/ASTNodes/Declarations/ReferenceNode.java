@@ -9,8 +9,17 @@ import Visitors.AbstractVisitor;
 import Visitors.Visitable;
 
 public class ReferenceNode extends LeafNode {
-	Type type;
+	//Type type;
 	IDNode referencedIdentifier;
+	private boolean _isValue;
+
+	/*public boolean get_isValue() {
+		return _isValue;
+	}*/
+
+	public void set_isValue(boolean _isValue) {
+		this._isValue = _isValue;
+	}
 
 	public IDNode GetId()
 	{
