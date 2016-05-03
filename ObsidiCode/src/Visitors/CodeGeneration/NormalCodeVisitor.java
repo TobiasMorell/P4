@@ -34,14 +34,10 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append("package CompiledRobots;\n");
         codeBuilder.append("import Java.Util.ArrayList;\n");
         codeBuilder.append("import Utility.Coord;\n\n");
-        codeBuilder.append(keywords.ACCESS);
-        codeBuilder.append(' ');
-        codeBuilder.append(keywords.CLASS);
-        codeBuilder.append(' ');
-        codeBuilder.append(robotName);
-        codeBuilder.append(' ');
-        codeBuilder.append(keywords.EXTENSION);
-        codeBuilder.append(" {\n");
+        codeBuilder.append("public class " + robotName + "NormalThread extends NormalThread { \n");
+        codeBuilder.append("private " + robotName +"Robot Robot");
+        codeBuilder.append("public " + robotName + " NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
+        codeBuilder.append("super(mutex); Robot = r; }  \n");
 
     }
 
@@ -107,26 +103,23 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
-    private void visitMethodDclGeneric(MethodDcl node, String type, String idExtension)
+    private void visitMethodDclGeneric(MethodDcl node, String type)
     {
         codeBuilder.append(keywords.ACCESS);
         codeBuilder.append(' ');
         codeBuilder.append(node.type);
         codeBuilder.append(' ');
-        codeBuilder.append(idExtension);
         codeBuilder.append(node.id);
         codeBuilder.append('(');
         for (Node n : node.parameters) {
             visit(n);
         }
-        codeBuilder.append(") {\n");
         visit(node.GetLeftChild());
-        codeBuilder.append("}\n");
+
     }
 
     @Override
     public Object visit(HearDcl node) {
-        visitMethodDclGeneric(node, keywords.VOID, "hear");
         return null;
     }
 
@@ -158,7 +151,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
                 typeExt = "";
                 break;
         }
-        visitMethodDclGeneric(node, typeExt, "");
+        visitMethodDclGeneric(node, typeExt);
         return null;
     }
 
@@ -168,6 +161,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(ReferenceNode node) {
         IDNode id = node.GetId();
         codeBuilder.append(id.GetID());
+
+        //todo Check if type is list and then find index if it has one.
         if(id._extension != null){
             codeBuilder.append(".get(");
             visit(id._extension);
@@ -321,11 +316,15 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+
+    //Curly braces are now specific to blocknodes
     @Override
     public Object visit(BlockNode node) {
+        codeBuilder.append("\n {");
         for (Node n : node.GetChildren()) {
             visit(n);
         }
+        codeBuilder.append("\n }");
         return null;
     }
 
@@ -337,21 +336,39 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolLit node) {
+        codeBuilder.append(node.value.toLowerCase());
         return null;
     }
 
     @Override
     public Object visit(BreakNode node) {
+        codeBuilder.append("break; \n");
         return null;
     }
 
     @Override
     public Object visit(CoordLit node) {
+
+        double x = node.x;
+        double y = node.y;
+        double z = node.z;
+        codeBuilder.append("new ");
+        codeBuilder.append(keywords.COORD);
+        codeBuilder.append("(");
+        codeBuilder.append(x);
+        codeBuilder.append(",");
+        codeBuilder.append(y);
+        codeBuilder.append(",");
+        codeBuilder.append(z);
+        codeBuilder.append(");");
         return null;
     }
 
     @Override
     public Object visit(ElseNode node) {
+        codeBuilder.append("else { ");
+        visit(node.GetLeftChild());
+        codeBuilder.append(" } \n");
         return null;
     }
 
@@ -362,6 +379,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IDNode node) {
+        //todo mangler at tjekke om variablen er declared i symbol table
+        codeBuilder.append(node._id);
         return null;
     }
 
@@ -377,27 +396,47 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
+
+
         return null;
     }
 
     @Override
     public Object visit(MethodInvocationNode node) {
+
+        codeBuilder.append(node.GetLeftChild());
+        codeBuilder.append("( ");
+        int i = node.GetChildren().size();
+        for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
+        codeBuilder.append(");");
         return null;
     }
 
     @Override
     public Object visit(NumLit node) {
+
+        codeBuilder.append(node._value);
         return null;
     }
 
     @Override
     public Object visit(ProgNode node) {
         this.robotName = node._id;
+        emitHeader();
+        for (Node n : node.GetChildren()
+             ) { visit(n);
+        }
+
+        codeBuilder.append("}");
         return null;
     }
 
     @Override
     public Object visit(ReturnNode node) {
+
+        codeBuilder.append("return ");
+        visit(node.GetLeftChild());
+        codeBuilder.append(";");
         return null;
     }
 
@@ -408,6 +447,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringLit node) {
+        codeBuilder.append(node.text);
         return null;
     }
 }

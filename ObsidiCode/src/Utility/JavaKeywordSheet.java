@@ -12,7 +12,7 @@ public class JavaKeywordSheet extends AbstractKeywordSheet {
         STRING = "String";
         INT = "int";
         FLOAT = "float";
-        COORD = "Vector3d";
+        COORD = "Coord";
         ACCESS = "public";
         VOID = "void";
         LIST = "ArrayList<Object>";
