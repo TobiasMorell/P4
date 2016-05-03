@@ -68,7 +68,6 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(MethodDcl node) {
         System.out.println("Visiting MethodDcl " + node.id +" "+ _table.depth);
-        _table.functions.add(new Func(node));
         visit(node.GetLeftChild());
         return null;
     }
@@ -302,6 +301,24 @@ public class DeclVisitor extends AbstractVisitor {
         System.out.println("Visiting Prognode " + _table.depth);
         _table.OpenScope();
         for (Node child : node.GetChildren()) {
+            if(child instanceof CollectionNode){
+                for (Node grandchild: ((CollectionNode)child).GetChildren()) {
+                    if(grandchild instanceof CollectionNode){
+                        for (Node dcl: ((CollectionNode)grandchild).GetChildren()) {
+                            _table.EnterSymbol(((DeclarationNode)dcl).GetID(),((DeclarationNode)dcl).type);
+                        }
+                    }else if(grandchild instanceof MethodDcl){
+                        _table.functions.add(new Func((MethodDcl)grandchild));
+                    }else{
+                        _table.MakeError("Error: This should not happen!");
+                    }
+                }
+                for (Node grandchild: ((CollectionNode)child).GetChildren()) {
+                    if(!(grandchild instanceof CollectionNode)){
+                        visit(grandchild);
+                    }
+                }
+            }
             visit(child);
         }
         return null;

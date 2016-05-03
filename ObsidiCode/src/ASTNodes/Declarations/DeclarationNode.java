@@ -17,6 +17,10 @@ public class DeclarationNode extends BinaryNode{
 		type = t;
 	}
 
+	public String GetID(){
+		return ((IDNode)GetLeftChild())._id;
+	}
+
 	@Override
 	public Object Accept(AbstractVisitor v) {
 		return v.visit(this);

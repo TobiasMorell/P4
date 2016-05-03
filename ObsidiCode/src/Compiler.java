@@ -13,7 +13,7 @@ public class Compiler {
 	public static void main( String[] args) throws Exception 
     {
         AntlrASTBuilder astBuilder = new AntlrASTBuilder();
-        Node root = astBuilder.Compile("test_decl.txt"); //<-- write file to compile here!
+        Node root = astBuilder.Compile("esben_test.oc"); //<-- write file to compile here!
 
         //OCPPVisitor ppv = new OCPPVisitor(); //<-- Un-comment to print ObsidiCode
         //PrettyPrintVisitor ppv = new PrettyPrintVisitor(); //<-- Un-comment to print java-code
