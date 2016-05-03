@@ -145,6 +145,7 @@ public class SymbolTable {
             if(sym.name.equals(id)) return(sym);
 
         }
+        MakeError(String.format("Error: Variable, %s, could not be found", id));
         return null;
     }
 

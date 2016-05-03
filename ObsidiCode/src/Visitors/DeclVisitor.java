@@ -1,6 +1,7 @@
 package Visitors;
 
 import ASTNodes.Declarations.*;
+import ASTNodes.GeneralNodes.BinaryNode;
 import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
@@ -9,6 +10,7 @@ import TypeChecking.Symbol;
 import TypeChecking.SymbolTable;
 import TypeChecking.Func;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,7 @@ public class DeclVisitor extends AbstractVisitor {
         System.out.println("Visiting NumDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth);
         _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.num);
         if(node.GetRightChild() != null) {
-            Node.Type t = GetExpressionType(node.GetRightChild());
+           // Node.Type t = GetExpressionType(node.GetRightChild());todo: fix
         }
         return null;
     }
@@ -118,12 +120,18 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(AndNode node) {
-        return null;
+        return CheckBool(node, "And");
     }
 
     @Override
     public Object visit(AssignNode node) {
+        Node.Type t1, t2;
         System.out.println("Visiting AssignNode " + _table.depth);
+        if(!(node.GetLeftChild() instanceof ReferenceNode)){
+            _table.MakeError("Error: trying to assign to non variable");
+        }else{
+            //todo: visit children and compare types according to rules
+        }
         return null;
     }
 
@@ -164,13 +172,14 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(OrNode node) {
-        return null;
+        return CheckBool(node, "or");
     }
 
     @Override
     public Object visit(PlusNode node) {
-        Node.Type t, t1, t2;
+        Node.Type t1, t2;
         t1 = node.GetLeftChild().getT();
+        t2 = node.GetLeftChild().getT();
 
         return null;
     }
@@ -182,12 +191,12 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(XnorNode node) {
-        return null;
+        return CheckBool(node, "Xnor");
     }
 
     @Override
     public Object visit(XorNode node) {
-        return null;
+        return CheckBool(node, "Xor");
     }
 
     @Override
@@ -275,6 +284,10 @@ public class DeclVisitor extends AbstractVisitor {
         for (Node n: node.GetChildren()) {
             types.add((Node.Type)visit(n));
         }
+        Func function =_table.RetrieveMethod(node, types);
+        if(function!=null) {
+            return function.returnType;
+        }
         return null;
     }
 
@@ -296,7 +309,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReturnNode node) {
-        return null;
+        System.out.println("Visiting ReturnNode ");
+        return visit(node.GetLeftChild());
     }
 
     @Override
@@ -315,20 +329,14 @@ public class DeclVisitor extends AbstractVisitor {
      * @param node The Exprnode to be type checked
      * @return The type of the expression
      */
-    private Node.Type GetExpressionType(Node node) {
-        Node.Type t;
-        if(!(node instanceof ExprNode)){
-            if(node instanceof MethodInvocationNode){
-                //_table.
-            }
-            _table.MakeError("This must be an expression");
+    private Node.Type CheckBool(BinaryNode node, String typename) {
+        Node.Type t1,t2;
+        t1 = (Node.Type)visit(node.GetLeftChild());
+        t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1 == Node.Type.bool && t1 == t2){
+            return t1;
         }
-        ExprNode n = (ExprNode)node;
-        t = n.type;
-
-        if(t == Node.Type.unknown){
-
-        }
-        return Node.Type.num;
+        _table.MakeError(String.format("Error : %s on line %d is not a boolean expression", typename, node.line));
+        return null;
     }
 }
