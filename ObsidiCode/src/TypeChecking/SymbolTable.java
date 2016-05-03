@@ -11,6 +11,7 @@ import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.MethodInvocationNode;
 import Visitors.DeclVisitor;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -168,9 +169,26 @@ public class SymbolTable {
         return null;
     }
 
-    public Func[] RetrieveAllMethodsWithName(String s)
+    /***
+     * Find all methods in the symbol table with the given name
+     * @param name of the methods to search for
+     * @return an array of all declared methods with that name
+     */
+    public Func[] RetrieveAllMethodsWithName(String name)
     {
+        //Make a new list to store all methods
+        ArrayList<Func> funcs = new ArrayList<>();
+        //Find all methods with the given name and store in list
+        for(Func F : functions)
+        {
+            if(name.equals(F.name))
+                funcs.add(F);
+        }
 
+        //Convert to array and return
+        Func[] f = new Func[funcs.size()];
+        f = funcs.toArray(f);
+        return f;
     }
 
     public void OpenScope()

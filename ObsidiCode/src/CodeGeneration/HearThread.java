@@ -1,5 +1,7 @@
 package CodeGeneration;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -16,10 +18,55 @@ public abstract class HearThread extends Thread {
         this.mutex = mut;
     }
 
+    /***
+     * Add a new signal to be processed
+     * @param newSignal the signal to process
+     */
     public void Signal(Signal newSignal)
     {
         signalQueue.add(newSignal);
         mutex.SwitchTurns();
+    }
+
+    /***
+     * Find a hear-method that corresponds to a given signal
+     * @param si The current signal
+     * @return Either null or the method corresponding to the current signal
+     */
+    protected Method findMethodFromSignal(Signal si)
+    {
+        Object[] objs = si.GetArguments();
+        Class[] argClasses = new Class[objs.length];
+        for(int i = 0; i < objs.length; i++) {
+            argClasses[i] = objs[i].getClass();
+        }
+        try {
+            return this.getClass().getDeclaredMethod(si.GetID(), argClasses);
+        } catch (NoSuchMethodException e)
+        {
+            return null;
+        }
+    }
+
+    /***
+     * Invokes a method with the parameters of a given signal
+     * @param m the method to invoke
+     * @param si the signal with the parameters to invoke with
+     */
+    protected void invokeMethod(Method m, Signal si)
+    {
+        Object[] objs = si.GetArguments();
+        try {
+            m.invoke(this, m);
+        } catch (InvocationTargetException e)
+        {
+            //Should never reach this point, as parameters have been checked.
+            e.printStackTrace();
+        } catch (IllegalAccessException e)
+        {
+            //If this exception is thrown the method is private
+            System.out.println("The method was not accessible.");
+        }
     }
 
     @Override
@@ -38,5 +85,9 @@ public abstract class HearThread extends Thread {
         }
     }
 
+    /***
+     * Abstract method that should be overriden to handle all signals
+     * @param sig_id the signal to handle
+     */
     public abstract void Handle(Signal sig_id);
 }

@@ -11,6 +11,7 @@ import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
 import Visitors.AbstractVisitor;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -18,12 +19,10 @@ import java.util.ArrayList;
  */
 public class HearCodeVisitor extends NormalCodeVisitor {
     private ArrayList<String> hearMethods = new ArrayList<>();
-    private SymbolTable st;
 
-    public HearCodeVisitor(AbstractKeywordSheet aks, SymbolTable st)
+    public HearCodeVisitor(AbstractKeywordSheet aks)
     {
         super(aks);
-        this.st = st;
     }
 
     private void placeHeader()
@@ -32,7 +31,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append(String.format("%s %s %sHearThread %s HearThread {\n",
                 keywords.ACCESS, keywords.CLASS, robotName, keywords.EXTENSION));
         //Add fields
-        codeBuilder.append("private Robot Robot;\n");
+        codeBuilder.append(String.format("private %sRobot Robot;\n", robotName));
         //Declare a constructor
         codeBuilder.append(String.format("public %sHearThread (Robot r, RobotMutex mut) {\n", robotName));
         codeBuilder.append("super(mut);\n");
@@ -41,17 +40,14 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         //Override the Handle-method
         codeBuilder.append("@Override\n");
         codeBuilder.append("public void Handle(Signal sig_id) {\n");
+        //Create a switch of methods to call correct hear
         codeBuilder.append("switch (sig_id.GetID()){\n");
         for (String s : hearMethods) {
             codeBuilder.append(String.format("case \"%s\":\n", s));
-            //Parse arguments
-            //todo: find out how to parse the parameters
-            Signal si = new Signal("TestSignal", new Object[3]);
-            Object[] objs = si.GetArguments();
-            Func f = st.RetrieveMethod(si.GetID(), Node.Type.num);
-
-            //Call the corresponding method
-            codeBuilder.append(String.format("%s(PUT ARGUMENTS HERE);\n", s));
+            //find and possibly invoke the method of the given Signal
+            codeBuilder.append("Method m = findHearFromSignal(sig_id.GetID())");
+            codeBuilder.append("if(m != null) {\n");
+            codeBuilder.append("invokeMethod(m, sig_id);\n}");
             codeBuilder.append("break;\n");
         }
         codeBuilder.append("default:\n");
@@ -66,9 +62,8 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         for (Node n : node.parameters) {
             visit(n);
         }
-        codeBuilder.append(") {\n");
+        codeBuilder.append(")");
         visit(node.GetLeftChild());
-        codeBuilder.append("}\n");
         return null;
     }
 

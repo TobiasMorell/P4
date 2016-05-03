@@ -39,10 +39,10 @@ public class RobotMutex {
         return whoGoes;
     }
 
-    public RobotMutex(int first, int max)
+    public RobotMutex()
     {
-        this.whoGoes = Execution.FromInt(first);
-        this.howMany = max;
+        this.whoGoes = Execution.Normal;
+        this.howMany = 2;
     }
 
     public synchronized void SwitchTurns()

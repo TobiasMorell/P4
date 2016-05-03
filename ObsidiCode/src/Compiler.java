@@ -29,6 +29,6 @@ public class Compiler {
 
         //Compile either to java or java-byte code
         NormalCodeVisitor jcv = new NormalCodeVisitor(new JavaKeywordSheet());
-        HearCodeVisitor hcv = new HearCodeVisitor(new JavaKeywordSheet(), st);
+        HearCodeVisitor hcv = new HearCodeVisitor(new JavaKeywordSheet());
     }
 }
