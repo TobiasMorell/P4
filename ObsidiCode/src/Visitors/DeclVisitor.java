@@ -169,7 +169,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(PlusNode node) {
-        Node.Type t;
+        Node.Type t, t1, t2;
+        t1 = node.GetLeftChild().getT();
 
         return null;
     }
@@ -279,7 +280,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumLit node) {
-        System.out.println("Visiting NumLit ");
+        System.out.println("Visiting NumLit " + node.line);
         return Node.Type.num;
     }
 

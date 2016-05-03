@@ -72,7 +72,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		if (load != null)
 			pn.AddNode(load);
 		pn.AddNode(visit(ctx.roboBodyDcl()));
-		
+
 		return pn;
 	}
 
@@ -127,6 +127,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	}
 
 	@Override
+	public Node visitLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx) {
+		line++;
+		return super.visitLambdaLoadNewLine(ctx);
+	}
+
+	@Override
 	public Node visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) {
 		LoadNode ln = (LoadNode) visit(ctx.recursion);
 
@@ -135,6 +141,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			ln = new LoadNode();
 
 		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.load_id.getText()));
+		line++;
 		return ln;
 	}
 
@@ -145,7 +152,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 		//System.out.println("Initializing list...");
 		ArrayList<Node> stmts = new ArrayList<>(10);
-
+		line++;
 		return new ProgNode(stmts, robotName);
 	}
 
@@ -179,6 +186,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx) {
+		line++;
 		return null;
 	}
 
@@ -188,7 +196,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		CollectionNode decls = (CollectionNode) visit(ctx.dcl_list);
 		
 		giveContextToNodes(decls, ctx.t.type.getType());
-		
+		line++;
 		return decls;
 	}
 
@@ -305,6 +313,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitMethodDeclarator(ObsidiCodeParser.MethodDeclaratorContext ctx) {
 		//Find the params and return them (id is handled in visitMethodHeader
+		line++;
 		return visit(ctx.params);
 	}
 
@@ -320,6 +329,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		CollectionNode params = (CollectionNode) visit(ctx.params);
 		
 		//Find the body
+		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Return a new HearDcl, which collects all the found information
@@ -345,7 +355,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		Node res = visit(ctx.stmt);
 		if(res != null)
 			bn.AddNode(res);
-
+		line++;
 		return bn;
 	}
 
@@ -431,6 +441,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitIfStmt(ObsidiCodeParser.IfStmtContext ctx) {
 		Node expr = visit(ctx.expr);
+		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		IfNode elseIf = (IfNode) visit(ctx.elseIfStmt);
 		BlockNode elseRes = (BlockNode) visit(ctx.elseStmt);
@@ -451,9 +462,11 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitElseIf(ObsidiCodeParser.ElseIfContext ctx) {
+		line++;
 		//Generate nodes for each of the parts of the else-if
 		IfNode recursion = (IfNode) visit(ctx.recursion);
 		Node condition = visit(ctx.expr);
+		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Add to list
@@ -475,6 +488,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitElse(ObsidiCodeParser.ElseContext ctx) {
 		//Generate nodes for all parts of the statement
+		line = line +2;
 		BlockNode bn = (BlockNode) visit(ctx.body) ;
 		
 		return bn;
@@ -498,6 +512,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	public Node visitRepeatStmt(ObsidiCodeParser.RepeatStmtContext ctx) {
 		//Generate nodes for expression and body part
 		ExprNode expr = (ExprNode) visit(ctx.expr);
+		line++;
 		BlockNode bn = (BlockNode) visit(ctx.body);
 		
 		return new LoopNode(expr, bn);
@@ -506,6 +521,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitForeverStmt(ObsidiCodeParser.ForeverStmtContext ctx) {
 		//Generate a loop node, that has 'false' as ExprNode
+		line++;
 		ExprNode expr = new BoolLit("FALSE");
 		BlockNode bn = (BlockNode) visit(ctx.body);
 		

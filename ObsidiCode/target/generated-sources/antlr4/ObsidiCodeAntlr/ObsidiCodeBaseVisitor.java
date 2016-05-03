@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/Java/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -25,6 +25,13 @@ public class ObsidiCodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

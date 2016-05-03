@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/Java/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -190,7 +190,6 @@ public class ObsidiCodeParser extends Parser {
 		}
 	}
 	public static class LambdaLoadContext extends LoadsContext {
-		public TerminalNode NEWLINE() { return getToken(ObsidiCodeParser.NEWLINE, 0); }
 		public LambdaLoadContext(LoadsContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -203,6 +202,23 @@ public class ObsidiCodeParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitLambdaLoad(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class LambdaLoadNewLineContext extends LoadsContext {
+		public TerminalNode NEWLINE() { return getToken(ObsidiCodeParser.NEWLINE, 0); }
+		public LambdaLoadNewLineContext(LoadsContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).enterLambdaLoadNewLine(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ObsidiCodeListener ) ((ObsidiCodeListener)listener).exitLambdaLoadNewLine(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ObsidiCodeVisitor ) return ((ObsidiCodeVisitor<? extends T>)visitor).visitLambdaLoadNewLine(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -257,7 +273,7 @@ public class ObsidiCodeParser extends Parser {
 				break;
 			case 2:
 				{
-				_localctx = new LambdaLoadContext(_localctx);
+				_localctx = new LambdaLoadNewLineContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(117);

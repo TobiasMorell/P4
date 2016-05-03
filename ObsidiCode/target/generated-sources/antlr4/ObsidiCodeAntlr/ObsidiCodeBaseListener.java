@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/Java/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -35,6 +35,18 @@ public class ObsidiCodeBaseListener implements ObsidiCodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

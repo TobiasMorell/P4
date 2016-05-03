@@ -74,7 +74,7 @@ prog
 loads
     :	recursion=loads 'LOAD' '(' load_id=StringLit ')' NEWLINE   #nonLambdaLoad
     |	/*lambda*/                                                 #lambdaLoad
-    |   NEWLINE                                                    #lambdaLoad
+    |   NEWLINE                                                    #lambdaLoadNewLine
     ;
 //Types and literals:
 literal
@@ -187,7 +187,8 @@ ifStmt
 	:	'IF' '(' expr=expression ')' NEWLINE body=block 'END IF' elseIfStmt=elseIfOpt elseStmt=elseOpt
 	;
 elseIfOpt
-	:	recursion=elseIfOpt NEWLINE 'ELSE IF' '(' expr=expression ')' NEWLINE body=block 'END ELSEIF'	#elseIf
+	:	recursion=elseIfOpt NEWLINE
+	'ELSE IF' '(' expr=expression ')' NEWLINE body=block 'END ELSEIF'	#elseIf
 	|	/*lambda*/																				        #noElseIf
 	;
 elseOpt

@@ -1,4 +1,4 @@
-// Generated from /home/morell/Documents/Java/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Gedesnegl/Documents/GitHub/P4/ObsidiCode\ObsidiCode.g4 by ANTLR 4.5.1
 package ObsidiCodeAntlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -23,6 +23,13 @@ public interface ObsidiCodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLambdaLoad(ObsidiCodeParser.LambdaLoadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lambdaLoadNewLine}
+	 * labeled alternative in {@link ObsidiCodeParser#loads}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nonLambdaLoad}
 	 * labeled alternative in {@link ObsidiCodeParser#loads}.
