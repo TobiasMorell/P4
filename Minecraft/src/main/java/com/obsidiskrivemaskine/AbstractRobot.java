@@ -1,7 +1,6 @@
 package com.obsidiskrivemaskine;
 
 import com.obsidiskrivemaskine.Entity.RobotEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
  */
 public abstract class AbstractRobot {
     static World world;
-    public static boolean IsRunning;
     static EntityPlayer player;
     private static RobotEntity Robot;
 
@@ -26,14 +24,38 @@ public abstract class AbstractRobot {
     }
 
     public static void move(String direction) {
-        if (direction.equalsIgnoreCase("east"))
-            Robot.getNavigator().tryMoveToXYZ(Robot.posX + 1, Robot.posY, Robot.posZ, 1);
-        else if (direction.equalsIgnoreCase("west"))
-            Robot.getNavigator().tryMoveToXYZ(Robot.posX - 1, Robot.posY, Robot.posZ, 1);
-        else if (direction.equalsIgnoreCase("north"))
-            Robot.getNavigator().tryMoveToXYZ(Robot.posX, Robot.posY, Robot.posZ - 1, 1);
-        else if (direction.equalsIgnoreCase("south"))
-            Robot.getNavigator().tryMoveToXYZ(Robot.posX, Robot.posY, Robot.posZ + 1, 1);
+        double targetX, targetY,targetZ;
+        if (direction.equalsIgnoreCase("east")){
+            targetX = Robot.posX + 1;
+            targetY = Robot.posY;
+            targetZ = Robot.posZ;
+        }
+        else if (direction.equalsIgnoreCase("west")){
+            targetX = Robot.posX - 1;
+            targetY = Robot.posY;
+            targetZ = Robot.posZ;
+        }
+        else if (direction.equalsIgnoreCase("north")){
+            targetX = Robot.posX;
+            targetY = Robot.posY;
+            targetZ = Robot.posZ - 1;
+        }
+        else if (direction.equalsIgnoreCase("south")){
+            targetX = Robot.posX;
+            targetY = Robot.posY;
+            targetZ = Robot.posZ + 1;
+        }
+        else{
+            talk("Invalid direction");
+            targetX = Robot.posX;
+            targetY = Robot.posY;
+            targetZ = Robot.posZ;
+        }
+        BlockPos targetPos = new BlockPos(targetX, targetY, targetZ);
+        Robot.getNavigator().clearPathEntity();
+        Robot.getNavigator().setPath(Robot.getNavigator().getPathToPos(targetPos), 0.8D);
+        //The path tends to lead the entity to somewhere not quite intended, this is to ensure that it ends up in the intended location
+        Robot.setLocationAndAngles(targetX, targetY, targetZ, Robot.rotationYaw, Robot.rotationPitch);
     }
 
     public static void dig(String direction) {
@@ -82,23 +104,46 @@ public abstract class AbstractRobot {
     }
 
     public static void use(){
-        Robot.getHeldItem().onItemUse(player, world, Robot.getPosition().add(0, 0, 1), Robot.getHorizontalFacing(), 0, 0, 0);
+        try {
+            Robot.getHeldItem().onItemUse(player, world, Robot.getPosition().add(0, 0, 1), Robot.getHorizontalFacing(), 0, 0, 0);
+        }
+        catch (Exception e){
+            talk("Unable to use currently held item");
+        }
     }
 
     public static void drop(String toDrop, int amount){
         ItemStack itemToDrop = searchInventory(toDrop);
-        if(itemToDrop != null)
+        if(itemToDrop != null && itemToDrop.stackSize >= amount)
             Robot.dropItem(itemToDrop.getItem(), amount);
+        else if(itemToDrop != null && itemToDrop.stackSize < amount)
+            Robot.dropItem(itemToDrop.getItem(), itemToDrop.stackSize);
+        else
+            talk("Item not found in inventory");
     }
 
     public static void lootChest(){
         TileEntityChest chestEntity = (TileEntityChest)world.getTileEntity(new BlockPos(Robot.posX, Robot.posY, Robot.posZ - 1));
+        if(chestEntity == null)
+            chestEntity = (TileEntityChest)world.getTileEntity(new BlockPos(Robot.posX, Robot.posY, Robot.posZ + 1));
+        if(chestEntity == null)
+            chestEntity = (TileEntityChest)world.getTileEntity(new BlockPos(Robot.posX + 1, Robot.posY, Robot.posZ));
+        if(chestEntity == null)
+            chestEntity = (TileEntityChest)world.getTileEntity(new BlockPos(Robot.posX - 1, Robot.posY, Robot.posZ));
         if(chestEntity != null) {
-            for (int i = 0; i < chestEntity.getSizeInventory(); i++) {
-                if (Robot.addItemToInventory(chestEntity.getStackInSlot(i)))
-                    chestEntity.setInventorySlotContents(i, null);
-            }
+           try {
+               for (int i = 0; i < chestEntity.getSizeInventory(); i++) {
+                   if (Robot.addItemToInventory(chestEntity.getStackInSlot(i)))
+                       chestEntity.setInventorySlotContents(i, null);
+               }
+           }
+           catch (Exception e){
+               talk("Unable to find nearby chest");
+               e.printStackTrace();
+           }
         }
+        else
+            talk("Unable to find nearby chest");
     }
 
     public static void swing(){
@@ -107,27 +152,11 @@ public abstract class AbstractRobot {
         if(Robot.getDistanceToEntity(Robot.getAttackTarget()) <= 1.5)
             Robot.attackEntityAsMob(Robot.getAttackTarget());
     }
-/*
-    public static void createEntity(){
-        Robot = new RobotEntity(world);
-    }
 
-
-    public static void createEntityIfNotPresent(){
-        if(Robot == null || Robot.isDead) {
-            //createEntity();
-            spawnEntity(Robot);
-        }
-    }
-*/
-    public static void spawnEntity(RobotEntity robot, EntityPlayer playerIn, World worldIn){
+    public static void instantiateEntity(RobotEntity robot, EntityPlayer playerIn, World worldIn){
         Robot = robot;
         player = playerIn;
         world = worldIn;
-        /*robot.setLocationAndAngles(((double)(int)player.posX) + 5.5, (double)(int)player.posY + 1, ((double)(int)player.posZ) + 0.5, player.rotationYaw, 0.0F);
-        for(int i = 0; i < 15; i++)
-            robot.spawnExplosionParticle();
-        worldIn.spawnEntityInWorld(robot);*/
     }
 
     public static void targetNearestEnemy(){

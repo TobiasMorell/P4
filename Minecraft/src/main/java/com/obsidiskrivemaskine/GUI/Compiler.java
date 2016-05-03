@@ -33,7 +33,7 @@ public class Compiler {
 
             SyncRobot syncRobot = newClassLoader();
             Method mainMethod = syncRobot.getClass().getDeclaredMethod("run");
-            mainMethod.invoke(syncRobot);
+            //mainMethod.invoke(syncRobot);
         }
         catch (Exception e)
         {
@@ -47,7 +47,8 @@ public class Compiler {
         classLoader = new DynamicSuperClassLoader(parentClassLoader);
         try {
             Class <? extends SyncRobot> clas = classLoader.loadClass("DynamicClass");
-            return clas.newInstance();
+            SyncRobot sr = clas.newInstance();
+            return sr;
         }
         catch (Exception e){
             System.out.println("Class loading failed");

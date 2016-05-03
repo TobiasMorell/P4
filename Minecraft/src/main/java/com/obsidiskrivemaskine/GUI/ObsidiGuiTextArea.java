@@ -11,14 +11,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public class ObsidiGuiTextArea extends Gui
+public class ObsidiGuiTextArea
 {
     private FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
 
-    public ObsidiGuiTextArea()
-    {
-        super();
-    }
+    public ObsidiGuiTextArea(){}
 
     /* this is simply used to create an abstraction layer */
     public void drawSplitLines (String str, int x, int y, int wrapWidth, int color)
