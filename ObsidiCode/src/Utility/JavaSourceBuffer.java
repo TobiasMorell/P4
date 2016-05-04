@@ -16,7 +16,7 @@ public class JavaSourceBuffer extends SimpleJavaFileObject {
         this._code = code;
     }
 
-    public CharSequence getCharContent(boolean b) throws IOException {
+    public CharSequence getCharContent() {
         return _code;
     }
 }

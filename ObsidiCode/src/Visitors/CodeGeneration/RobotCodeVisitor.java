@@ -2,6 +2,7 @@ package Visitors.CodeGeneration;
 
 import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.CollectionNode;
+import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 import CodeGeneration.RobotMutex;
@@ -23,20 +24,29 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
     {
         codeBuilder.append(String.format("public class %sRobot extends SyncRobot {\n", robotName));
 
+        //Append global variables
+        codeBuilder.append(String.format("private %HearThread hearThread;\n", robotName));
+        codeBuilder.append(String.format("private %NormalThread normalThread;\n", robotName));
+
         //Append constructor
         codeBuilder.append(String.format("public %sRobot() {\n", robotName));
-        codeBuilder.append("RobotMutex mutex = new RobotMutex();");
-        codeBuilder.append(String.format("this.hearThread = new %sHearThread(this, mutex)"));
-
+        codeBuilder.append("RobotMutex mutex = new RobotMutex();\n");
+        codeBuilder.append(String.format("this.hearThread = new %sHearThread(this, mutex);\n"));
+        codeBuilder.append(String.format("this.normalThread = new %sNormalThread(this, mutex);\n"));
+        codeBuilder.append("}\n");
     }
 
     @Override
-    public Object visit(BoolDcl node) {
-        return null;
-    }
+    public Object visit(ProgNode node) {
+        placeHeader();
+        robotName = node._id;
+        for (Node n : node.GetChildren())
+        {
+            if(n instanceof CollectionNode)
+                visit(n);
+        }
 
-    @Override
-    public Object visit(CoordDcl node) {
+        codeBuilder.append("}");
         return null;
     }
 
@@ -47,191 +57,6 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(MethodDcl node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(NumDcl node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ReferenceNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(StringDcl node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ListDcl node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(DotNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(GreaterEqualNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(LessEqualNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(AndNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(AssignNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(DivNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(GreaterNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(IsNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(LessNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(MinusNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(MultNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(NotNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(OrNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(PlusNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(UnaryMinusNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(XnorNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(XorNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(BlockNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(CollectionNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(BoolLit node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(BreakNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(CoordLit node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ElseNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ExprNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(IDNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(IfNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(LoadNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(LoopNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(MethodInvocationNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(NumLit node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ReturnNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(SignalNode node) {
-        return null;
-    }
-
-    @Override
-    public Object visit(StringLit node) {
         return null;
     }
 }
