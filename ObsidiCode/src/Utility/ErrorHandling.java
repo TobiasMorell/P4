@@ -18,4 +18,10 @@ public class ErrorHandling {
     private static void Error(String err, Object o){
         errors.add(err+o.toString());
     }
+
+    private static void printErrors(){
+        for(String error : errors){
+            System.out.print(error);
+        }
+    }
 }
