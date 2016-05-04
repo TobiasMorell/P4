@@ -25,14 +25,14 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append(String.format("public class %sRobot extends SyncRobot {\n", robotName));
 
         //Append global variables
-        codeBuilder.append(String.format("private %HearThread hearThread;\n", robotName));
-        codeBuilder.append(String.format("private %NormalThread normalThread;\n", robotName));
+        codeBuilder.append(String.format("private %sHearThread hearThread;\n", robotName));
+        codeBuilder.append(String.format("private %sNormalThread normalThread;\n", robotName));
 
         //Append constructor
         codeBuilder.append(String.format("public %sRobot() {\n", robotName));
         codeBuilder.append("RobotMutex mutex = new RobotMutex();\n");
-        codeBuilder.append(String.format("this.hearThread = new %sHearThread(this, mutex);\n"));
-        codeBuilder.append(String.format("this.normalThread = new %sNormalThread(this, mutex);\n"));
+        codeBuilder.append(String.format("this.hearThread = new %sHearThread(this, mutex);\n", robotName));
+        codeBuilder.append(String.format("this.normalThread = new %sNormalThread(this, mutex);\n", robotName));
         codeBuilder.append("}\n");
     }
 

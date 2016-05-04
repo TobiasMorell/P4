@@ -5,6 +5,7 @@ import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
+import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
 import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
@@ -18,10 +19,17 @@ public class NormalCodeVisitor extends AbstractVisitor {
     protected StringBuilder codeBuilder = new StringBuilder();
     protected String robotName;
     AbstractKeywordSheet keywords;
+    private SymbolTable symtable;
 
-    public NormalCodeVisitor(AbstractKeywordSheet keywords)
+    public NormalCodeVisitor(AbstractKeywordSheet keywords, SymbolTable symtab)
     {
         this.keywords = keywords;
+        this.symtable = symtab;
+    }
+
+    public  NormalCodeVisitor (AbstractKeywordSheet aks)
+    {
+        this.keywords = aks;
     }
 
     public JavaSourceBuffer GetSourceCode()
@@ -159,15 +167,16 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReferenceNode node) {
+        //todo Check if type is list and then find index if it has one.
         IDNode id = node.GetId();
         codeBuilder.append(id.GetID());
-
-        //todo Check if type is list and then find index if it has one.
-        if(id._extension != null){
+        if(id._extension != null)
+        {
             codeBuilder.append(".get(");
             visit(id._extension);
             codeBuilder.append(')');
         }
+
         codeBuilder.append(";\n");
         return null;
     }

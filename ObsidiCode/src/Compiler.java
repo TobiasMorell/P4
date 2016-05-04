@@ -25,7 +25,7 @@ public class Compiler {
             if(OS.startsWith("Windows"))
             {
                 System.out.println("Running on Windows - compiling esben_test.oc");
-                path += "\\Test\\esben_test.oc";
+                path += "\\Test\\test_decl.txt";
             }
             else if (OS.startsWith("Linux")) {
                 System.out.println("Running on Linux - compiling esben_test.oc");
@@ -51,12 +51,12 @@ public class Compiler {
 
             //Compile either to java or java-byte code
             JavaKeywordSheet jsk = new JavaKeywordSheet();
-            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
+            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk, st);
             HearCodeVisitor hcv = new HearCodeVisitor(jsk);
             RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
 
-            JavaSourceCompiler jsc = new JavaSourceCompiler();
-            jsc.CompileJavaSource(null);
+            //JavaSourceCompiler jsc = new JavaSourceCompiler();
+            //jsc.CompileJavaSource(null);
 
             jcv.visit(root);
             hcv.visit(root);
@@ -67,10 +67,12 @@ public class Compiler {
             sourceCode[1] = hcv.GetSourceCode();
             sourceCode[2] = rcv.GetSourceCode();
 
+
             for (JavaSourceBuffer code : sourceCode)
                 JavaSourcePrinter.PrintSource(code);
         } else {
             System.out.println("The root was null; could not compile!");
         }
+
     }
 }

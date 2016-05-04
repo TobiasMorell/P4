@@ -2,7 +2,7 @@ Test_robo:
 LOAD("Attack-bot")
 LOAD("Bow-bot")
 
-BOOL works = true
+BOOL works = TRUE
 
 //This be le tests con many!
 /*Whattup maite!?*/
