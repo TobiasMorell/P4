@@ -2,9 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b263e5cd-bbaa-4ce9-82cf-f813113fcc41" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ObsidiCode/src/Utility/JavaSourcePrinter.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Minecraft/src/main/java/com/obsidiskrivemaskine/GUI/Compiler.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ObsidiCode/src/Visitors/PrettyPrintVisitor.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Minecraft/src/main/java/com/obsidiskrivemaskine/GUI/DynamicSuperClassLoader.java" afterPath="$PROJECT_DIR$/Minecraft/src/main/java/com/obsidiskrivemaskine/GUI/DynamicSuperClassLoader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Minecraft/src/main/java/com/obsidiskrivemaskine/GUI/ObsidiGUIScreen.java" afterPath="$PROJECT_DIR$/Minecraft/src/main/java/com/obsidiskrivemaskine/GUI/ObsidiGUIScreen.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/ObsidiCode.eml" afterPath="$PROJECT_DIR$/ObsidiCode/ObsidiCode.eml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/Test/test_decl.txt" afterPath="$PROJECT_DIR$/ObsidiCode/Test/test_decl.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Compiler.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Compiler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Visitors/SemanticsVisitor.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Visitors/SemanticsVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/TypeChecking/SymbolTable.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/TypeChecking/SymbolTable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Utility/AntlrASTBuilder.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Utility/AntlrASTBuilder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Utility/JavaSourceBuffer.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Utility/JavaSourceBuffer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/HearCodeVisitor.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/HearCodeVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/NormalCodeVisitor.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/NormalCodeVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/RobotCodeVisitor.java" afterPath="$PROJECT_DIR$/ObsidiCode/src/Visitors/CodeGeneration/RobotCodeVisitor.java" />
     </list>
     <ignored path="P4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,7 +38,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SemanticsVisitor.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SemanticsVisitor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Visitors/SemanticsVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="232">
@@ -64,17 +76,17 @@
         <entry file="file://$PROJECT_DIR$/ObsidiCode/src/TypeChecking/SymbolTable.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-2628">
-              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+              <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Compiler.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Compiler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Compiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="32" column="74" selection-start-line="32" selection-start-column="74" selection-end-line="32" selection-end-column="74" />
+            <state relative-caret-position="144">
+              <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -110,7 +122,7 @@
         <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Utility/JavaSourceBuffer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="126">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -170,9 +182,9 @@
       <list>
         <option value="$PROJECT_DIR$/ObsidiCode/src/Utility/AntlrASTBuilder.java" />
         <option value="$PROJECT_DIR$/ObsidiCode/src/Utility/ErrorHandler.java" />
-        <option value="$PROJECT_DIR$/ObsidiCode/src/Compiler.java" />
         <option value="$PROJECT_DIR$/ObsidiCode/src/Utility/ErrorHandling.java" />
         <option value="$PROJECT_DIR$/ObsidiCode/src/Visitors/SemanticsVisitor.java" />
+        <option value="$PROJECT_DIR$/ObsidiCode/src/Compiler.java" />
       </list>
     </option>
   </component>
@@ -830,7 +842,7 @@
     <entry file="file://$PROJECT_DIR$/ObsidiCode/src/TypeChecking/SymbolTable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2628">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -838,7 +850,7 @@
     <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Utility/JavaSourceBuffer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -855,14 +867,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-344">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Compiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="32" column="74" selection-start-line="32" selection-start-column="74" selection-end-line="32" selection-end-column="74" />
           <folding />
         </state>
       </provider>
@@ -890,6 +894,14 @@
             <element signature="e#9297#9298#0" expanded="true" />
             <element signature="e#9324#9325#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ObsidiCode/src/Compiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>

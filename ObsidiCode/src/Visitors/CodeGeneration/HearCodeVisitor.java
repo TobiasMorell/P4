@@ -80,6 +80,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(ProgNode node) {
+        robotName = node._id;
         placeHeader();
         for (Node n: node.GetChildren()) {
             visit(n);

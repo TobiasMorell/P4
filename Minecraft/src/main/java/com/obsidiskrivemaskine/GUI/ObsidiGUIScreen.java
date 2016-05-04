@@ -12,7 +12,6 @@ import java.io.*;
 public class ObsidiGUIScreen extends GuiScreen
 {
     private ResourceLocation skrivemaskinegui = new ResourceLocation("obsidiskrivemaskine:GUI/KurtSkriveMaskine.png");
-    private Compiler javaCompiler = new Compiler();
     private StringBuilder text = new StringBuilder();
     private int cursorLocation = 0, saveButton = 0, resetButton = 1, i = 0;
     private char cursor = '_'; // cursor symbol
@@ -20,6 +19,7 @@ public class ObsidiGUIScreen extends GuiScreen
     private FileWriter obsidiFileWriter;
     private FileReader obsidiFileReader;
     private ObsidiGuiTextArea textbox = new ObsidiGuiTextArea();
+    private String robotName;
 
     @Override
     public void initGui() {
@@ -41,7 +41,8 @@ public class ObsidiGUIScreen extends GuiScreen
                 mc.thePlayer.closeScreen();
                 text.deleteCharAt(cursorLocation);
                 saveFile();
-                javaCompiler.inputTask(obsidiFile.toString());
+                //Todo call compiler from this location + load classes
+                String currentDir = new File(System.getProperty("user.dir")).getParent() + "/ObsidiCode";
                 break;
             case 1:
                 text = text.delete(0, text.toString().length());
@@ -55,7 +56,7 @@ public class ObsidiGUIScreen extends GuiScreen
     }
 
     void saveFile(){
-        File testFile = new File("DynamicClass.java");
+        File testFile = new File(robotName + ".oc");
         try {
             obsidiFileWriter = new FileWriter(testFile);
             obsidiFileWriter.write(text.toString());
@@ -72,8 +73,14 @@ public class ObsidiGUIScreen extends GuiScreen
             try {
                 obsidiFileReader = new FileReader(obsidiFile);
                 BufferedReader br = new BufferedReader(obsidiFileReader);
+                boolean firstLine = true;
                 for (String line = br.readLine(); line != null; line = br.readLine()) {
                     text.append(line + '\n');
+                    if(firstLine)
+                    {
+                        robotName = line.replace(":", "");
+                        firstLine = false;
+                    }
                 }
 
                 obsidiFileReader.close();

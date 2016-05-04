@@ -1,6 +1,9 @@
 package com.obsidiskrivemaskine.GUI;
 
+import com.obsidiskrivemaskine.SyncRobot;
+
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -16,15 +19,9 @@ public class DynamicSuperClassLoader extends ClassLoader{
         super(parent);
     }
 
-    public Class loadClass(String name) throws ClassNotFoundException {
-        if(!"DynamicClass".equals(name))
-            return super.loadClass(name);
-
+    public Class loadClass(String name, String filepath) throws ClassNotFoundException {
         try {
-            String url = "file:DynamicClass.class";
-            URL myUrl = new URL(url);
-            URLConnection connection = myUrl.openConnection();
-            InputStream input = connection.getInputStream();
+            FileInputStream input = new FileInputStream(filepath);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int data = input.read();
 
@@ -37,7 +34,7 @@ public class DynamicSuperClassLoader extends ClassLoader{
 
             byte[] classData = buffer.toByteArray();
 
-            return defineClass("DynamicClass", classData, 0, classData.length);
+            return defineClass(name, classData, 0, classData.length);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -45,6 +42,22 @@ public class DynamicSuperClassLoader extends ClassLoader{
         }
 
         return null;
+    }
+
+    public static SyncRobot newClassLoader(String className, String filepath) {
+        ClassLoader parentClassLoader = DynamicSuperClassLoader.class.getClassLoader();
+        DynamicSuperClassLoader classLoader;
+        classLoader = new DynamicSuperClassLoader(parentClassLoader);
+        try {
+            Class <? extends SyncRobot> clas = classLoader.loadClass(className, filepath);
+            SyncRobot sr = clas.newInstance();
+            return sr;
+        }
+        catch (Exception e){
+            System.out.println("Class loading failed");
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

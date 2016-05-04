@@ -35,7 +35,7 @@ public class SymbolTable {
         scopeDisplay = new ArrayList<>();
         symbols = new ArrayList<>();
         functions = new ArrayList<>();
-        dclvisitor = new DeclVisitor(this);
+        //dclvisitor = new DeclVisitor(this);
     }
     /*
     Scopedisplay[depth] bliver brugt til at adde og slette symboler i den pågælende dybte/index,.
