@@ -19,7 +19,7 @@ public class AntlrASTBuilder {
 
     public AntlrASTBuilder()
     {
-        workingDir = System.getProperty("user.dir") + "/ObsidiCode/Test/";
+        workingDir = System.getProperty("user.dir") + "/Test/";
     }
 
     public Node Compile(String file)

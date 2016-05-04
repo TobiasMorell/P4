@@ -35,7 +35,24 @@ public class SymbolTable {
         scopeDisplay = new ArrayList<>();
         symbols = new ArrayList<>();
         functions = new ArrayList<>();
+        addNativeFunctions();
+
         dclvisitor = new DeclVisitor(this);
+    }
+
+    private void addNativeFunctions() {
+        functions.add(new Func("GetHP", Node.Type.num));
+        functions.add(new Func("GetPosition", Node.Type.coord, null));
+        functions.add(new Func("Mine", Node.Type.Void, Node.Type.string));
+        functions.add(new Func("LootChest", null));
+        functions.add(new Func("Move", null, Node.Type.string));
+        functions.add(new Func("GiveItem", null, Node.Type.string));
+        functions.add(new Func("Drop", null, Node.Type.string, Node.Type.num));
+        functions.add(new Func("Talk", null, Node.Type.string));
+        functions.add(new Func("Equip", null, Node.Type.string));
+        functions.add(new Func("GetX", Node.Type.num, Node.Type.coord));
+        functions.add(new Func("GetY", Node.Type.num, Node.Type.coord));
+        functions.add(new Func("GetZ", Node.Type.num, Node.Type.coord));
     }
     /*
     Scopedisplay[depth] bliver brugt til at adde og slette symboler i den pågælende dybte/index,.
@@ -160,11 +177,9 @@ public class SymbolTable {
                     }
                 }
                 return F;
-            }else{
-                MakeError("Invalid Method invocation: " + name);
             }
         }
-        MakeError("This shouldn't happen...");
+        MakeError("Invalid Method invocation: " + name);
         return null;
     }
 

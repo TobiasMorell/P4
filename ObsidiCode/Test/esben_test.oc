@@ -4,8 +4,8 @@ LOAD("WalkerBot") //Basic walk functionalitet som GoTo
 NUM Count = 10 + 50
 
 VOID START()
-    GoTo(MineArea)
-    Mine(4, TRUE, 150)
+    Move("West")
+    Dig(4, TRUE, 150)
 END START
 
 //Miner bare i en retning i den specificerede længde
@@ -13,8 +13,8 @@ END START
 VOID StripMine(NUM Length)
     Count = 0
     REPEAT UNTIL (Count IS Length)
-        Robot.Dig() 
-        Robot.Move() 
+        Mine("NORTH")
+        Move("South")
         Count = Count + 1
         georg = 3+8
     END REPEAT
@@ -25,11 +25,11 @@ COORD MineArea
 //Tunnels er mængden af tunneller er 
 /* Mine miner den originale tunnel, som alle de andre tunneller skal være på. Og styrer derudover 
 hvor mange tunneller der skal mines osv */
-VOID Mine(NUM Tunnels, BOOL BothSides, NUM Distance)
+VOID Dig(NUM Tunnels, BOOL BothSides, NUM Distance)
     NUM MinedTunnels = 0
     StripMine(Tunnels * 3)
     GoBack(Tunnels * 3)
-    Robot.Turn("Right")
+    //Robot.Turn("Right")
     REPEAT UNTIL (MinedTunnels IS Tunnels)
         StripMine(150)
         IF (BothSides) 
@@ -38,28 +38,28 @@ VOID Mine(NUM Tunnels, BOOL BothSides, NUM Distance)
         END IF
         GoBack(150)
         IF (BothSides)
-            Robot.Turn("Right")
+            //Robot.Turn("Right")
         END IF
         ELSE IF (MinedTunnels IS Tunnels - 2)
-            Robot.BreakDance()
+            //Robot.BreakDance()
 
         END ELSEIF
         ELSE
-            Robot.Turn("Left")
+            //Robot.Turn("Left")
         END ELSE
-        Robot.Move()
-        Robot.Move()
-        Robot.Move()
-        Robot.Turn("Left")
+        //Robot.Move()
+        //Robot.Move()
+        //Robot.Move()
+        //Robot.Turn("Left")
     END REPEAT
 END Mine
     
 VOID GoBack(NUM Length)
     Count = 0
-    Robot.Turn("Left")
-    Robot.Turn("Left")
+    //Robot.Turn("Left")
+    //Robot.Turn("Left")
     REPEAT UNTIL (Count IS Length)
-        Robot.Move()
+        //Robot.Move()
         Count = Count + 1
     END REPEAT
 END GoBack

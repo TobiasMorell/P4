@@ -67,6 +67,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	
 	@Override
 	public Node visitProg(ObsidiCodeParser.ProgContext ctx) {
+		line = ctx.getStart().getLine();
 		ProgNode pn = (ProgNode) visit(ctx.roboDcl());
 		Node load = visit(ctx.loads());
 		if (load != null)
@@ -78,6 +79,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLiteral(ObsidiCodeParser.LiteralContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.NumLit() != null)
 			return new NumLit(Float.parseFloat(ctx.NumLit().getText()));
 		else if(ctx.CoordLit() != null){
@@ -100,11 +102,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) {
+		line = ctx.getStart().getLine();
 		return new DotNode(visit(ctx.meth), ctx.parent.getText()); // Fix dis error monday!
 	}
 
 	@Override
 	public Node visitTypeNameIdentifier(ObsidiCodeParser.TypeNameIdentifierContext ctx) {
+		line = ctx.getStart().getLine();
 		String id = ctx.id.getText();
 		Node ref;
 		
@@ -128,12 +132,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLambdaLoadNewLine(ObsidiCodeParser.LambdaLoadNewLineContext ctx) {
-		line++;
+		line = ctx.getStart().getLine();
 		return super.visitLambdaLoadNewLine(ctx);
 	}
 
 	@Override
 	public Node visitNonLambdaLoad(ObsidiCodeParser.NonLambdaLoadContext ctx) {
+		line = ctx.getStart().getLine();
 		LoadNode ln = (LoadNode) visit(ctx.recursion);
 
 		//The child was empty i.e. last step of recursion
@@ -141,20 +146,20 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			ln = new LoadNode();
 
 		ln.AddNode(new ProgNode(new ArrayList<Node>(), ctx.load_id.getText()));
-		line++;
 		return ln;
 	}
 
 	@Override
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
+		line = ctx.getStart().getLine();
 		String robotName = ctx.id.getText();
 		ArrayList<Node> stmts = new ArrayList<>();
-		line++;
 		return new ProgNode(stmts, robotName);
 	}
 
 	@Override
 	public Node visitRoboBodyDcl(ObsidiCodeParser.RoboBodyDclContext ctx) {
+		line = ctx.getStart().getLine();
 		CollectionNode bn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.RoboBodyDclContext)
@@ -174,6 +179,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMemberDeclNotLambda(ObsidiCodeParser.MemberDeclNotLambdaContext ctx) {
+		line = ctx.getStart().getLine();
 		//Not an empty statement - parse it!
 		if(ctx.met_dcl != null)
 			return visit(ctx.met_dcl);
@@ -183,22 +189,23 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMemberDclLambda(ObsidiCodeParser.MemberDclLambdaContext ctx) {
-		line++;
+		line = ctx.getStart().getLine();
 		return null;
 	}
 
 	@Override
 	public Node visitFieldDcl(ObsidiCodeParser.FieldDclContext ctx) {
+		line = ctx.getStart().getLine();
 		//Find the identifier and value of given declaration
 		CollectionNode decls = (CollectionNode) visit(ctx.dcl_list);
 		
 		giveContextToNodes(decls, ctx.t.type.getType());
-		line++;
 		return decls;
 	}
 
 	@Override
 	public Node visitVariableDclList(ObsidiCodeParser.VariableDclListContext ctx) {
+		line = ctx.getStart().getLine();
 		CollectionNode declarations;
 		
 		/*The strategy used here (and all of the other recursively defined rules is
@@ -221,6 +228,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitVariableDcl(ObsidiCodeParser.VariableDclContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableInitializerContext)
 			return visit(ctx.var_init);
 		else
@@ -229,6 +237,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitVariableInitializer(ObsidiCodeParser.VariableInitializerContext ctx) {
+		line = ctx.getStart().getLine();
 		Node n = visit(ctx.expr);
 		
 		if(n instanceof AssignNode || n instanceof ReferenceNode)
@@ -243,6 +252,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitListInitializer(ObsidiCodeParser.ListInitializerContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) != null)
 			return visit(ctx.list);
 
@@ -251,6 +261,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLitList(ObsidiCodeParser.LitListContext ctx) {
+		line = ctx.getStart().getLine();
 		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.PrimaryContext)
@@ -266,6 +277,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx) {
+		line = ctx.getStart().getLine();
 		MethodDcl dcl = (MethodDcl) visit(ctx.header);
 		dcl.AddBody((BlockNode) visit(ctx.body));
 		return dcl;
@@ -273,6 +285,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMethodHeader(ObsidiCodeParser.MethodHeaderContext ctx) {
+		line = ctx.getStart().getLine();
 		Node.Type t;
 		CollectionNode cn = (CollectionNode) visit(ctx.declarator); //Stores params
 		
@@ -309,24 +322,25 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMethodDeclarator(ObsidiCodeParser.MethodDeclaratorContext ctx) {
+		line = ctx.getStart().getLine();
 		//Find the params and return them (id is handled in visitMethodHeader
-		line++;
 		return visit(ctx.params);
 	}
 
 	@Override
 	public Node visitMethodBody(ObsidiCodeParser.MethodBodyContext ctx) {
+		line = ctx.getStart().getLine();
 		//Just skip this and don't mind the 'END' identifier part.
 		return visit(ctx.body);
 	}
 
 	@Override
 	public Node visitHearDcl(ObsidiCodeParser.HearDclContext ctx) {
+		line = ctx.getStart().getLine();
 		//Find parameters
 		CollectionNode params = (CollectionNode) visit(ctx.params);
 		
 		//Find the body
-		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Return a new HearDcl, which collects all the found information
@@ -335,6 +349,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitBlock(ObsidiCodeParser.BlockContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.BlockStmtListContext)
 			return visit(ctx.list);
 		
@@ -343,6 +358,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitBlockStmtList(ObsidiCodeParser.BlockStmtListContext ctx) {
+		line = ctx.getStart().getLine();
 		BlockNode bn;
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.BlockStmtListContext)
 			bn = (BlockNode) visit(ctx.list);
@@ -352,12 +368,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		Node res = visit(ctx.stmt);
 		if(res != null)
 			bn.AddNode(res);
-		line++;
 		return bn;
 	}
 
 	@Override
 	public Node visitStatement(ObsidiCodeParser.StatementContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.t != null)
 		{
 			CollectionNode cn = (CollectionNode) visit(ctx.dcl);
@@ -383,6 +399,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitNoSubSkip(ObsidiCodeParser.NoSubSkipContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.skipSignal != null)
 			return visit(ctx.skipSignal);
 		else if (ctx.skipExpr != null)
@@ -393,16 +410,19 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitNoSubBrk(ObsidiCodeParser.NoSubBrkContext ctx) {
+		line = ctx.getStart().getLine();
 		return new BreakNode();
 	}
 
 	@Override
 	public Node visitNoSubRet(ObsidiCodeParser.NoSubRetContext ctx) {
+		line = ctx.getStart().getLine();
 		return new ReturnNode((ExprNode) visit(ctx.expr));
 	}
 
 	@Override
 	public Node visitSignalStmt(ObsidiCodeParser.SignalStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		//Find the id of the signal
 		IDNode id = new IDNode(ctx.id.getText());
 		
@@ -414,6 +434,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitExprStmt(ObsidiCodeParser.ExprStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		// Will always just need to visit the first child
 		if(ctx.meth_invoc != null)
 			return visit(ctx.meth_invoc);
@@ -423,6 +444,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMethodInvocation(ObsidiCodeParser.MethodInvocationContext ctx) {
+		line = ctx.getStart().getLine();
 		ReferenceNode id = (ReferenceNode) visit(ctx.id);
 		
 		CollectionNode args = (CollectionNode) visit(ctx.args);
@@ -437,8 +459,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitIfStmt(ObsidiCodeParser.IfStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		Node expr = visit(ctx.expr);
-		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		IfNode elseIf = (IfNode) visit(ctx.elseIfStmt);
 		BlockNode elseRes = (BlockNode) visit(ctx.elseStmt);
@@ -459,11 +481,10 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitElseIf(ObsidiCodeParser.ElseIfContext ctx) {
-		line++;
+		line = ctx.getStart().getLine();
 		//Generate nodes for each of the parts of the else-if
 		IfNode recursion = (IfNode) visit(ctx.recursion);
 		Node condition = visit(ctx.expr);
-		line++;
 		BlockNode body = (BlockNode) visit(ctx.body);
 		
 		//Add to list
@@ -484,6 +505,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitElse(ObsidiCodeParser.ElseContext ctx) {
+		line = ctx.getStart().getLine();
 		//Generate nodes for all parts of the statement
 		line = line +2;
 		BlockNode bn = (BlockNode) visit(ctx.body) ;
@@ -498,6 +520,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLoopStmt(ObsidiCodeParser.LoopStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		//Just skip this rule and handle the next
 		if(ctx.ever != null)
 			return visit(ctx.ever);
@@ -507,9 +530,9 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitRepeatStmt(ObsidiCodeParser.RepeatStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		//Generate nodes for expression and body part
 		ExprNode expr = (ExprNode) visit(ctx.expr);
-		line++;
 		BlockNode bn = (BlockNode) visit(ctx.body);
 		
 		return new LoopNode(expr, bn);
@@ -517,8 +540,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitForeverStmt(ObsidiCodeParser.ForeverStmtContext ctx) {
+		line = ctx.getStart().getLine();
 		//Generate a loop node, that has 'false' as ExprNode
-		line++;
 		ExprNode expr = new BoolLit("FALSE");
 		BlockNode bn = (BlockNode) visit(ctx.body);
 		
@@ -527,6 +550,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitFormalArgs(ObsidiCodeParser.FormalArgsContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ArgsListContext)
 			return visit(ctx.list);
 		
@@ -535,6 +559,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitArgsList(ObsidiCodeParser.ArgsListContext ctx) {
+		line = ctx.getStart().getLine();
 		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ArgsListContext)
@@ -548,6 +573,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitFormalParams(ObsidiCodeParser.FormalParamsContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.list != null)
 			return visit(ctx.list);
 
@@ -556,6 +582,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitParamsList(ObsidiCodeParser.ParamsListContext ctx) {
+		line = ctx.getStart().getLine();
 		CollectionNode cn;
 		
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ParamContext)
@@ -572,6 +599,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitParam(ObsidiCodeParser.ParamContext ctx) {
+		line = ctx.getStart().getLine();
 		Node decl = null;
 		switch(ctx.t.type.getType()){
 		case ObsidiCodeParser.NUM:
@@ -592,11 +620,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitExpression(ObsidiCodeParser.ExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.assignmentExpression());
 	}
 
 	@Override
 	public Node visitAssignmentExpression(ObsidiCodeParser.AssignmentExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.skipAss != null)
 			return visit(ctx.skipAss);
 		else
@@ -605,6 +635,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitAssignment(ObsidiCodeParser.AssignmentContext ctx) {
+		line = ctx.getStart().getLine();
 		//Generate a node for lhs and rhs
 		Node lhs = visit(ctx.lhs);
 		Node expr = visit(ctx.expr);
@@ -614,6 +645,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitLeftHandSide(ObsidiCodeParser.LeftHandSideContext ctx) {
+		line = ctx.getStart().getLine();
 		Node access = visit(ctx.tn);
 		ExprNode optExt = (ExprNode) visit(ctx.ext);
 		
@@ -625,6 +657,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitListOpt(ObsidiCodeParser.ListOptContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.expr != null)
 			return visit(ctx.expr);
 		
@@ -633,11 +666,13 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitConditionalExpression(ObsidiCodeParser.ConditionalExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.or);
 	}
 
 	@Override
 	public Node visitConditionOrExpression(ObsidiCodeParser.ConditionOrExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.ConditionAndExpressionContext)
 			return visit(ctx.and);
 		else
@@ -646,6 +681,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitConditionAndExpression(ObsidiCodeParser.ConditionAndExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.XOrExpressionContext)
 			return visit(ctx.xor);
 		else
@@ -654,6 +690,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitXOrExpression(ObsidiCodeParser.XOrExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.EqualityExpressionContext)
 			return visit(ctx.eq);
 		else
@@ -662,6 +699,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitEqualityExpression(ObsidiCodeParser.EqualityExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.RelationalExpressionContext)
 			return visit(ctx.rel);
 		else{
@@ -673,6 +711,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitEqualityExpressionEnd(ObsidiCodeParser.EqualityExpressionEndContext ctx) {
+		line = ctx.getStart().getLine();
 		switch(ctx.eq_mod.getType())
 		{
 		case ObsidiCodeParser.EQ_MOD_IS:
@@ -686,6 +725,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitRelationalExpression(ObsidiCodeParser.RelationalExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.AdditiveExpressionContext)
 			return visit(ctx.add);
 		else {
@@ -697,6 +737,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitRelationalExpressionEnd(ObsidiCodeParser.RelationalExpressionEndContext ctx) {
+		line = ctx.getStart().getLine();
 		switch(ctx.relational_key.getType())
 		{
 		case ObsidiCodeParser.RELATIONAL_KEY_GT:
@@ -713,6 +754,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitAdditiveExpression(ObsidiCodeParser.AdditiveExpressionContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.MultiExprContext)
 			return visit(ctx.mult);
 		else {
@@ -724,6 +766,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitAdditiveExpressionEnd(ObsidiCodeParser.AdditiveExpressionEndContext ctx) {
+		line = ctx.getStart().getLine();
 		switch(ctx.op.getType()) {
 		case ObsidiCodeParser.OP_MINUS:
 			return new MinusNode(null, visit(ctx.mult));
@@ -736,6 +779,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMultiExpr(ObsidiCodeParser.MultiExprContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.UnaryExprContext)
 			return visit(ctx.un);
 		else {
@@ -747,6 +791,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitMultiExprEnd(ObsidiCodeParser.MultiExprEndContext ctx) {
+		line = ctx.getStart().getLine();
 		switch(ctx.op.getType()){
 		case ObsidiCodeParser.OP_DIV:
 			return new DivNode(null, visit(ctx.un));
@@ -758,6 +803,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitUnaryExpr(ObsidiCodeParser.UnaryExprContext ctx) {
+		line = ctx.getStart().getLine();
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.PrimaryContext)
 			return visit(ctx.prim);
 		else
@@ -766,21 +812,25 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 
 	@Override
 	public Node visitPrimaryLiteral(ObsidiCodeParser.PrimaryLiteralContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.literal());
 	}
 
 	@Override
 	public Node visitParenExpr(ObsidiCodeParser.ParenExprContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.expression());
 	}
 
 	@Override
 	public Node visitPrimaryIdRef(ObsidiCodeParser.PrimaryIdRefContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.lhs);
 	}
 
 	@Override
 	public Node visitPrimaryMethodInvoc(ObsidiCodeParser.PrimaryMethodInvocContext ctx) {
+		line = ctx.getStart().getLine();
 		return visit(ctx.methodInvocation());
 	}	
 }
