@@ -2,6 +2,7 @@
 import ASTNodes.GeneralNodes.Node;
 import TypeChecking.SymbolTable;
 import Utility.AntlrASTBuilder;
+import Utility.ErrorHandling;
 import Utility.JavaKeywordSheet;
 import ASTNodes.Declarations.ReferenceNode;
 import ASTNodes.Operators.AssignNode;
