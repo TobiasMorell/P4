@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component inheritJdk="true">
-
-    <target name="checkos">
-        <condition property="isWindows" value="true">
-            <os family="windows" />
-        </condition>
-
-        <condition property="isLinux" value="true">
-            <os family="unix" />
-        </condition>
-    </target>
-
-    <exclude-output/>
-    <contentEntry url="file://$MODULE_DIR$"/>
-
-    <lib name="antlr-4.5-complete.jar" scope="COMPILE">
-
-        <target name="setWindowsRoot" if="isWindows">
-            <relative-module-cls project-related="jar://$PROJECT_DIR$/ObsidiCode/antlr-4.5-complete.jar!/"/>
-        </target>
-
-        <target name="setUnixRoot" if="isUnix">
-    	    <relative-module-cls project-related="jar://$PROJECT_DIR$/antlr-4.5-complete.jar!/"/>
-        </target>
-
-    </lib>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="antlr-4.5-complete.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/antlr-4.5-complete.jar!/"/>
+	</lib>
 </component>
