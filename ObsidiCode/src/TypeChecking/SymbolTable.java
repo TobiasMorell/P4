@@ -35,8 +35,6 @@ public class SymbolTable {
         scopeDisplay = new ArrayList<>();
         symbols = new ArrayList<>();
         functions = new ArrayList<>();
-        addNativeFunctions();
-
         dclvisitor = new DeclVisitor(this);
     }
 

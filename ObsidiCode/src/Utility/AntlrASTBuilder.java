@@ -15,18 +15,12 @@ import java.io.*;
  * Created by morell on 4/27/16.
  */
 public class AntlrASTBuilder {
-    private final String workingDir;
-
-    public AntlrASTBuilder()
-    {
-        workingDir = System.getProperty("user.dir") + "/Test/";
-    }
 
     public Node Compile(String file)
     {
         try {
             //Open file-reader and create an input stream for ANTLR
-            FileInputStream fis = new FileInputStream(workingDir + file);
+            FileInputStream fis = new FileInputStream(file);
             ANTLRInputStream ais = new ANTLRInputStream(fis);
 
             //Create a lexer and token stream
@@ -45,7 +39,7 @@ public class AntlrASTBuilder {
             return bASTv.visit(tree);
         }
         catch (FileNotFoundException e) {
-            System.out.println("The given file was not found:\n" + workingDir + file);
+            System.out.println("The given file was not found:\n" + file);
         }
         catch (IOException e) {
             System.out.println("Could not open input-stream to read source-file.");

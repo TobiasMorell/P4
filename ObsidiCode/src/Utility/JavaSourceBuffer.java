@@ -12,11 +12,12 @@ public class JavaSourceBuffer extends SimpleJavaFileObject {
 
     public  JavaSourceBuffer (String className, String code)
     {
+        //Classname null problem
         super(URI.create("string:///"+ className.replace('.','/') + Kind.SOURCE.extension), Kind.SOURCE);
         this._code = code;
     }
 
-    public CharSequence getCharContent(boolean b) throws IOException {
+    public CharSequence getCharContent() {
         return _code;
     }
 }
