@@ -53,7 +53,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
     private void visitDeclarationGeneric(DeclarationNode node, String type)
     {
         //Append type-name
-        codeBuilder.append(node.type);
+        codeBuilder.append(type);
         codeBuilder.append(' ');
         //visit left-child to append ID
         visit(node.GetLeftChild());
@@ -127,7 +127,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             //Kan helt sikkert gøres smartere
             if(n instanceof BoolDcl) { codeBuilder.append(keywords.BOOLEAN);  }
             if(n instanceof StringDcl) { codeBuilder.append(keywords.STRING);  }
-            if(n instanceof NumDcl) { codeBuilder.append(keywords.INT);  }
+            if(n instanceof NumDcl) { codeBuilder.append(keywords.FLOAT);  }
             if(n instanceof CoordDcl) { codeBuilder.append(keywords.COORD);  }
             //codeBuilder.append(n);
             codeBuilder.append(" ");
@@ -202,7 +202,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(DotNode node) {
+        visit(node.GetLeftChild());
         codeBuilder.append(keywords.CLASS_ACCESS);
+        codeBuilder.append(node.name);
         return null;
     }
 
