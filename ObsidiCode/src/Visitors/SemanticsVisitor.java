@@ -1,5 +1,6 @@
 package Visitors;
 
+import Utility.ErrorHandling;
 import ASTNodes.Declarations.*;
 import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
@@ -116,6 +117,9 @@ public class SemanticsVisitor extends AbstractVisitor {
         else if(lhs == rhs && lhs == Node.Type.coord){
             node.setT(Node.Type.coord);
         }
+        else {
+            ErrorHandling.Error("Division not allowed - incompatible types");
+        }
 
         return null;
     }
@@ -204,6 +208,9 @@ public class SemanticsVisitor extends AbstractVisitor {
         if(lhs == Node.Type.coord&& rhs == Node.Type.coord){
             //Todo (lhs.x*rhs.x,lhs.y*rhs.y,lhs.z*rhs.z)
             node.setT(Node.Type.coord);
+        }
+        else {
+            ErrorHandling.Error("Illegal operation - Types incompatible with multiplication");
         }
         return null;
     }

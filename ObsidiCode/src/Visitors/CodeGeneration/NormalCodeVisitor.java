@@ -43,8 +43,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append("import Java.Util.ArrayList;\n");
         codeBuilder.append("import Utility.Coord;\n\n");
         codeBuilder.append("public class " + robotName + "NormalThread extends NormalThread { \n");
-        codeBuilder.append("private " + robotName +"Robot Robot");
-        codeBuilder.append("public " + robotName + " NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
+        codeBuilder.append("private " + robotName +"Robot Robot; \n");
+        codeBuilder.append("public " + robotName + "NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
         codeBuilder.append("super(mutex); Robot = r; }  \n");
 
     }
@@ -122,7 +122,10 @@ public class NormalCodeVisitor extends AbstractVisitor {
         for (Node n : node.parameters) {
             visit(n);
         }
+        codeBuilder.append(")");
+
         visit(node.GetLeftChild());
+
 
     }
 
@@ -177,7 +180,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             codeBuilder.append(')');
         }
 
-        codeBuilder.append(";\n");
+        codeBuilder.append("");
         return null;
     }
 
@@ -337,9 +340,13 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+
+    //Needs to be implemented to show code produced
     @Override
     public Object visit(CollectionNode node) {
-
+        for (Node n : node.GetChildren()
+                ) { visit(n);
+        }
         return null;
     }
 
@@ -388,15 +395,17 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IDNode node) {
-        //todo mangler at tjekke om variablen er declared i symbol table
+        //todo mangler at tjekke om variablen er declared i symbol table, det gør topdcl visitor vist allerede
         codeBuilder.append(node._id);
         return null;
     }
 
     @Override
     public Object visit(IfNode node) {
+
         return null;
     }
+
 
     @Override
     public Object visit(LoadNode node) {
