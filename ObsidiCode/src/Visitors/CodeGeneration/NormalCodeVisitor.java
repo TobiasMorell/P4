@@ -5,10 +5,13 @@ import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
+import ObsidiCodeAntlr.ObsidiCodeParser;
 import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
 import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by morell on 4/26/16.
@@ -48,7 +51,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append("super(mutex); Robot = r; }  \n");
 
     }
-
+        //Note to self, both generic dcls and blocks all produce \n which kinda seems overkill, unsure what to change
     private void visitDeclarationGeneric(DeclarationNode node, String type)
     {
         //Append type-name
@@ -115,12 +118,27 @@ public class NormalCodeVisitor extends AbstractVisitor {
     {
         codeBuilder.append(keywords.ACCESS);
         codeBuilder.append(' ');
-        codeBuilder.append(node.type);
+        codeBuilder.append(type);
         codeBuilder.append(' ');
         codeBuilder.append(node.id);
         codeBuilder.append('(');
+        int i = node.parameters.size();
         for (Node n : node.parameters) {
-            visit(n);
+
+            //istedet for visits på n så gør det her "manuelt" for at undgå at postfix ;
+            //Kan helt sikkert gøres smartere
+            if(n instanceof BoolDcl) { codeBuilder.append(keywords.BOOLEAN);  }
+            if(n instanceof StringDcl) { codeBuilder.append(keywords.STRING);  }
+            if(n instanceof NumDcl) { codeBuilder.append(keywords.INT);  }
+            if(n instanceof CoordDcl) { codeBuilder.append(keywords.COORD);  }
+            //codeBuilder.append(n);
+            codeBuilder.append(" ");
+            visit(n.GetLeftChild());
+            --i;
+            if(i > 0)
+            {
+                codeBuilder.append(", ");
+            }
         }
         codeBuilder.append(")");
 
@@ -217,11 +235,13 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+    //At tilføje et ; og \n løste super mange problemer, ved ik om det godt i alle tilfælde.
     @Override
     public Object visit(AssignNode node) {
         visit(node.GetLeftChild());
         codeBuilder.append(keywords.ASSIGN);
         visit(node.GetRightChild());
+        codeBuilder.append("; \n");
         return null;
     }
 
@@ -332,11 +352,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
     //Curly braces are now specific to blocknodes
     @Override
     public Object visit(BlockNode node) {
-        codeBuilder.append("\n {");
+        codeBuilder.append(" \n { \n");
         for (Node n : node.GetChildren()) {
             visit(n);
         }
-        codeBuilder.append("\n }");
+        codeBuilder.append(" \n } \n");
         return null;
     }
 
@@ -372,9 +392,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append(keywords.COORD);
         codeBuilder.append("(");
         codeBuilder.append(x);
-        codeBuilder.append(",");
+        codeBuilder.append(", ");
         codeBuilder.append(y);
-        codeBuilder.append(",");
+        codeBuilder.append(", ");
         codeBuilder.append(z);
         codeBuilder.append(");");
         return null;
@@ -393,6 +413,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+
+
+
     @Override
     public Object visit(IDNode node) {
         //todo mangler at tjekke om variablen er declared i symbol table, det gør topdcl visitor vist allerede
@@ -400,33 +423,60 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+
+
+
     @Override
     public Object visit(IfNode node) {
+
+        codeBuilder.append("if(");
+        visit(node.GetCondition());
+        codeBuilder.append(") \n");
+        visit(node.GetBody());
+        codeBuilder.append(" \n");
+
+        if(node.GetElseIf() != null)
+        {
+            codeBuilder.append("else if(");
+            visit(node.GetElseIf().GetCondition());
+            codeBuilder.append(") \n");
+            visit(node.GetElseIf().GetBody());
+            codeBuilder.append("\n");
+
+        }
+
+        //if(node.GetElseIf() != null ) { visit(node.GetElseIf()); }
+        if(node.GetElse() != null) { visit(node.GetElse()); }
 
         return null;
     }
 
 
+    //todo yet to be implemented
     @Override
     public Object visit(LoadNode node) {
         return null;
     }
 
+
+
     @Override
     public Object visit(LoopNode node) {
+        codeBuilder.append("while(!(");
+        visit(node.GetLeftChild());
+        codeBuilder.append("))");
 
-
+        visit(node.GetRightChild());
         return null;
     }
 
     @Override
     public Object visit(MethodInvocationNode node) {
-
-        codeBuilder.append(node.GetLeftChild());
+        visit(node.GetLeftChild());
         codeBuilder.append("( ");
         int i = node.GetChildren().size();
         for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
-        codeBuilder.append(");");
+        codeBuilder.append("); ");
         return null;
     }
 
