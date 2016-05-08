@@ -5,13 +5,11 @@ import ASTNodes.GeneralNodes.CollectionNode;
 import ASTNodes.GeneralNodes.Node;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
-import ObsidiCodeAntlr.ObsidiCodeParser;
 import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
 import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
 
-import java.lang.reflect.Method;
 
 /**
  * Created by morell on 4/26/16.
@@ -55,7 +53,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
     private void visitDeclarationGeneric(DeclarationNode node, String type)
     {
         //Append type-name
-        codeBuilder.append(type);
+        codeBuilder.append(node.type);
         codeBuilder.append(' ');
         //visit left-child to append ID
         visit(node.GetLeftChild());

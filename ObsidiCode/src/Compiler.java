@@ -25,7 +25,7 @@ public class Compiler {
             if(OS.startsWith("Windows"))
             {
                 System.out.println("Running on Windows - compiling esben_test.oc");
-                path += "\\Test\\test_decl.txt";
+                path += "\\Test\\esben_test.oc";
             }
             else if (OS.startsWith("Linux")) {
                 System.out.println("Running on Linux - compiling esben_test.oc");
@@ -47,11 +47,11 @@ public class Compiler {
 
         if(root != null) {
             //Build the symbol table
-            SymbolTable st = new SymbolTable(root);
+            //SymbolTable st = new SymbolTable(root);
 
             //Compile either to java or java-byte code
             JavaKeywordSheet jsk = new JavaKeywordSheet();
-            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk, st);
+            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
             HearCodeVisitor hcv = new HearCodeVisitor(jsk);
             RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
 
