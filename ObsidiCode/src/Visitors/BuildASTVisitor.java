@@ -12,6 +12,7 @@ import ASTNodes.GeneralNodes.*;
 import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 import ObsidiCodeAntlr.*;
+import Utility.ErrorHandling;
 
 //The generic type must be the super class of the returned node, in this case Node.
 public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
@@ -247,6 +248,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		}
 		else {
 			System.out.println("Could not figure out what to do"); //Shitty error-handling again!
+			ErrorHandling.Error("Found no AssignNodes or ReferenceNodes in ", n);
 			return null;
 		}
 	}

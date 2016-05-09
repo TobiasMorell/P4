@@ -104,7 +104,7 @@ public class SymbolTable {
      */
     public void MakeError(String s) {
         System.out.println(s);
-        System.exit(-1);
+        //System.exit(-1);
     }
 
     /**

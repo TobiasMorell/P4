@@ -8,6 +8,7 @@ import ASTNodes.SyntaxNodes.NumLit;
 import Visitors.CodeGeneration.HearCodeVisitor;
 import Visitors.CodeGeneration.NormalCodeVisitor;
 import Visitors.CodeGeneration.RobotCodeVisitor;
+import Visitors.SemanticsVisitor;
 
 import java.io.File;
 
@@ -53,6 +54,9 @@ public class Compiler {
             //Build the symbol table
             SymbolTable st = new SymbolTable(root);
 
+            SemanticsVisitor smv = new SemanticsVisitor();
+
+            smv.visit(root);
             //Compile either to java or java-byte code
             JavaKeywordSheet jsk = new JavaKeywordSheet();
             NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
@@ -77,6 +81,7 @@ public class Compiler {
         } else {
             System.out.println("The root was null; could not compile!");
         }
+        ErrorHandling.printErrors();
 
     }
 }

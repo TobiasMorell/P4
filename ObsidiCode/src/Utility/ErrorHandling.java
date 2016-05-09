@@ -15,11 +15,11 @@ public class ErrorHandling {
         errors.add(err);
     }
 
-    private static void Error(String err, Object o){
+    public static void Error(String err, Object o){
         errors.add(err+o.toString());
     }
 
-    private static void printErrors(){
+    public static void printErrors(){
         for(String error : errors){
             System.out.print(error);
         }

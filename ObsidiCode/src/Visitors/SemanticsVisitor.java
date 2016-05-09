@@ -166,6 +166,8 @@ public class SemanticsVisitor extends AbstractVisitor {
             node.setT(Node.Type.coord);
         }
         else {
+
+            ErrorHandling.Error("Illegal combination of types at line: ");
             //Todo illegal combination of types
         }
         return null;
@@ -210,7 +212,7 @@ public class SemanticsVisitor extends AbstractVisitor {
             node.setT(Node.Type.coord);
         }
         else {
-            ErrorHandling.Error("Illegal operation - Types incompatible with multiplication");
+            ErrorHandling.Error("Illegal combination of types in a multiplication at line: " + node.line);
         }
         return null;
     }
@@ -389,6 +391,8 @@ public class SemanticsVisitor extends AbstractVisitor {
     public Object visit(ProgNode node) {
         //Since the Prog Node is the beginning of the program it makes sense to initialize our breakable var here
         breakable = 0;
+        visit(node.GetLeftChild());
+        VisitChildren(node);
         return null;
     }
 

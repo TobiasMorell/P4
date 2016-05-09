@@ -3,6 +3,6 @@
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<lib name="antlr-4.5-complete.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/antlr-4.5-complete.jar!/"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ObsidiCode/antlr-4.5-complete.jar!/"/>
 	</lib>
 </component>

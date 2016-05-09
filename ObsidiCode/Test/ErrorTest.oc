@@ -1,0 +1,9 @@
+TestRobot:
+
+NUM a = 5
+
+STRING rov = "This is a string"
+
+VOID START()
+    rov = a * rov
+END START
