@@ -1,7 +1,6 @@
 package com.obsidiskrivemaskine;
 
 import com.obsidiskrivemaskine.Entity.RobotEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -14,69 +13,77 @@ public class SyncRobot extends Thread{
     private static World world;
     private static RobotEntity Robot;
     private static EntityPlayer player;
-    private final int mutex_ID;
 
     public SyncRobot(){
         start();
-        mutex_ID = 1;
     }
 
-    public synchronized void move(String direction){
+    public synchronized void Move(String direction){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.move(direction);
             synchronized (this){ wait(1050); }
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void dig(String direction){
+    public synchronized void Mine(String direction){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.dig(direction);
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void giveItem(String itemName){
+    public synchronized void Place(String item){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
+            AbstractRobot.Place(item);
+            Robot.getLock().changeLockState(false);
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+    }
+
+    public synchronized void GiveItem(String itemName){
+        try {
+            Robot.getLock().isLockOpen();
             AbstractRobot.giveItem(itemName);
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void use(){
+    public synchronized void Use(){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.use();
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void swing(){
+    public synchronized void Swing(){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.swing();
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void findNearestEnemy(){
+    public synchronized void FindNearestEnemy(){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.findNearestEnemy();
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
@@ -87,37 +94,57 @@ public class SyncRobot extends Thread{
             spawnEntity();
     }
 
-    public synchronized void drop(String toDrop, int amount){
+    public synchronized void Drop(String toDrop, int amount){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.drop(toDrop, amount);
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void equip(String weapon){
+    public synchronized void Equip(String weapon){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.equip(weapon);
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public synchronized void lootChest(){
+    public synchronized void LootChest(){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.lootChest();
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
     }
 
-    public static void hack(World worldIn, EntityPlayer playerIn){
+    public synchronized void StoreInChest(String itemToStore, int amount){
+        try {
+            Robot.getLock().isLockOpen();
+            AbstractRobot.StoreInChest(itemToStore, amount);
+            Robot.getLock().changeLockState(false);
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+    }
+
+    public synchronized void StoreAllInChest(){
+        try {
+            Robot.getLock().isLockOpen();
+            AbstractRobot.StoreAllInChest();
+            Robot.getLock().changeLockState(false);
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+    }
+
+    public static void init(World worldIn, EntityPlayer playerIn){
         world = worldIn;
         player = playerIn;
     }
@@ -131,21 +158,21 @@ public class SyncRobot extends Thread{
         AbstractRobot.instantiateEntity(Robot, player, world);
     }
 
-    public synchronized void talk(String msg){
+    public synchronized void Talk(String msg){
             try {
-                Robot.getMutex().isLockOpen(    );
+                Robot.getLock().isLockOpen(    );
                 AbstractRobot.talk(msg);
-                Robot.getMutex().changeLockState(false);
+                Robot.getLock().changeLockState(false);
             } catch (InterruptedException e) {
                 System.out.println("Could not sleep the SyncRobot");
             }
     }
 
-    public synchronized void targetNearestEnemy(){
+    public synchronized void TargetNearestEnemy(){
         try {
-            Robot.getMutex().isLockOpen();
+            Robot.getLock().isLockOpen();
             AbstractRobot.targetNearestEnemy();
-            Robot.getMutex().changeLockState(false);
+            Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }

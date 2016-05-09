@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class RobotEntity extends EntityCreature
 {
-    public static RobotLock mutex = new RobotLock(true);
+    public static RobotLock lock = new RobotLock(true);
     ItemStack[] Inventory;
     ArrayList<EntityLivingBase> entities;
     public RobotEntity(World worldIn)
@@ -33,8 +33,8 @@ public class RobotEntity extends EntityCreature
         this.setCanPickUpLoot(true);
     }
 
-    public synchronized RobotLock getMutex(){
-        return mutex;
+    public synchronized RobotLock getLock(){
+        return lock;
     }
 
     public static void RegisterEntity(){
@@ -43,9 +43,14 @@ public class RobotEntity extends EntityCreature
     }
 
     @Override
+    protected boolean canDropLoot(){
+        return false;
+    }
+
+    @Override
     public void onEntityUpdate(){
         synchronized(this){
-            mutex.changeLockState(true);
+            lock.changeLockState(true);
             notifyAll();
         }
         super.onEntityUpdate();
