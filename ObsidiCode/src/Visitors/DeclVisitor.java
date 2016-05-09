@@ -46,14 +46,28 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(BoolDcl node) {
         System.out.println("Visiting BoolDcl" + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
-        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.bool);
+        if(node.GetRightChild()!= null) {
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.bool) {
+                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool);
+                return Node.Type.bool;
+            }else{
+                _table.MakeError("Error: Trying to initialize boolian with unmatching type ");
+            }
+        }
         return null;
     }
 
     @Override
     public Object visit(CoordDcl node) {
         System.out.println("Visiting CoordDcl " + _table.depth+ " on line " + node.line);
-        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.coord);
+        if(node.GetRightChild()!= null) {
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.coord) {
+                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord);
+                return Node.Type.coord;
+            }else{
+                _table.MakeError("Error: Trying to initialize coordinate with unmatching type ");
+            }
+        }
         return null;
     }
 
@@ -75,9 +89,13 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(NumDcl node) {
         System.out.println("Visiting NumDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
-        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.num);
-        if(node.GetRightChild() != null) {
-           // Node.Type t = GetExpressionType(node.GetRightChild());todo: fix
+        if(node.GetRightChild()!= null) {
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.num) {
+                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num);
+                return Node.Type.num;
+            }else{
+                _table.MakeError("Error: Trying to initialize number with unmatching type ");
+            }
         }
         return null;
     }
@@ -96,7 +114,14 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(StringDcl node) {
         System.out.println("Visiting StringDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
-        _table.EnterSymbol(((IDNode)node.GetLeftChild()).GetID(), Node.Type.string);
+        if(node.GetRightChild()!= null) {
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.string) {
+                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string);
+                return Node.Type.string;
+            }else{
+                _table.MakeError("Error: Trying to initialize string with unmatching type ");
+            }
+        }
         return null;
     }
 
@@ -104,6 +129,14 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(ListDcl node) {
         System.out.println("Visiting ListDcl "+ ((IDNode)node.GetLeftChild())._id +" " + _table.depth);
+        if(node.GetRightChild()!= null) {
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.List) {
+                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List);
+                return Node.Type.List;
+            }else{
+                _table.MakeError("Error: Trying to initialize List with unmatching type ");//todo: lists should not work this way.
+            }
+        }
         return null;
     }
 
@@ -129,8 +162,15 @@ public class DeclVisitor extends AbstractVisitor {
         if(!(node.GetLeftChild() instanceof ReferenceNode)){
             _table.MakeError("Error: trying to assign to non variable");
         }else{
-            //todo: visit children and compare types according to rules
+            t1 = (Node.Type)visit(node.GetRightChild());
+            t2 = _table.RetrieveSymbol(((ReferenceNode)node.GetLeftChild()).GetId()._id).getType();
+            if(t1 == t2) {
+                return t1;
+            }else{
+                _table.MakeError("Error: Trying to assign " + t2 + " to " + t1 + " on line " + node.line);
+            }
         }
+
         return null;
     }
 
@@ -253,8 +293,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
-        System.out.println("Visiting IfNode " + _table.depth+ " on line " + node.line);
         if(node != null) {
+            System.out.println("Visiting IfNode " + _table.depth+ " on line " + node.line);
             visit(node.GetBody());
             visit(node.GetElseIf());
             visit(node.GetElse());
@@ -306,7 +346,8 @@ public class DeclVisitor extends AbstractVisitor {
                 for (Node grandchild: ((CollectionNode)child).GetChildren()) {
                     if(grandchild instanceof CollectionNode){
                         for (Node dcl: ((CollectionNode)grandchild).GetChildren()) {
-                            _table.EnterSymbol(((DeclarationNode)dcl).GetID(),((DeclarationNode)dcl).type);
+                            //_table.EnterSymbol(((DeclarationNode)dcl).GetID(),((DeclarationNode)dcl).type);
+                            visit(grandchild);
                         }
                     }else if(grandchild instanceof MethodDcl){
                         _table.functions.add(new Func((MethodDcl)grandchild));
@@ -320,7 +361,6 @@ public class DeclVisitor extends AbstractVisitor {
                     }
                 }
             }
-            visit(child);
         }
         return null;
     }
