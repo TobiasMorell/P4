@@ -51,7 +51,7 @@ public class Compiler {
 
         if(root != null) {
             //Build the symbol table
-            //SymbolTable st = new SymbolTable(root);
+            SymbolTable st = new SymbolTable(root);
 
             //Compile either to java or java-byte code
             JavaKeywordSheet jsk = new JavaKeywordSheet();

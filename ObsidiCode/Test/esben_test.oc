@@ -16,7 +16,6 @@ VOID StripMine(NUM Length)
         Mine("NORTH")
         Move("South")
         Count = Count + 1
-        georg = 3+8
     END REPEAT
 END StripMine
 
