@@ -28,8 +28,8 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     private void placeHeader()
     {
         //Add class header
-        codeBuilder.append(String.format("%s %s %sHearThread %s HearThread {\n",
-                keywords.ACCESS, keywords.CLASS, robotName, keywords.EXTENSION));
+        codeBuilder.append(String.format("%s %s %sHearThread extends HearThread {\n",
+                keywords.ACCESS, keywords.CLASS, robotName));
         //Add fields
         codeBuilder.append(String.format("private %sRobot Robot;\n", robotName));
         //Declare a constructor

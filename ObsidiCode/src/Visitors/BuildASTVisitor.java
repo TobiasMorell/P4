@@ -2,6 +2,7 @@ package Visitors;
 
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -278,8 +279,14 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx) {
 		line = ctx.getStart().getLine();
-		MethodDcl dcl = (MethodDcl) visit(ctx.header);
-		dcl.AddBody((BlockNode) visit(ctx.body));
+		
+		MethodDcl dcl = null;
+		if(ctx.header != null)
+			dcl = (MethodDcl) visit(ctx.header);
+		else if(ctx.hearDcl() != null)
+			dcl = (HearDcl) visit(ctx.hearDcl());
+		if(dcl != null)
+			dcl.AddBody((BlockNode) visit(ctx.body));
 		return dcl;
 	}
 

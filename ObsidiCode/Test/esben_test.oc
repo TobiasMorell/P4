@@ -22,6 +22,11 @@ END StripMine
 
 COORD MineArea
 
+/*HEAR Guardian (COORD enemyLocation)
+    GoTo(enemyLocation)
+    SIGNAL Guardian (enemyLocation)
+END HEAR*/
+
 //Tunnels er mængden af tunneller er 
 /* Mine miner den originale tunnel, som alle de andre tunneller skal være på. Og styrer derudover 
 hvor mange tunneller der skal mines osv */
