@@ -27,6 +27,12 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		{
 			IDNode id = null;
 			Node initialization = null;
+
+			if(decl instanceof ListDcl)
+			{
+				decls.add(decl);
+				break;
+			}
 			
 			//Found an IDNode, meaning there's no initialization
 			if(decl instanceof IDNode)
@@ -281,7 +287,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitMethodDcl(ObsidiCodeParser.MethodDclContext ctx) {
 		line = ctx.getStart().getLine();
-		
+
 		MethodDcl dcl = null;
 		if(ctx.header != null)
 			dcl = (MethodDcl) visit(ctx.header);
