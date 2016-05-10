@@ -9,6 +9,7 @@ import ASTNodes.SyntaxNodes.*;
 import TypeChecking.Symbol;
 import TypeChecking.SymbolTable;
 import TypeChecking.Func;
+import Utility.ErrorHandling;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class DeclVisitor extends AbstractVisitor {
     }
 
     /***
-     * todo: Implement this method!
+     * todo: Implement this method! (on hold)
      * @param node a dot node that holds a reference to package/class/variable
      * @return null
      */
@@ -260,19 +261,40 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(GreaterNode node) {
         node.type = Node.Type.bool;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        Node.Type t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1==t2){
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Error: Greater than expression on line "+node.line+" compares values of different types");
+            return Node.Type.bool;
+        }
     }
 
     @Override
-    public Object visit(IsNode node) {
+    public Object visit(IsNode node) {//todo: discuss weather Is is a good representation of ==<
         node.type = Node.Type.bool;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        Node.Type t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1==t2){
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Error: Is expression on line "+node.line+" compares values of different types");
+            return Node.Type.bool;
+        }
     }
 
     @Override
     public Object visit(LessNode node) {
         node.type = Node.Type.bool;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        Node.Type t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1==t2){
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Error: Less than expression on line "+node.line+" compares values of different types");
+            return Node.Type.bool;
+        }
     }
 
     @Override
@@ -408,7 +430,13 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(NotNode node) {
         node.type = Node.Type.bool;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        if(t1== Node.Type.bool){
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Error: Trying to negate non boolean expression on line "+node.line);
+            return null;
+        }
     }
 
     @Override
@@ -631,10 +659,7 @@ public class DeclVisitor extends AbstractVisitor {
             if(child instanceof CollectionNode){
                 for (Node grandchild: ((CollectionNode)child).GetChildren()) {
                     if(grandchild instanceof CollectionNode){
-                        for (Node dcl: ((CollectionNode)grandchild).GetChildren()) {
-                            //_table.EnterSymbol(((DeclarationNode)dcl).GetID(),((DeclarationNode)dcl).type);
-                            visit(grandchild);//todo: fix lol
-                        }
+                        visit(grandchild);
                     }else if(grandchild instanceof MethodDcl){
                         Func f = new Func((MethodDcl)grandchild);
                         _table.functions.add(f);

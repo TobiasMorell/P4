@@ -53,50 +53,6 @@ public class SymbolTable {
         functions.add(new Func("GetY", Node.Type.num, Node.Type.coord));
         functions.add(new Func("GetZ", Node.Type.num, Node.Type.coord));
     }
-    /*
-    Scopedisplay[depth] bliver brugt til at adde og slette symboler i den pågælende dybte/index,.
-    Samtidig viser bogen et hashtable ved siden af hvor symboler aldrig slettes.
-    Dette kan muligvis bruges når der skal laves multipass.
-
-    291 bogen. hashtab til lookup, scope til list til nuværende level, sikkert så den hurtigere kan abandon scope
-
-    var er bare en nested liste af symboler med samme navn, så når der kommer et nyt med samme navn,
-    bliver den gamle slettet og peget på af den nye (assigned til den nyes var field).
-    Dvs at hashtable sletter symboler, men dem som tager deres plads holder en reference til dem.
-    Det bare en kosteffektiv måde at gøre det på.
-
-    Btw Multipass er vi genere vores shit i flere phases
-    Foreksempel laver vi først laver vi inputtet til tokenstream, så til et ast, og derefter modified ast og så til
-    assembly modsat syntax directed translation hvor alt gennemgås på engang, chapter 7 i fischer.
-    Btw godt eksempel af et mega simpelt symb tab for syntax directed translation i THE DRAGON BOOK.
-
-    Det meget spøjse er Lasse ansigt. Side 292
-     */
-
-    /**
-     * Fills out symbol table from a node.
-     * @param node
-     */
-    private void ProcessNode(Node node) {
-        //Check weather to put something in the TypeChecking.TypeChecking
-        System.out.println("Processing Node");
-        if (node instanceof BlockNode) {
-            //As a new scope is already opened with a method declaration.
-            //we choose to check that the parent is not of this type
-            OpenScope();
-        }else if(node instanceof DeclarationNode){
-            String id = ((IDNode)node.GetLeftChild()).GetID();
-            EnterSymbol(id, ((DeclarationNode)node).type);
-        }else if(node instanceof ReferenceNode) {
-            Symbol s = RetrieveSymbol(((ReferenceNode) node).GetId().GetID());
-            if (s == null)
-                MakeError("TypeChecking.Symbol \"" + s.name + "\" does not exist");
-        }
-        // Make foreach node n : n.GetChildren()) ProcessNde(n)
-        // if(node instanceof BlockNode) symtab.CloseScope();
-
-
-        }
 
     /**
      * Prints a simple error message and exits the compiler afterwards.
@@ -106,30 +62,6 @@ public class SymbolTable {
         System.out.println(s);
         //System.exit(-1);
     }
-
-    /**
-     * Processes all children of a parent node
-     * @param node parent node
-     */
-    private void ProcessChildren(Node node){
-        if(node instanceof UnaryNode){
-            ProcessNode(((UnaryNode)node).GetLeftChild());
-
-        }else if(node instanceof BinaryNode){
-            ProcessNode(((BinaryNode)node).GetLeftChild());
-            ProcessNode(((BinaryNode)node).GetRightChild());
-        }else if(node instanceof NaryNode){
-            for (Node n: ((NaryNode)node).GetChildren()) {
-                ProcessNode(n);
-
-            }
-        }
-
-        if(node instanceof BlockNode){
-            CloseScope();
-        }
-    }
-
 
 
     public void EnterSymbol(String id, Node.Type type)
@@ -224,7 +156,7 @@ public class SymbolTable {
             Symbol c = scopeDisplay.get(depth);
             if (c != null) {
                 Symbol prevsym = c.var;
-                HashTable.remove(c.name); //todo: Det hér virker nok ikke.
+                HashTable.remove(c.name); //todo: might not work, however is not put to use as of current
                 if (prevsym != null)
                     HashTable.put(prevsym.getName(), prevsym);
             }
@@ -244,11 +176,4 @@ public class SymbolTable {
 
 }
 
-/* Lasse Rant
-
-Ser fint ud, mangler persistent data structure methods, classes, det vil vi gerne beholde efter scope ender.
-Muligvis vise forskel igennem typer, methods ... ah det kommer i bogen 298 og frem.
-
-*/
-
-//TODO: all except open,
+//todo: Persistent data?
