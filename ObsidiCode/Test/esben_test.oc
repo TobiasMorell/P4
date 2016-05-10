@@ -2,6 +2,11 @@ TestRobot:
 LOAD("WalkerBot") //Basic walk functionalitet som GoTo
 
 NUM Count = 10 + 50
+STRING Mystring = "This is a test string"
+COORD Mycoord = (3,5,7)
+LIST Mylist = "Item1", "Item2", "Item3", "Item4" END Mylist
+//Maybe LIST has []
+BOOL Mybool = TRUE
 
 VOID START()
     Move("West")
@@ -16,6 +21,7 @@ VOID StripMine(NUM Length)
         Mine("NORTH")
         Move("South")
         Count = Count + 1
+        Count = Count
     END REPEAT
 END StripMine
 
