@@ -210,6 +210,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     private void visitExpressionGeneric(ExprNode n, String operator)
     {
+        if(n.GetLeftChild().type == Node.Type.num && n.GetRightChild().type == Node.Type.string) {n.GetLeftChild().toString();}  //NUM concat end of string }
+        //codeBuilder.append(n.GetLeftChild().type);
+        //codeBuilder.append(n.GetRightChild().type);
+
+
         visit(n.GetLeftChild());
         codeBuilder.append(' ');
         codeBuilder.append(operator);
@@ -298,6 +303,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(PlusNode node) {
         visitExpressionGeneric(node, keywords.PLUS);
+        //codeBuilder.append(node.GetLeftChild());
+        //codeBuilder.append(node.GetRightChild());
         return null;
     }
 

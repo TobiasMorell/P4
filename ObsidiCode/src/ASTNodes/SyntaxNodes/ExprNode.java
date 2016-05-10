@@ -11,8 +11,6 @@ public class ExprNode extends BinaryNode{
 
 	public ExprNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
-		type = Type.unknown;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
