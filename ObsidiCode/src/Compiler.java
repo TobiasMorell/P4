@@ -34,7 +34,7 @@ public class Compiler {
                 System.out.println("Running on Linux - compiling esben_test.oc");
                 if(!path.endsWith("/ObsidiCode"))
                     path += "/ObsidiCode";
-                path += "/Test/ErrorTest.oc";
+                path += "/Test/esben_test.oc";
             }
             else if (OS.startsWith("Mac")) {
                 System.out.println("Running on mac - compiling esben_test.oc");
