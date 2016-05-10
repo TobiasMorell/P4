@@ -29,13 +29,14 @@ public class JavaSourceCompiler {
                 try {
                     System.out.println("Creating directory for compiled sources");
                     targetFolder.mkdir();
-                    targetDir = targetFolder.getAbsolutePath();
+                    targetDir = targetFolder.getAbsolutePath() + "/";
                 }
                 catch (SecurityException e)
                 {
                     ErrorHandling.Error("Could not create directory for compiled sources.");
                 }
             }
+            targetDir = targetFolder.getAbsolutePath() + "/";
         }
 
         //Create an iteratable data-structure to store compilation-files
