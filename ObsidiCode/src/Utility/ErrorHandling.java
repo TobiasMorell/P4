@@ -21,7 +21,7 @@ public class ErrorHandling {
 
     public static void printErrors(){
         for(String error : errors){
-            System.out.print(error);
+            System.out.print(error + "\n");
         }
     }
 }

@@ -9,6 +9,7 @@ import ASTNodes.GeneralNodes.UnaryNode;
 import ASTNodes.SyntaxNodes.BlockNode;
 import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.MethodInvocationNode;
+import Utility.ErrorHandling;
 import Visitors.DeclVisitor;
 
 import java.lang.reflect.Array;
@@ -59,7 +60,7 @@ public class SymbolTable {
      * @param s Error message
      */
     public void MakeError(String s) {
-        System.out.println(s);
+        ErrorHandling.Error(s);
         //System.exit(-1);
     }
 
