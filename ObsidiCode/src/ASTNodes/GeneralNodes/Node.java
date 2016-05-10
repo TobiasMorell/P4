@@ -17,14 +17,12 @@ public abstract class Node implements Visitable
     protected Node _leftmostChild;
 
     public Type getT() {
-        return t;
+        return type;
     }
 
     public void setT(Type t) {
-        this.t = t;
+        this.type = t;
     }
-
-    protected Type t;
 
     public Node GetLeftChild()
     {
@@ -32,7 +30,7 @@ public abstract class Node implements Visitable
     }
 
     public boolean isType(Type t) {
-        return this.t == t;
+        return this.type == t;
     }
 
 }

@@ -157,11 +157,12 @@ public class SymbolTable {
      */
     public Symbol RetrieveSymbol(String id) {
         Symbol sym = (Symbol)HashTable.get(id);
-        while(sym != null)
-        {
-            if(sym.name.equals(id)) return(sym);
+        //while(sym != null)
+        //{
+            if(sym != null && sym.name.equals(id))
+                return(sym);
 
-        }
+        //}
         return null;
     }
 

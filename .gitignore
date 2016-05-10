@@ -35,3 +35,4 @@ Minecraft/.gradle/gradle.log
 Minecraft/.gradle/2.7/taskArtifacts/cache.properties.lock
 *.bin
 Minecraft/.gradle/gradle.log
+.idea/workspace.xml

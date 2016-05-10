@@ -115,7 +115,7 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(ReferenceNode node) {
         System.out.println("Visiting Reference " + node.GetId()._id +" "+ _table.depth+ " on line " + node.line);
-        Symbol s = _table.RetrieveSymbol(node.GetId()._id);
+        Symbol s = _table.RetrieveSymbol(node.GetId()._id); //
         if(s != null) {
             node.type = s.getType();
             return node.type;
@@ -347,7 +347,8 @@ public class DeclVisitor extends AbstractVisitor {
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
             _table.MakeError("Error: Element in Multiplication on line "+node.line+" has no type");
-        switch (t1){
+        //Skiftet switch til else switch
+        else switch (t1){
             case num:
                 switch (t2){
                     case num:
