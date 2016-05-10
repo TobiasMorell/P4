@@ -57,7 +57,7 @@ public abstract class HearThread extends Thread {
     {
         Object[] objs = si.GetArguments();
         try {
-            m.invoke(this, m);
+            m.invoke(this, objs);
         } catch (InvocationTargetException e)
         {
             //Should never reach this point, as parameters have been checked.
