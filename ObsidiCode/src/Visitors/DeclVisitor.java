@@ -46,9 +46,9 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(BoolDcl node) {
         System.out.println("Visiting BoolDcl" + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.bool) {
-                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool);
                 return Node.Type.bool;
             }else{
                 _table.MakeError("Error: Trying to initialize boolian with unmatching type ");
@@ -60,9 +60,9 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(CoordDcl node) {
         System.out.println("Visiting CoordDcl " + _table.depth+ " on line " + node.line);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.coord) {
-                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord);
                 return Node.Type.coord;
             }else{
                 _table.MakeError("Error: Trying to initialize coordinate with unmatching type ");
@@ -74,24 +74,35 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(HearDcl node) {
         System.out.println("Visiting HearDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
-        _table.functions.add(new Func(node));
-        visit(node.GetLeftChild());
+        //_table.functions.add(new Func(node));
+        VisitMethod(node);
         return null;
     }
 
     @Override
     public Object visit(MethodDcl node) {
         System.out.println("Visiting MethodDcl " + node.id +" "+ _table.depth+ " on line " + node.line);
-        visit(node.GetLeftChild());
+        VisitMethod(node);
         return null;
+    }
+
+    public void VisitMethod(MethodDcl method){
+        _table.OpenScope();
+        //for (Node n: method.parameters) {
+        //    visit(n);
+        //}
+        for (Node n:((BlockNode)method.GetLeftChild()).GetChildren()) {
+            visit(n);
+        }
+        _table.CloseScope();
     }
 
     @Override
     public Object visit(NumDcl node) {
         System.out.println("Visiting NumDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.num) {
-                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num);
                 return Node.Type.num;
             }else{
                 _table.MakeError("Error: Trying to initialize number with unmatching type ");
@@ -115,9 +126,9 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(StringDcl node) {
         System.out.println("Visiting StringDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.string) {
-                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string);
                 return Node.Type.string;
             }else{
                 _table.MakeError("Error: Trying to initialize string with unmatching type ");
@@ -130,9 +141,9 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(ListDcl node) {
         System.out.println("Visiting ListDcl "+ ((IDNode)node.GetLeftChild())._id +" " + _table.depth);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.List) {
-                _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List);
                 return Node.Type.List;
             }else{
                 _table.MakeError("Error: Trying to initialize List with unmatching type ");//todo: lists should not work this way.
@@ -621,10 +632,11 @@ public class DeclVisitor extends AbstractVisitor {
                     if(grandchild instanceof CollectionNode){
                         for (Node dcl: ((CollectionNode)grandchild).GetChildren()) {
                             //_table.EnterSymbol(((DeclarationNode)dcl).GetID(),((DeclarationNode)dcl).type);
-                            visit(grandchild);
+                            visit(grandchild);//todo: fix lol
                         }
                     }else if(grandchild instanceof MethodDcl){
-                        _table.functions.add(new Func((MethodDcl)grandchild));
+                        Func f = new Func((MethodDcl)grandchild);
+                        _table.functions.add(f);
                     }else{
                         _table.MakeError("Error: This should not happen!");
                     }
