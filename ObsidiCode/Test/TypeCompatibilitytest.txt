@@ -1,0 +1,73 @@
+TypeCompatibility:
+
+/* STRING n1, n2, n3 this code creates errors
+n1 = "2 "
+n2 = "3 "
+n3 = "4 " */
+
+STRING n1 = " "
+STRING n2 = " "
+STRING n3 = " "
+
+VOID START()
+    TestPlus()
+    TestMinus()
+END START
+
+VOID TestPlus()
+    NUM MyNum = 60
+    STRING MyString = "Apples wapples"
+    COORD MyCoord = (3,5,7)
+    BOOL MyBool = TRUE
+    BOOL MyBool2 = FALSE
+
+    STRING MyString1 = MyNum + MyString
+
+    STRING MyString2 = MyBool + MyString
+
+    STRING MyString3 = MyCoord + MyString
+
+    n1 = n2 + n3
+
+    STRING MyString4 = MyString + MyNum
+
+    COORD MyCoord1 = MyCoord + MyNum
+
+    n1 = n2 + n3
+
+    STRING MyString5 = MyString + MyBool
+
+    BOOL b2 = MyBool + MyBool2
+
+    //IF(MyBool + MyBool2)
+       // STRING Cake = "CAKE"
+    //END IF
+
+    n1 = n2 + n3
+
+    STRING MyString5 = MyString + MyCoord
+
+    COORD MyCoord2 = MyNum + MyCoord
+
+    COORD MyCoord3 = MyCoord + MyCoord
+
+
+
+
+
+END TestPlus
+
+
+VOID TestMinus()
+    STRING MyMinusString1 = "Wallah wallah"
+    STRING MyMinusString2 = "Wallah wallah awdawd awdaw"
+    NUM MyMinusNum = 33
+    COORD MyMinusCoord = (3,6,9)
+
+
+    STRING MyMinusString3 = MyMinusString1 - MyMinusString2
+    COORD MyMinusCoord2 = MyMinusCoord - MyMinusNum
+    COORD MyMinusCoord3 = MyMinusNum - MyMinusCoord
+    COORD MyMinusCoord4 = MyMinusCoord - MyMinusCoord2
+
+END TestMinus

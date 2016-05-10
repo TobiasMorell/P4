@@ -4,7 +4,8 @@ LOAD("WalkerBot") //Basic walk functionalitet som GoTo
 NUM Count = 10 + 50
 STRING Mystring = "This is a test string", Youstring = "String number two"
 COORD Mycoord = (3,5,7)
-LIST Mylist = "Item1", "Item2", "Item3", "Item4" END Mylist
+LIST Mylist
+//Mylist = Mylist + "item1" yet to be implemented
 //Maybe LIST has []
 BOOL Mybool = TRUE
 
@@ -21,7 +22,11 @@ VOID StripMine(NUM Length)
         Mine("NORTH")
         Move("South")
         Count = Count + 1
-        Count = Count
+        Mystring = Count + Mystring
+        Mybool = Mybool + Mystring
+        Mystring = Mycoord + Mystring
+
+        Mystring = Mystring + Count
     END REPEAT
 END StripMine
 

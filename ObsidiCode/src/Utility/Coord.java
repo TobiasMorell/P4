@@ -4,9 +4,9 @@ package Utility;
  * Created by morell on 4/28/16.
  */
 public class Coord {
-    public double x, y, z;
+    public float x, y, z;
 
-     public Coord(double x, double y, double z)
+     public Coord(float x, float y, float z)
      {
          this.x = x;
          this.y = y;
