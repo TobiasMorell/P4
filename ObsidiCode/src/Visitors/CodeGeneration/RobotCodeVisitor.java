@@ -38,8 +38,8 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(ProgNode node) {
-        placeHeader();
         robotName = node._id;
+        placeHeader();
         for (Node n : node.GetChildren())
         {
             if(n instanceof CollectionNode)

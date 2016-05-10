@@ -16,11 +16,15 @@ VOID StripMine(NUM Length)
         Mine("NORTH")
         Move("South")
         Count = Count + 1
-        NUM georg = Count = awdawdaw = 5 * 3+8
     END REPEAT
 END StripMine
 
 COORD MineArea
+
+/*HEAR Guardian (COORD enemyLocation)
+    GoTo(enemyLocation)
+    SIGNAL Guardian (enemyLocation)
+END HEAR*/
 
 //Tunnels er mængden af tunneller er 
 /* Mine miner den originale tunnel, som alle de andre tunneller skal være på. Og styrer derudover 

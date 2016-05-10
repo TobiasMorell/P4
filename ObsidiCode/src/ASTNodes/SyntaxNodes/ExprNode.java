@@ -9,7 +9,6 @@ import Visitors.AbstractVisitor;
  */
 public class ExprNode extends BinaryNode{
 
-	public Type type;
 	public ExprNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
 		type = Type.unknown;
