@@ -297,6 +297,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(PlusNode node) {
+        //node.GetLeftChild().getT();
         visitExpressionGeneric(node, keywords.PLUS);
         return null;
     }
