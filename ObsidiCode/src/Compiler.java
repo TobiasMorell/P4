@@ -78,6 +78,9 @@ public class Compiler {
 
             for (JavaSourceBuffer code : sourceCode)
                 JavaSourcePrinter.PrintSource(code);
+
+            JavaSourceCompiler jsc = new JavaSourceCompiler();
+            jsc.CompileJavaSource(sourceCode);
         } else {
             System.out.println("The root was null; could not compile!");
         }

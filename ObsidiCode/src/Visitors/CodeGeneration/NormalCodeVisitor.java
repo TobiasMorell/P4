@@ -35,7 +35,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     public JavaSourceBuffer GetSourceCode()
     {
-        return new JavaSourceBuffer(robotName, codeBuilder.toString());
+        return new JavaSourceBuffer(robotName + "NormalThread", codeBuilder.toString());
     }
 
     private void emitHeader()

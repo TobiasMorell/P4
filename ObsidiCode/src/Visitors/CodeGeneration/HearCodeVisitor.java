@@ -9,6 +9,7 @@ import CodeGeneration.Signal;
 import TypeChecking.Func;
 import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
+import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
 
 import java.lang.reflect.Method;
@@ -23,6 +24,11 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     public HearCodeVisitor(AbstractKeywordSheet aks)
     {
         super(aks);
+    }
+
+    public JavaSourceBuffer GetSourceCode()
+    {
+        return new JavaSourceBuffer(robotName + "HearThread", codeBuilder.toString());
     }
 
     private void placeHeader()

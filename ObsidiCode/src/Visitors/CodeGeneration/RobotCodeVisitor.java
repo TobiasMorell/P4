@@ -7,6 +7,7 @@ import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 import CodeGeneration.RobotMutex;
 import Utility.AbstractKeywordSheet;
+import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
 
 /**
@@ -18,6 +19,11 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
     public RobotCodeVisitor(AbstractKeywordSheet aks)
     {
         super(aks);
+    }
+
+    public JavaSourceBuffer GetSourceCode()
+    {
+        return new JavaSourceBuffer(robotName + "Robot", codeBuilder.toString());
     }
 
     private void placeHeader()

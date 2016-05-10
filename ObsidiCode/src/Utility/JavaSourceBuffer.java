@@ -9,15 +9,22 @@ import java.net.URI;
  */
 public class JavaSourceBuffer extends SimpleJavaFileObject {
     private final String _code;
+    private final String _className;
 
     public  JavaSourceBuffer (String className, String code)
     {
-        //Classname null problem
         super(URI.create("string:///"+ className.replace('.','/') + Kind.SOURCE.extension), Kind.SOURCE);
+        _className = className;
         this._code = code;
     }
 
-    public CharSequence getCharContent() {
+    public String getClassName()
+    {
+        return _className;
+    }
+
+    @Override
+    public CharSequence getCharContent(boolean b) throws IOException {
         return _code;
     }
 }
