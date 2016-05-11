@@ -15,7 +15,8 @@ public class StringDcl extends DeclarationNode {
     }
     public StringDcl(String id, Node rightChild)
     {
-        super(Type.string, new IDNode(id), rightChild);
+        super(Type.string, null, rightChild);
+        this.SetLeftmostNode(new IDNode(id, this));
     }
 
     @Override

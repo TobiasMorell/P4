@@ -15,7 +15,8 @@ public class NumDcl extends DeclarationNode {
 	}
 	public NumDcl(String id, Node rightChild)
 	{
-		super(Type.num, new IDNode(id), rightChild);
+		super(Type.num, null, rightChild);
+		this.SetLeftmostNode(new IDNode(id, this));
 	}
 
 	@Override

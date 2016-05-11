@@ -240,7 +240,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.VariableInitializerContext)
 			return visit(ctx.var_init);
 		else
-			return new ListDcl(new IDNode(ctx.id.getText()), (CollectionNode) visit(ctx.list_init));
+			return new ListDcl(ctx.id.getText(), (CollectionNode) visit(ctx.list_init));
 	}
 
 	@Override
@@ -438,13 +438,11 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitSignalStmt(ObsidiCodeParser.SignalStmtContext ctx) {
 		line = ctx.getStart().getLine();
-		//Find the id of the signal
-		IDNode id = new IDNode(ctx.id.getText());
 		
 		//Find all the arguments and store them in a block node
 		CollectionNode args = (CollectionNode) visit(ctx.arguments);
 		
-		return new SignalNode(id, args);
+		return new SignalNode(ctx.id.getText(), args);
 	}
 
 	@Override
