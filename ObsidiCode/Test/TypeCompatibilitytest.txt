@@ -39,9 +39,9 @@ VOID TestPlus()
 
     BOOL b2 = MyBool + MyBool2
 
-    //IF(MyBool + MyBool2)
-       // STRING Cake = "CAKE"
-    //END IF
+    IF(MyBool + MyBool2)
+       STRING Cake = "CAKE"
+    END IF
 
     n1 = n2 + n3
 
