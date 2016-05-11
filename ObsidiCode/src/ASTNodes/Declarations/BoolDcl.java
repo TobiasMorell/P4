@@ -15,7 +15,8 @@ public class BoolDcl extends DeclarationNode{
     }
     public BoolDcl(String id, Node rightChild)
     {
-        super(Type.bool, new IDNode(id), rightChild);
+        super(Type.bool, null, rightChild);
+        this.SetLeftmostNode(new IDNode(id, this));
     }
 
     @Override

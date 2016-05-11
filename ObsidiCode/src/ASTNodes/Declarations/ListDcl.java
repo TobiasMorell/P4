@@ -10,8 +10,9 @@ import Visitors.AbstractVisitor;
  * Created by morell on 4/14/16.
  */
 public class ListDcl extends DeclarationNode {
-    public ListDcl(IDNode id, CollectionNode members) {
-        super(Type.List, id, members);
+    public ListDcl(String id, CollectionNode members) {
+        super(Type.List, null, members);
+        this.SetLeftmostNode(new IDNode(id, this));
     }
 
     @Override

@@ -15,7 +15,8 @@ public class CoordDcl extends DeclarationNode {
     }
     public CoordDcl(String id, Node rightChild)
     {
-        super(Type.coord, new IDNode(id), rightChild);
+        super(Type.coord, null, rightChild);
+        this.SetLeftmostNode(new IDNode(id, this));
     }
 
     @Override

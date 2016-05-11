@@ -19,7 +19,7 @@ public class BlockNode extends NaryNode{
     public BlockNode(String id, ArrayList<Node> stmts)
     {
     	super(stmts);
-    	this._leftmostChild = new IDNode(id);
+    	this._leftmostChild = new IDNode(id, this);
     }
 
     @Override

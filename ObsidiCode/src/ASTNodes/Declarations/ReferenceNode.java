@@ -27,7 +27,7 @@ public class ReferenceNode extends LeafNode {
 	}
 	
 	public ReferenceNode(String id) {
-		this.referencedIdentifier = new IDNode(id);
+		this.referencedIdentifier = new IDNode(id, this);
 	}
 
 	@Override

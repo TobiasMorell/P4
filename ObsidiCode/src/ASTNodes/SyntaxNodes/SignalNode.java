@@ -6,8 +6,9 @@ import Visitors.AbstractVisitor;
 
 public class SignalNode extends BinaryNode {
 
-	public SignalNode(IDNode id, CollectionNode args) {
-		super(id, args);
+	public SignalNode(String id, CollectionNode args) {
+		super(null, args);
+		this.SetLeftmostNode(new IDNode(id, this));
 	}
 
 	@Override
