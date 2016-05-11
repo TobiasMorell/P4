@@ -102,5 +102,15 @@
     <orderEntry type="library" name="Gradle: org.scala-lang:scala-actors:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: net.java.jinput:jinput-platform:2.0.5:natives-linux" level="project" />
     <orderEntry type="library" name="Gradle: net.minecraftforge:forgeSrc:1.8.9-11.15.1.1722" level="project" />
+    <orderEntry type="library" name="Gradle: com.mojang:netty:1.4" level="project" />
+    <orderEntry type="module-library">
+      <library name="Gradle: ObsidiCode">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/ObsidiCode.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

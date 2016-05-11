@@ -1,5 +1,6 @@
 package com.obsidiskrivemaskine.block;
 
+import com.obsidiskrivemaskine.AbstractRobot;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.SyncRobot;
 import net.minecraft.block.Block;
