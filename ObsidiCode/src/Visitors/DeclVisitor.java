@@ -606,10 +606,14 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(IfNode node) {
         if(node != null) {
-            System.out.println("Visiting IfNode " + _table.depth+ " on line " + node.line);
-            visit(node.GetBody());
-            visit(node.GetElseIf());
-            visit(node.GetElse());
+            if(visit(node.GetCondition()) == Node.Type.bool) {
+                System.out.println("Visiting IfNode " + _table.depth + " on line " + node.line);
+                visit(node.GetBody());
+                visit(node.GetElseIf());
+                visit(node.GetElse());
+            }else{
+                ErrorHandling.Error("Condition in if statement is not boolean",node.line);
+            }
         }
         return null;
     }
