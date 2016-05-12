@@ -119,6 +119,9 @@ public class DeclVisitor extends AbstractVisitor {
         System.out.println("Visiting Reference " + node.GetId()._id +" "+ _table.depth+ " on line " + node.line);
         Symbol s = _table.RetrieveSymbol(node.GetId()._id); //
         if(s != null) {
+            if(_table.depth == 0){
+                node._GlobalRef = true;
+            }
             node.type = s.getType();
             return node.type;
         }
