@@ -7,9 +7,9 @@ import ASTNodes.Operators.*;
 import ASTNodes.SyntaxNodes.*;
 import TypeChecking.SymbolTable;
 import Utility.AbstractKeywordSheet;
-import Utility.Coord;
 import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
+
 
 
 /**
@@ -42,15 +42,21 @@ public class NormalCodeVisitor extends AbstractVisitor {
     private void emitHeader()
     {
         codeBuilder.append("package CompiledRobots;\n");
-        codeBuilder.append("import Java.Util.ArrayList;\n");
-        codeBuilder.append("import Utility.Coord;\n\n");
+        codeBuilder.append("import java.util.ArrayList;\n");
+        codeBuilder.append("import Utility.Coord;\n");
+        codeBuilder.append("import CodeGeneration.*;\n\n");
         codeBuilder.append("public class " + robotName + "NormalThread extends NormalThread { \n");
         codeBuilder.append("private " + robotName +"Robot Robot; \n");
         codeBuilder.append("public " + robotName + "NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
         codeBuilder.append("super(mutex); Robot = r; }  \n");
 
+
+
+
     }
         //Note to self, both generic dcls and blocks all produce \n which kinda seems overkill, unsure what to change
+        //Note not all of our custom orthogonality with operators and types can be made directly in code gen,
+        // some must be made instead as methods in the generated language
     private void visitDeclarationGeneric(DeclarationNode node, String type)
     {
         //Append type-name
@@ -188,7 +194,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(ReferenceNode node) {
         //todo Check if type is list and then find index if it has one.
+
         IDNode id = node.GetId();
+        if(node._GlobalRef) {codeBuilder.append("r."); }
         codeBuilder.append(id.GetID());
         if(id._extension != null)
         {
@@ -248,7 +256,33 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(DivNode node) {
-        visitExpressionGeneric(node, keywords.DIV);
+        if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string)
+        {
+            //picks out all chars of rhs in lhs.
+            //todo this
+        }
+        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        {
+            CoordSimplifier(node, 1, '/');
+        }
+        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        {
+            //todo this
+           //boolean exclusive and visit(node.GetLeftChild()); codeBuilder.append(""); visit(node.GetRightChild());
+            //wtf is exclusive and?
+        }
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 2, '/');
+        }
+        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 3, '/');
+        }
+        else
+        {
+            visitExpressionGeneric(node, keywords.DIV);
+        }
         return null;
     }
 
@@ -274,9 +308,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(MinusNode node) {
         if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string)
         {
-            //remove RHS in LHS
-            String test1 = "This is my Horse and I love it This is my Horse";
-            String test2 = "This is my Horse";
             visit(node.GetLeftChild());
             codeBuilder.append(".replaceAll(");
             visit(node.GetRightChild());
@@ -284,19 +315,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            codeBuilder.append("new Coord(");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".x - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(", ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".y - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(", ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".z - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(")");
+            CoordSimplifier(node, 1, '-');
         }
 
         else if(node.GetLeftChild().type ==  Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
@@ -305,35 +324,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type ==  Node.Type.num && node.GetRightChild().type == Node.Type.coord)
         {
-            codeBuilder.append("new Coord(");
-            visit(node.GetLeftChild());
-            codeBuilder.append(" - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".x, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(" - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".y, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(" - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".z)");
+            CoordSimplifier(node, 2, '-');
         }
         else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            codeBuilder.append("new Coord(");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".x - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".x, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".y - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".y, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".z - ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".y)");
+            CoordSimplifier(node, 3, '-');
         }
         else {visitExpressionGeneric(node, keywords.MINUS); }
         return null;
@@ -341,7 +336,63 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MultNode node) {
-        visitExpressionGeneric(node, keywords.MULT);
+        if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string) {
+            //takes first char in lhs then first char in rhs and so forth
+            //lave while ikke tom og så take hvert element over i en ny string
+            //todo this
+            String string1 = "Elefant";
+            String string2 = "Elefant";
+            char[] chars = new char[1000];
+
+            //while (string1.length() > 0)
+              //  chars[1] = string1.charAt(1);
+
+            for (int i = 0, x = 1; i < 10; i += 2, x++)
+            {
+                chars[i] = string1.charAt(x);
+                chars[i + 1] = string2.charAt(x);
+            }
+            codeBuilder.append(chars);
+        }
+
+        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.num)
+        {
+            /*
+            String teststring = "Beers"; float myfloat = 4; String test = ""; int j = 0;
+            codeBuilder.append("String test; ");
+            codeBuilder.append("for(int i = 0; i < ");
+            visit(node.GetRightChild()); codeBuilder.append("; 1++){ ");
+            codeBuilder.append("test += "); visit(node.GetLeftChild()); codeBuilder.append("}");
+            visit(node.GetLeftChild()); codeBuilder.append(" = test");
+            */
+            String teststring = ""; float myfloat = 4;
+            for (int i = 0; i < myfloat; i++){
+                teststring += teststring;
+            }
+            //repeat string num times.
+            //todo this
+        }
+
+        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        {
+            CoordSimplifier(node, 1, '*');
+        }
+        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        {
+            visit(node.GetLeftChild()); codeBuilder.append(" && "); visit(node.GetRightChild());
+        }
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 2, '*');
+        }
+        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 3, '*');
+        }
+        else
+        {
+            visitExpressionGeneric(node, keywords.MULT);
+        }
         return null;
     }
 
@@ -362,16 +413,10 @@ public class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(PlusNode node) {
 
-        //todo For some fucking reason, in an if(boolx + boolz) doesnt work
-        //if Left is NUM and Right is STRING then produce STRING with the NUM concatted at end
-        //BRUG symboltable istedet, nodernes typer er fucked, randoms null
-        //Men selv med symboltable approach, skal jo stadig ned gennem en collectionnodes børn for at finde navnet, derfra kunne jeg også have typen.
         if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.string)
         {
             visit(node.GetLeftChild());  codeBuilder.append(".toString()"); codeBuilder.append(" + "); visit(node.GetRightChild());
         }
-
-
 
         else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.string)
         {
@@ -395,19 +440,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         //makes: oldcoord.x += 10; oldcoord.y +=
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            codeBuilder.append("new Coord(");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".x + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(", ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".y + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(", ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".z + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(")");
+            CoordSimplifier(node,1,'+');
         }
 
         else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.bool)
@@ -426,28 +459,17 @@ public class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetLeftChild()); codeBuilder.append(" + "); visit(node.GetRightChild());
             codeBuilder.append(".toString()");
         }
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 2, '+');
+        }
 
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord) {
-            codeBuilder.append("new Coord(");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".x + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".x, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".y + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".y, ");
-            visit(node.GetLeftChild());
-            codeBuilder.append(".z + ");
-            visit(node.GetRightChild());
-            codeBuilder.append(".y)");
+        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        {
+            CoordSimplifier(node, 3, '+');
         }
         else { visitExpressionGeneric(node, keywords.PLUS); }
-
-
         return null;
-
-
     }
 
     @Override
@@ -567,7 +589,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IDNode node) {
-        //todo mangler at tjekke om variablen er declared i symbol table, det gør topdcl visitor vist allerede
         codeBuilder.append(node._id);
         return null;
     }
@@ -614,15 +635,15 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append("while(!(");
         visit(node.GetLeftChild());
         codeBuilder.append("))");
-
         visit(node.GetRightChild());
         return null;
     }
 
     @Override
     public Object visit(MethodInvocationNode node) {
+        codeBuilder.append("r.");
         visit(node.GetLeftChild());
-        codeBuilder.append("( ");
+        codeBuilder.append("(");
         int i = node.GetChildren().size();
         for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
         codeBuilder.append("); ");
@@ -666,5 +687,82 @@ public class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(StringLit node) {
         codeBuilder.append(node.text);
         return null;
+    }
+
+    public void CoordSimplifier(ExprNode x, int y, char z)
+    {
+        switch (y) {
+            case 1: codeBuilder.append(keywords.NEW);
+                codeBuilder.append(" ");
+                codeBuilder.append(keywords.COORD);
+                codeBuilder.append("(");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".x ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(", ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".y ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(", ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".z ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(")");
+                break;
+            case 2: codeBuilder.append(keywords.NEW);
+                codeBuilder.append(" ");
+                codeBuilder.append(keywords.COORD);
+                codeBuilder.append("(");
+                visit(x.GetLeftChild());
+                codeBuilder.append(" ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".x, ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(" ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".y, ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(" ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".z)");
+                break;
+            case 3: codeBuilder.append(keywords.NEW);
+                codeBuilder.append(" ");
+                codeBuilder.append(keywords.COORD);
+                codeBuilder.append("(");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".x ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".x, ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".y ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".y, ");
+                visit(x.GetLeftChild());
+                codeBuilder.append(".z ");
+                codeBuilder.append(z);
+                codeBuilder.append(" ");
+                visit(x.GetRightChild());
+                codeBuilder.append(".y)");
+                break;
+            default: codeBuilder.append("This behaviour is uintended");
+                break;
+        }
     }
 }
