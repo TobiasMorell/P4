@@ -20,9 +20,10 @@ import java.util.List;
  */
 public class DeclVisitor extends AbstractVisitor {
     SymbolTable _table;
+    public static ArrayList<String> seenfiles = new ArrayList<>();
 
     /***
-     * @param Table The symboltable that the visitor should fill
+     * @param Table The symboltable that the visitor should fills
      */
     public DeclVisitor(SymbolTable Table){
         _table = Table;
@@ -472,12 +473,16 @@ public class DeclVisitor extends AbstractVisitor {
                 }
                 break;
             case bool:
-                if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
-                    return Node.Type.bool;
+                switch (t2){
+                    case bool:
+                        node.type = Node.Type.bool;
+                        return Node.Type.bool;
+                    case string:
+                        return Node.Type.string;
+                    default:
+                        ErrorHandling.Error("Only boolean and string can be added to boolean", node.line);
+                        break;
                 }
-                _table.MakeError("Error: nothing but boolean can be added to boolean");
-                break;
             case string:
                 switch (t2){
                     case num:case string:case bool:case coord:case List:
@@ -627,8 +632,12 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(LoopNode node) {
         System.out.println("Visiting LoopNode " + _table.depth+ " on line " + node.line);
-        visit(node.GetLeftChild());
-        visit(node.GetRightChild());
+        if(visit(node.GetLeftChild()) == Node.Type.bool){
+            visit(node.GetRightChild());
+        }else{
+            ErrorHandling.Error("Condition in if statement is not boolean",node.line);
+        }
+
         return null;
     }
 
