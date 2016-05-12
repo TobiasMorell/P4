@@ -1,5 +1,12 @@
 package com.obsidiskrivemaskine.GUI;
 
+import ASTNodes.GeneralNodes.Node;
+import TypeChecking.SymbolTable;
+import Utility.*;
+import Visitors.CodeGeneration.HearCodeVisitor;
+import Visitors.CodeGeneration.NormalCodeVisitor;
+import Visitors.CodeGeneration.RobotCodeVisitor;
+import Visitors.SemanticsVisitor;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -23,7 +30,7 @@ public class ObsidiGUIScreen extends GuiScreen
 
     @Override
     public void initGui() {
-        obsidiFile = new File("DynamicClass.java");
+        obsidiFile = new File(System.getProperty("user.dir") + "/ObsidiCode/Test/SimpleMiner.oc");
         this.buttonList.add(new GuiButton(saveButton, this.width / 2 + 5, this.height / 2 + 125, 100, 20, "Save and Exit"));
         this.buttonList.add(new GuiButton(resetButton, this.width / 2 - 105, this.height / 2 + 125, 100, 20, "Reset"));
         loadFile();
@@ -43,6 +50,11 @@ public class ObsidiGUIScreen extends GuiScreen
                 saveFile();
                 //Todo call compiler from this location + load classes
                 String currentDir = new File(System.getProperty("user.dir")).getParent() + "/ObsidiCode";
+                try{compileOC("SimpleMiner.oc");}
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                loadRobot();
                 break;
             case 1:
                 text = text.delete(0, text.toString().length());
@@ -53,6 +65,93 @@ public class ObsidiGUIScreen extends GuiScreen
         }
 
         super.actionPerformed(button);
+    }
+
+    public static void compileOC(String args) throws Exception {
+        if(args == null) {
+            System.out.println("No file was specified for compilation, attempting to find files.");
+            String astBuilder = System.getProperty("os.name");
+            String root = System.getProperty("user.dir");
+            System.out.println("Attempting to find OS.");
+            if(astBuilder.startsWith("Windows")) {
+                System.out.println("Running on Windows - compiling esben_test.oc");
+                if(!root.endsWith("\\ObsidiCode")) {
+                    root = root + "\\ObsidiCode";
+                }
+
+                root = root + "\\Test\\esben_test.oc";
+            } else if(astBuilder.startsWith("Linux")) {
+                System.out.println("Running on Linux - compiling esben_test.oc");
+                if(!root.endsWith("/ObsidiCode")) {
+                    root = root + "/ObsidiCode";
+                }
+
+                root = root + "/Test/esben_test.oc";
+            } else {
+                if(!astBuilder.startsWith("Mac")) {
+                    System.out.println("Could not correctly determine the operating system, aborting compilation.");
+                    throw new IllegalArgumentException("No file was specified when calling the compiler, please do so.");
+                }
+
+                System.out.println("Running on mac - compiling esben_test.oc");
+                root = root + "/Test/esben_test.oc";
+            }
+
+            args = root;
+        }
+
+        AntlrASTBuilder var14 = new AntlrASTBuilder();
+        Node var15 = var14.Compile(args);
+        if(var15 != null) {
+            new SymbolTable(var15);
+            SemanticsVisitor smv = new SemanticsVisitor();
+            smv.visit(var15);
+            JavaKeywordSheet jsk = new JavaKeywordSheet();
+            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
+            HearCodeVisitor hcv = new HearCodeVisitor(jsk);
+            RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
+            jcv.visit(var15);
+            hcv.visit(var15);
+            rcv.visit(var15);
+            JavaSourceBuffer[] sourceCode = new JavaSourceBuffer[]{jcv.GetSourceCode(), hcv.GetSourceCode(), rcv.GetSourceCode()};
+            JavaSourceBuffer[] jsc = sourceCode;
+            int len$ = sourceCode.length;
+
+            for(int i$ = 0; i$ < len$; ++i$) {
+                JavaSourceBuffer code = jsc[i$];
+                JavaSourcePrinter.PrintSource(code);
+            }
+
+            JavaSourceCompiler var16 = new JavaSourceCompiler();
+            var16.CompileJavaSource(sourceCode);
+        } else {
+            System.out.println("The root was null; could not compile!");
+        }
+
+        ErrorHandling.printErrors();
+    }
+
+    void loadRobot(){
+        ClassLoader parentClassLoader = DynamicSuperClassLoader.class.getClassLoader();
+        DynamicSuperClassLoader newClassLoader = new DynamicSuperClassLoader(parentClassLoader);
+        String classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "NormalThread.class");
+        try{newClassLoader.loadClass(robotName + "NormalThread", classFile);}
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Failed to load NormalThread class");
+        }
+        classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "HearThread.class");
+        try{newClassLoader.loadClass(robotName + "HearThread", classFile);}
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Failed to load HearThread class");
+        }
+        classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "Robot.class");
+        try{newClassLoader.loadClass(robotName + "Robot", classFile).newInstance();}
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Failed to load Robot class");
+        }
     }
 
     void saveFile(){

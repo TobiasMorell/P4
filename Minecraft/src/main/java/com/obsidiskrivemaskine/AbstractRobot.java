@@ -2,17 +2,12 @@ package com.obsidiskrivemaskine;
 
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -26,7 +21,13 @@ public abstract class AbstractRobot {
     private static RobotEntity Robot;
 
     public static void talk(String msg){
-        player.addChatMessage(new ChatComponentText("\247f" + msg));
+        if(player != null)
+            player.addChatMessage(new ChatComponentText("\247f" + msg));
+    }
+
+    public static void init(World worldIn, EntityPlayer playerIn){
+        world = worldIn;
+        player = playerIn;
     }
 
     public static void move(String direction) {
