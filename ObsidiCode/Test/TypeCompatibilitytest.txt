@@ -1,21 +1,41 @@
 TypeCompatibility:
 
-/* STRING n1, n2, n3 this code creates errors
-n1 = "2 "
-n2 = "3 "
-n3 = "4 " */
+
 
 STRING n1 = " "
 STRING n2 = " "
 STRING n3 = " "
 
 VOID START()
-    TestPlus()
-    TestMinus()
-    TestMultiplication()
-    TestDiv()
+
+RefactorTest()
+
 END START
 
+VOID RefactorTest()
+    NUM RFNum = 45
+    NUM RFNum1 = 65
+    COORD RFCoord = (1,5,2)
+    COORD RFCoord1 = (8,5,4)
+    n1 = n2 + n3
+    COORD RFCoord2 = RFCoord + RFNum
+    COORD RFCoord3 = RFNum + RFCoord
+    COORD RFCoord4 = RFCoord + RFCoord1
+    n1 = n2 + n3
+    COORD RFCoord5 = RFCoord - RFNum
+    COORD RFCoord6 = RFNum - RFCoord
+    COORD RFCoord7 = RFCoord - RFCoord1
+    n1 = n2 + n3
+    COORD RFCoord8 = RFCoord * RFNum
+    COORD RFCoord9 = RFNum * RFCoord
+    COORD RFCoord10 = RFCoord * RFCoord1
+    n1 = n2 + n3
+    COORD RFCoord11 = RFCoord / RFNum
+    COORD RFCoord12 = RFNum / RFCoord
+    COORD RFCoord13 = RFCoord / RFCoord1
+END RecfactorTest
+
+/*
 VOID TestPlus()
     NUM MyNum = 60
     STRING MyString = "Apples wapples"
@@ -118,7 +138,7 @@ VOID TestDiv()
 
 
 END TestDiv
-
+*/
 
 
 
