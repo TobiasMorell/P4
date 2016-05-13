@@ -354,7 +354,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
                 codeBuilder.append(i);
             }
             codeBuilder.append(chars);
-            codeBuilder.append("HERE STUFF HAPPPENS ahfgafgjagjagjagagfajaghajfaggg");
         }
 
         else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.num)
@@ -464,29 +463,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            //CoordSimplifier(node, 3, '+');
-            codeBuilder.append(keywords.NEW);
-            codeBuilder.append(" ");
-            codeBuilder.append(keywords.COORD);
-            codeBuilder.append("(");
-            visit(x.GetLeftChild());
-            codeBuilder.append(".x ");
-            codeBuilder.append(z);
-            codeBuilder.append(" ");
-            visit(x.GetRightChild());
-            codeBuilder.append(".x, ");
-            visit(x.GetLeftChild());
-            codeBuilder.append(".y ");
-            codeBuilder.append(z);
-            codeBuilder.append(" ");
-            visit(x.GetRightChild());
-            codeBuilder.append(".y, ");
-            visit(x.GetLeftChild());
-            codeBuilder.append(".z ");
-            codeBuilder.append(z);
-            codeBuilder.append(" ");
-            visit(x.GetRightChild());
-            codeBuilder.append(".z)");
+            CoordSimplifier(node, 3, '+');
         }
         else { visitExpressionGeneric(node, keywords.PLUS); }
         return null;
