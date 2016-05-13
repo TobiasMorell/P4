@@ -4,9 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
         HearMutex hm = new HearMutex(1, 2);
+        Robot R = new Robot();
 
-        HearHandler he = new HearHandler(hm, 0);
-        NormalExecution ne = new NormalExecution(hm, 1);
+        HearHandler he = new HearHandler(hm, 0, R);
+        NormalExecution ne = new NormalExecution(hm, 1, R);
 	    DoublerThreader dt = new DoublerThreader(he);
 
         Thread th = new Thread(dt, "DoubleThreader");

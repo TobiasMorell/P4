@@ -17,10 +17,12 @@ public class Robot {
     }
 
     public void MoveBackwards(int steps){
-
+        for(int i = 0; i < steps; i++){
+            Move(Direction.Backwards);
+        }
     }
 
-    public void Move(Direction d){
+    public synchronized void Move(Direction d){
         System.out.println("Robot: Moving " + d);
         switch (d){
             case Forwards:
@@ -31,10 +33,9 @@ public class Robot {
                 break;
         }
         try {
-            wait(250);
+            wait(500);
         }catch(InterruptedException e){
-            return;
-        }finally {
+            System.out.println("ERROR!");
             return;
         }
     }
