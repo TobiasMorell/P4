@@ -383,6 +383,11 @@ public class OCPPVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(ParenNode node) {
+        return "(" + visit(node.GetLeftChild()) + ")";
+    }
+
+    @Override
     public Object visit(IfNode node) {
         StringBuilder sb = new StringBuilder();
 

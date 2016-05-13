@@ -619,6 +619,12 @@ public class DeclVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(ParenNode node) {
+        System.out.println("Visiting ParenNode " + _table.depth + "on line " + node.line);
+        return visit(node.GetLeftChild());
+    }
+
+    @Override
     public Object visit(IDNode node) {
         return null;
     }

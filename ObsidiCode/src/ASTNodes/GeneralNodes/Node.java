@@ -16,20 +16,20 @@ public abstract class Node implements Visitable
     public Node _parent;
     protected Node _leftmostChild;
 
-    public Type getT() {
+    public final Type getT() {
         return type;
     }
 
-    public void setT(Type t) {
+    public final void setT(Type t) {
         this.type = t;
     }
 
-    public Node GetLeftChild()
+    public final Node GetLeftChild()
     {
         return _leftmostChild;
     }
 
-    public boolean isType(Type t) {
+    public final boolean isType(Type t) {
         return this.type == t;
     }
 

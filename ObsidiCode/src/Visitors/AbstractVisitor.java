@@ -40,6 +40,7 @@ public abstract class AbstractVisitor {
     public abstract Object visit(UnaryMinusNode node);
     public abstract Object visit(XnorNode node);
     public abstract Object visit(XorNode node);
+    public abstract Object visit(ParenNode node);
 
     public abstract Object visit(BlockNode node);
     public abstract Object visit(CollectionNode node);
