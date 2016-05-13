@@ -17,6 +17,7 @@ public class ErrorHandling {
 
     public static void Error(String err, int line){
         String msg = String.format("Error on line %d: %s",line,err);
+        errors.add(msg);
     }
 
     public static void Error(String err, Object o){

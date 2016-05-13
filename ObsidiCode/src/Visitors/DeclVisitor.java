@@ -602,7 +602,7 @@ public class DeclVisitor extends AbstractVisitor {
     public Object visit(BreakNode node) {
         System.out.println("Visiting Breaknode on line "+node.line);
         if(breakable == 0){
-            ErrorHandling.Error("Cant Nothing to break out of");
+            ErrorHandling.Error("Nothing to break out of", node.line);
         }
         return null;
     }
@@ -632,7 +632,9 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(ParenNode node) {
         System.out.println("Visiting Parentheses " + _table.depth + "on line " + node.line);
-        return visit(node.GetLeftChild());
+        Node.Type t = (Node.Type) visit(node.GetLeftChild());
+        node.type = t;
+        return t;
     }
 
     @Override
@@ -642,6 +644,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IfNode node) {
+        breakable++;
         if(node != null) {
             if(visit(node.GetCondition()) == Node.Type.bool) {
                 System.out.println("Visiting IfNode " + _table.depth + " on line " + node.line);
@@ -652,6 +655,7 @@ public class DeclVisitor extends AbstractVisitor {
                 ErrorHandling.Error("Condition in if statement is not boolean",node.line);
             }
         }
+        breakable--;
         return null;
     }
 
@@ -663,13 +667,14 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
+        breakable++;
         System.out.println("Visiting LoopNode " + _table.depth+ " on line " + node.line);
         if(visit(node.GetLeftChild()) == Node.Type.bool){
             visit(node.GetRightChild());
         }else{
             ErrorHandling.Error("Condition in if statement is not boolean",node.line);
         }
-
+        breakable--;
         return null;
     }
 

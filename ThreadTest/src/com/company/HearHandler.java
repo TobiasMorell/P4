@@ -10,11 +10,13 @@ public class HearHandler extends Thread {
     private Queue<String> signalQueue = new LinkedList<String>();
     private HearMutex mutex;
     private final int THREAD_ID;
+    Robot r;
 
-    public HearHandler(HearMutex mut, int thread_id)
+    public HearHandler(HearMutex mut, int thread_id, Robot R)
     {
         this.mutex = mut;
         this.THREAD_ID = thread_id;
+        r=R;
     }
 
     public void Signal(String newSignal)
@@ -29,6 +31,7 @@ public class HearHandler extends Thread {
             try {
                 mutex.WaitForMyTurn(THREAD_ID);
                 System.out.println(String.format("Now handling %s", signalQueue.poll()));
+                r.MoveBackwards(3);
                 if (signalQueue.isEmpty()) {
                     mutex.SwitchTurns();
                 }
