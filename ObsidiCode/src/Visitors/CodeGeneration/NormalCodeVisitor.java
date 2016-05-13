@@ -41,9 +41,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     private void emitHeader()
     {
-        boolean x1, x2, x3, x4;
-        x1 = true; x2 = false; x3 = true; x4 = true;
-        if (true || false && true ^ false) {codeBuilder.append("This weird shit works somehow");}
         codeBuilder.append("package CompiledRobots;\n");
         codeBuilder.append("import java.util.ArrayList;\n");
         codeBuilder.append("import Utility.Coord;\n");
@@ -467,7 +464,29 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 3, '+');
+            //CoordSimplifier(node, 3, '+');
+            codeBuilder.append(keywords.NEW);
+            codeBuilder.append(" ");
+            codeBuilder.append(keywords.COORD);
+            codeBuilder.append("(");
+            visit(x.GetLeftChild());
+            codeBuilder.append(".x ");
+            codeBuilder.append(z);
+            codeBuilder.append(" ");
+            visit(x.GetRightChild());
+            codeBuilder.append(".x, ");
+            visit(x.GetLeftChild());
+            codeBuilder.append(".y ");
+            codeBuilder.append(z);
+            codeBuilder.append(" ");
+            visit(x.GetRightChild());
+            codeBuilder.append(".y, ");
+            visit(x.GetLeftChild());
+            codeBuilder.append(".z ");
+            codeBuilder.append(z);
+            codeBuilder.append(" ");
+            visit(x.GetRightChild());
+            codeBuilder.append(".z)");
         }
         else { visitExpressionGeneric(node, keywords.PLUS); }
         return null;
