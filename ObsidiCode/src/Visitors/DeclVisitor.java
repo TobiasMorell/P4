@@ -466,8 +466,10 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1, t2;
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1 == null || t2 == null)
-            _table.MakeError("Error: Element in PlusNode on line "+node.line+" has no type");
+        if(t1 == null || t2 == null) {
+            _table.MakeError("Error: Element in PlusNode on line " + node.line + " has no type");
+            return null;
+        }
         switch (t1){
             case num:
                 switch (t2){

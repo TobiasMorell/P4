@@ -27,11 +27,10 @@ VOID RefactorTest(NUM x, NUM y, NUM z)
     STRING String23 = "Kaniner gode at kaste med"
     STRING String24 = "Æbler"
 
+    //LIST MyList = String22, String23 END MyList
     LIST MyList
-    RFNum = (RFNum + String22) + (String23 + RFCoord)
-    RFNum = RFNum + String22 + String23 + RFCoord
-    RFNum = RFNum + RFNum1 * RFNum / RFNum - RFNum1
-    COORD RFCoord14 = RFNum1
+    //MyList = MyList + String22
+    //MyList - String22
     COORD RFCoord2 = RFCoord + RFNum
     COORD RFCoord3 = RFNum + RFCoord
     COORD RFCoord4 = RFCoord + RFCoord1
