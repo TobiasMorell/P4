@@ -1,29 +1,34 @@
 TypeCompatibility:
 
-
-
 STRING n1 = " "
 STRING n2 = " "
 STRING n3 = " "
+NUM Jeb = 123
+NUM Bush = 434
+NUM Junior = 911
 
 VOID START()
 
-RefactorTest()
+RefactorTest(Jeb, Bush, Junior)
 
 END START
 
-VOID RefactorTest()
+VOID RefactorTest(NUM x, NUM y, NUM z)
+
     NUM RFNum = 45
     NUM RFNum1 = 65
     COORD RFCoord = (1,5,2)
     COORD RFCoord1 = (8,5,4)
     BOOL RFBool = TRUE
     BOOL RFBool1 = FALSE
-    BOOL RFBool2 = TRUE
-    BOOL RFBool3 = TRUE
-    n1 = n2 + n3
-    BOOL RFCOORD = (1,2,3)
-    RFBool = (RFBool1 + RFBool2) * (RFBool - RFBool1)
+    NUM RFNum20 = 20
+    NUM RFNum21 = 22
+    STRING String22 = "Aber er gode til at kaste"
+    STRING String23 = "Kaniner gode at kaste med"
+    STRING String24 = "Æbler"
+
+    LIST MyList
+    RFNum = (RFNum + String22) + (String23 + RFCoord)
     RFNum = RFNum + RFNum1 * RFNum / RFNum - RFNum1
     COORD RFCoord14 = RFNum1
     COORD RFCoord2 = RFCoord + RFNum
