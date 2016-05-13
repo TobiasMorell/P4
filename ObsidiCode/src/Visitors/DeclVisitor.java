@@ -76,7 +76,6 @@ public class DeclVisitor extends AbstractVisitor {
     @Override
     public Object visit(HearDcl node) {
         System.out.println("Visiting HearDcl " + ((IDNode)node.GetLeftChild())._id +" "+ _table.depth+ " on line " + node.line);
-        //_table.functions.add(new Func(node));
         VisitMethod(node);
         return null;
     }
@@ -90,9 +89,6 @@ public class DeclVisitor extends AbstractVisitor {
 
     public void VisitMethod(MethodDcl method){
         _table.OpenScope();
-        //for (Node n: method.parameters) {
-        //    visit(n);
-        //}
         for (Node n:((BlockNode)method.GetLeftChild()).GetChildren()) {
             visit(n);
         }
@@ -159,14 +155,28 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(GreaterEqualNode node) {
-        node.type = Node.Type.bool;//todo check shit;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        Node.Type t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+            node.type = Node.Type.bool;//todo check shit;
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Only numbers can be compared with the Greater than Or Equal operator", node.line);
+        }
+        return null;
     }
 
     @Override
     public Object visit(LessEqualNode node) {
-        node.type = Node.Type.bool;
-        return Node.Type.bool;
+        Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
+        Node.Type t2 = (Node.Type)visit(node.GetRightChild());
+        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+            node.type = Node.Type.bool;//todo check shit;
+            return Node.Type.bool;
+        }else{
+            ErrorHandling.Error("Only numbers can be compared with the Less than Or Equal operator", node.line);
+        }
+        return null;
     }
 
     @Override
@@ -194,7 +204,7 @@ public class DeclVisitor extends AbstractVisitor {
             if(t1 == t2) {
                 return t1;
             }else{
-                _table.MakeError("Error: Trying to assign value of type" + t2 + " to variable of type" + t1 + " on line " + node.line);
+                _table.MakeError("Error: Trying to assign value of type " + t2 + " to variable of type " + t1 + " on line " + node.line);
             }
         }
 
@@ -264,15 +274,15 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(GreaterNode node) {
-        node.type = Node.Type.bool;
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1==t2){
+        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+            node.type = Node.Type.bool;//todo check shit;
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Error: Greater than expression on line "+node.line+" compares values of different types");
-            return Node.Type.bool;
+            ErrorHandling.Error("Only numbers can be compared with the Greater than operator", node.line);
         }
+        return null;
     }
 
     @Override
@@ -290,15 +300,15 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LessNode node) {
-        node.type = Node.Type.bool;
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1==t2){
+        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+            node.type = Node.Type.bool;//todo check shit;
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Error: Less than expression on line "+node.line+" compares values of different types");
-            return Node.Type.bool;
+            ErrorHandling.Error("Only numbers can be compared with the less than operator", node.line);
         }
+        return null;
     }
 
     @Override
@@ -373,7 +383,6 @@ public class DeclVisitor extends AbstractVisitor {
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
             _table.MakeError("Error: Element in Multiplication on line "+node.line+" has no type");
-        //Skiftet switch til else switch
         else switch (t1){
             case num:
                 switch (t2){
@@ -503,8 +512,11 @@ public class DeclVisitor extends AbstractVisitor {
                     case num:
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
+                    case string:
+                        node.type = Node.Type.string;
+                        return Node.Type.string;
                     default:
-                        _table.MakeError("Error: Trying to add value of uncompatible type to coordinate");
+                        ErrorHandling.Error("Trying to add value of uncompatible type to coordinate",node.line);
                 }
                 break;
             case List:
@@ -522,7 +534,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(UnaryMinusNode node) {
-        Node.Type t1, t2;
+        Node.Type t1;
         t1 = (Node.Type)visit(node.GetLeftChild());
         if(t1 == null)
             _table.MakeError("Error: Element in unary minus on line "+node.line+" has no type");
@@ -604,6 +616,12 @@ public class DeclVisitor extends AbstractVisitor {
     public Object visit(ExprNode node) {
         System.out.println("Visiting Expr " + _table.depth+ " on line " + node.line);
         return null;
+    }
+
+    @Override
+    public Object visit(ParenNode node) {
+        System.out.println("Visiting ParenNode " + _table.depth + "on line " + node.line);
+        return visit(node.GetLeftChild());
     }
 
     @Override
@@ -690,6 +708,12 @@ public class DeclVisitor extends AbstractVisitor {
                 }
             }
         }
+        for (Func f:_table.functions) {
+            if(f.name.equals("START")){
+                return null;
+            }
+        }
+        ErrorHandling.Error("Error: Program " + node._id + " Has no start method");
         return null;
     }
 

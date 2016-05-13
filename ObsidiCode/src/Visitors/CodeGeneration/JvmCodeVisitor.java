@@ -172,6 +172,11 @@ public class JvmCodeVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(ParenNode node) {
+        return null;
+    }
+
+    @Override
     public Object visit(IDNode node) {
         return null;
     }

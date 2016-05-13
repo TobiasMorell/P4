@@ -832,7 +832,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitParenExpr(ObsidiCodeParser.ParenExprContext ctx) {
 		line = ctx.getStart().getLine();
-		return visit(ctx.expression());
+		return new ParenNode( (ExprNode) visit(ctx.expression()));
 	}
 
 	@Override

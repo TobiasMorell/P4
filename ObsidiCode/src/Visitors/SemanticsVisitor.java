@@ -215,6 +215,11 @@ public class SemanticsVisitor extends AbstractVisitor {
     }
 
     @Override
+    public Object visit(ParenNode node) {
+        return visit(node.GetLeftChild());
+    }
+
+    @Override
     public Object visit(IDNode node) {
         return null;
     }

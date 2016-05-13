@@ -1,21 +1,14 @@
 package TypeChecking;
 
-import ASTNodes.Declarations.DeclarationNode;
-import ASTNodes.Declarations.ReferenceNode;
-import ASTNodes.GeneralNodes.BinaryNode;
-import ASTNodes.GeneralNodes.NaryNode;
+
 import ASTNodes.GeneralNodes.Node;
-import ASTNodes.GeneralNodes.UnaryNode;
-import ASTNodes.SyntaxNodes.BlockNode;
 import ASTNodes.SyntaxNodes.IDNode;
 import ASTNodes.SyntaxNodes.MethodInvocationNode;
 import Utility.ErrorHandling;
 import Visitors.DeclVisitor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 /**
  * Created by Gedesnegl on 08-04-2016.
