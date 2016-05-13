@@ -28,6 +28,7 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
 
     private void placeHeader()
     {
+        codeBuilder.append("import Utility.Coord;\n");
         codeBuilder.append("import CodeGeneration.*;\n\n");
         codeBuilder.append(String.format("public class %sRobot extends SyncRobot {\n", robotName));
 

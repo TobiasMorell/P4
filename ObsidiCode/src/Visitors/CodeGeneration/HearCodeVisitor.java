@@ -34,6 +34,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     private void placeHeader()
     {
         //added requested import
+        codeBuilder.append("import Utility.Coord;\n");
         codeBuilder.append("import CodeGeneration.*;\n\n");
         //Add class header
         codeBuilder.append(String.format("%s %s %sHearThread extends HearThread {\n",
