@@ -28,7 +28,7 @@ public class Compiler {
                 System.out.println("Running on Windows - compiling esben_test.oc");
                 if(!path.endsWith("\\ObsidiCode"))
                     path += "\\ObsidiCode";
-                path += "\\Test\\TypeCompatibilitytest.txt";
+                path += "\\Test\\esben_test.oc";
             }
             else if (OS.startsWith("Linux")) {
                 System.out.println("Running on Linux - compiling esben_test.oc");

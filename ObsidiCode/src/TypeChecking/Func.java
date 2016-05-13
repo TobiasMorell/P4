@@ -30,8 +30,6 @@ public class Func {
                 DeclarationNode N = (DeclarationNode)n;
                 parameters.add(N.type);
             }
-            //Add the parameters to the beginning of the blockNode so they'll be recorded in the scope for checking.
-            ((BlockNode)methodNode.GetLeftChild()).GetChildren().addAll(0,methodNode.parameters);
         }
     public Func(String Name, Node.Type ret, Node.Type... params){
         if(params != null) {

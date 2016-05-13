@@ -79,7 +79,7 @@ public class JavaSourceCompiler {
         }
         catch (IOException e)
         {
-            System.out.println("Could not create compilation output.");
+            System.out.println("Could not create compilation output.");//todo: IO exception thrown.. why?
         }
 
 

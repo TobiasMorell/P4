@@ -1,5 +1,6 @@
 package ASTNodes.Operators;
 
+import ASTNodes.GeneralNodes.Node;
 import ASTNodes.GeneralNodes.UnaryNode;
 import ASTNodes.SyntaxNodes.ExprNode;
 import Visitors.AbstractVisitor;
@@ -8,7 +9,7 @@ import Visitors.AbstractVisitor;
  * Created by morell on 5/13/16.
  */
 public class ParenNode extends UnaryNode {
-    public ParenNode (ExprNode expr)
+    public ParenNode (Node expr)
     {
         super (expr);
     }

@@ -23,7 +23,7 @@ VOID StripMine(NUM Length)
         Move("South")
         Count = Count + 1
         Mystring = Count + Mystring
-        Mybool = Mybool + Mystring
+        //Mybool = Mybool + Mystring
         Mystring = Mycoord + Mystring
 
         Mystring = Mystring + Count
@@ -57,10 +57,9 @@ VOID Dig(NUM Tunnels, BOOL BothSides, NUM Distance)
         END IF
         ELSE IF (MinedTunnels IS Tunnels - 2)
             //Robot.BreakDance()
-
         END ELSEIF
         ELSE
-            //Robot.Turn("Left")
+            STRING hest = (("Left" + TRUE)*(Tunnels))
         END ELSE
         //Robot.Move()
         //Robot.Move()

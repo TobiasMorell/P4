@@ -11,9 +11,7 @@ import TypeChecking.SymbolTable;
 import TypeChecking.Func;
 import Utility.ErrorHandling;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Gedesnegl on 12-04-2016.
@@ -21,6 +19,7 @@ import java.util.List;
 public class DeclVisitor extends AbstractVisitor {
     SymbolTable _table;
     public static ArrayList<String> seenfiles = new ArrayList<>();
+    int breakable = 0;
 
     /***
      * @param Table The symboltable that the visitor should fills
@@ -89,6 +88,9 @@ public class DeclVisitor extends AbstractVisitor {
 
     public void VisitMethod(MethodDcl method){
         _table.OpenScope();
+        for(Node n : method.parameters){
+            visit(n);
+        }
         for (Node n:((BlockNode)method.GetLeftChild()).GetChildren()) {
             visit(n);
         }
@@ -460,6 +462,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(PlusNode node) {
+        System.out.println("Visiting Plus on line " + node.line);
         Node.Type t1, t2;
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
@@ -597,6 +600,10 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BreakNode node) {
+        System.out.println("Visiting Breaknode on line "+node.line);
+        if(breakable == 0){
+            ErrorHandling.Error("Cant Nothing to break out of");
+        }
         return null;
     }
 
@@ -609,6 +616,10 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ElseNode node) {
+        if(node != null){
+            System.out.println("Visiting Else on line " + node.line);
+            visit(node.GetLeftChild());
+        }
         return null;
     }
 
@@ -620,7 +631,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ParenNode node) {
-        System.out.println("Visiting ParenNode " + _table.depth + "on line " + node.line);
+        System.out.println("Visiting Parentheses " + _table.depth + "on line " + node.line);
         return visit(node.GetLeftChild());
     }
 
