@@ -17,7 +17,14 @@ VOID RefactorTest()
     NUM RFNum1 = 65
     COORD RFCoord = (1,5,2)
     COORD RFCoord1 = (8,5,4)
+    BOOL RFBool = TRUE
+    BOOL RFBool1 = FALSE
+    BOOL RFBool2 = TRUE
+    BOOL RFBool3 = TRUE
     n1 = n2 + n3
+    RFBool = (RFBool1 + RFBool2) * (RFBool - RFBool1)
+    RFNum = RFNum + RFNum1 * RFNum / RFNum - RFNum1
+    COORD RFCoord14 = RFNum1
     COORD RFCoord2 = RFCoord + RFNum
     COORD RFCoord3 = RFNum + RFCoord
     COORD RFCoord4 = RFCoord + RFCoord1

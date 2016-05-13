@@ -41,6 +41,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     private void emitHeader()
     {
+        boolean x1, x2, x3, x4;
+        x1 = true; x2 = false; x3 = true; x4 = true;
+        if (true || false && true ^ false) {codeBuilder.append("This weird shit works somehow");}
         codeBuilder.append("package CompiledRobots;\n");
         codeBuilder.append("import java.util.ArrayList;\n");
         codeBuilder.append("import Utility.Coord;\n");
@@ -347,12 +350,14 @@ public class NormalCodeVisitor extends AbstractVisitor {
             //while (string1.length() > 0)
               //  chars[1] = string1.charAt(1);
 
-            for (int i = 0, x = 1; i < 10; i += 2, x++)
+            for (int i = 0, x = 0; i < string1.length() + string2.length(); i += 2, x++)
             {
                 chars[i] = string1.charAt(x);
                 chars[i + 1] = string2.charAt(x);
+                codeBuilder.append(i);
             }
             codeBuilder.append(chars);
+            codeBuilder.append("HERE STUFF HAPPPENS ahfgafgjagjagjagagfajaghajfaggg");
         }
 
         else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.num)
@@ -365,10 +370,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
             codeBuilder.append("test += "); visit(node.GetLeftChild()); codeBuilder.append("}");
             visit(node.GetLeftChild()); codeBuilder.append(" = test");
             */
-            String teststring = ""; float myfloat = 4;
-            for (int i = 0; i < myfloat; i++){
-                teststring += teststring;
-            }
             //repeat string num times.
             //todo this
         }
@@ -579,6 +580,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
+
+    //bruger visitExpressionGeneric med en operator istedet
+    //Bliver aldrig brugt
     @Override
     public Object visit(ExprNode node) {
         return null;
@@ -654,6 +658,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(NumLit node) {
 
         codeBuilder.append(node._value);
+        codeBuilder.append("f");
         return null;
     }
 
@@ -759,7 +764,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
                 codeBuilder.append(z);
                 codeBuilder.append(" ");
                 visit(x.GetRightChild());
-                codeBuilder.append(".y)");
+                codeBuilder.append(".z)");
                 break;
             default: codeBuilder.append("This behaviour is uintended");
                 break;
