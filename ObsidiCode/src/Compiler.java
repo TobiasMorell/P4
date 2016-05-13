@@ -63,17 +63,14 @@ public class Compiler {
             HearCodeVisitor hcv = new HearCodeVisitor(jsk);
             RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
 
-            //JavaSourceCompiler jsc = new JavaSourceCompiler();
-            //jsc.CompileJavaSource(null);
-
             jcv.visit(root);
             hcv.visit(root);
             rcv.visit(root);
 
             JavaSourceBuffer[] sourceCode = new JavaSourceBuffer[3];
-            sourceCode[0] = jcv.GetSourceCode();
+            sourceCode[2] = jcv.GetSourceCode();
             sourceCode[1] = hcv.GetSourceCode();
-            sourceCode[2] = rcv.GetSourceCode();
+            sourceCode[0] = rcv.GetSourceCode();
 
 
             for (JavaSourceBuffer code : sourceCode)

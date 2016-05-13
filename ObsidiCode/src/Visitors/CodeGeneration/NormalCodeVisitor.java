@@ -10,8 +10,6 @@ import Utility.AbstractKeywordSheet;
 import Utility.JavaSourceBuffer;
 import Visitors.AbstractVisitor;
 
-
-
 /**
  * Created by morell on 4/26/16.
  */
@@ -27,6 +25,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
     {
         this.keywords = keywords;
         this.symtable = symtab;
+
     }
 
     public  NormalCodeVisitor (AbstractKeywordSheet aks)
@@ -43,12 +42,13 @@ public class NormalCodeVisitor extends AbstractVisitor {
     {
         codeBuilder.append("package CompiledRobots;\n");
         codeBuilder.append("import java.util.ArrayList;\n");
+
         codeBuilder.append("import Utility.Coord;\n");
         codeBuilder.append("import CodeGeneration.*;\n\n");
         codeBuilder.append("public class " + robotName + "NormalThread extends NormalThread { \n");
         codeBuilder.append("private " + robotName +"Robot Robot; \n");
         codeBuilder.append("public " + robotName + "NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
-        codeBuilder.append("super(mutex); Robot = r; }  \n");
+        codeBuilder.append("super(mut); Robot = r; }  \n");
 
 
 

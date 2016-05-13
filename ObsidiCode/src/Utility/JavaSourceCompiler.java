@@ -4,7 +4,9 @@ import javax.tools.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by morell on 4/27/16.
@@ -40,36 +42,33 @@ public class JavaSourceCompiler {
         }
 
         //Create an iteratable data-structure to store compilation-files
-        Iterable<? extends JavaFileObject> compilationUnits[] = new Iterable[jsb.length];
+        List<JavaSourceBuffer> compilationUnits = new ArrayList<>();
 
         for (int i = 0; i < jsb.length; i++)
         {
-            compilationUnits[i] = Arrays.asList(jsb[i]);
+            compilationUnits.add(jsb[i]);
         }
         //And get the compiler from the system
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         try {
-            JavaCompiler.CompilationTask[] taskArr = new JavaCompiler.CompilationTask[jsb.length];
-
             boolean succes = true;
-            for (int i = 0; i < compilationUnits.length; i++) {
-                //Open an out-stream for code output
-                FileWriter codeOutput = new FileWriter(targetDir + jsb[i].getClassName() + ".class", false); //false means override existing file
-                //Compile and store in the output-stream
-                taskArr[i] = compiler.getTask(codeOutput, null, diagnostics, null, null, compilationUnits[i]);
+            //Open an out-stream for code output
+            FileWriter codeOutput = new FileWriter(targetDir + jsb[0].getClassName() + ".class", false); //false means override existing file
+            //Compile and store in the output-stream
+            JavaCompiler.CompilationTask task = compiler.getTask(codeOutput, null, diagnostics, null, null, compilationUnits);
 
-                //Close and flush output-stream
-                codeOutput.flush();
-                codeOutput.close();
+            //Close and flush output-stream
+            codeOutput.flush();
+            codeOutput.close();
 
-                try {
-                    if (!taskArr[i].call())
-                        succes = false;
-                } catch (UnsupportedOperationException e)
-                {
-                    System.out.println(e.getMessage());
-                }
+
+            try {
+                if (!task.call())
+                    succes = false;
+            } catch (UnsupportedOperationException e)
+            {
+                System.out.println(e.getMessage());
             }
             if(!succes) {
                 System.out.println("Compilation failed, should provide some errors in console.");
