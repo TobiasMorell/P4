@@ -10,7 +10,7 @@ import java.util.Queue;
  */
 public abstract class HearThread extends Thread {
     private Queue<Signal> signalQueue = new LinkedList<Signal>();
-    private RobotMutex mutex;
+    protected RobotMutex mutex;
     private final RobotMutex.Execution THREAD_ID = RobotMutex.Execution.Hear;
 
     public HearThread(RobotMutex mut)

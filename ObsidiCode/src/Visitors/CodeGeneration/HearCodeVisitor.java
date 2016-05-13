@@ -34,17 +34,17 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     private void placeHeader()
     {
         //added requested import
-        codeBuilder.append("import Utility.Coord;\n");
-        codeBuilder.append("import CodeGeneration.*;\n\n");
+        codeBuilder.append("package CompiledRobots;\n");
+        codeBuilder.append("import CodeGeneration.*;\n");
+        codeBuilder.append("import Utility.Coord;\n\n");
         //Add class header
-        codeBuilder.append(String.format("%s %s %sHearThread extends HearThread {\n",
-                keywords.ACCESS, keywords.CLASS, robotName));
+        codeBuilder.append(String.format("public class %sHearThread extends HearThread {\n", robotName));
         //Add fields
-        codeBuilder.append(String.format("private %sRobot Robot;\n", robotName));
+        codeBuilder.append(String.format("private %sRobot r;\n", robotName));
         //Declare a constructor
-        codeBuilder.append(String.format("public %sHearThread (Robot r, RobotMutex mut) {\n", robotName));
+        codeBuilder.append(String.format("public %sHearThread (%sRobot r, RobotMutex mut) {\n", robotName, robotName));
         codeBuilder.append("super(mut);\n");
-        codeBuilder.append("this.Robot = r;\n");
+        codeBuilder.append("this.r = r;\n");
         codeBuilder.append("}\n");
         //Override the Handle-method
         codeBuilder.append("@Override\n");
@@ -61,6 +61,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         }
         codeBuilder.append("default:\n");
         codeBuilder.append("break;\n");
+        codeBuilder.append("}\n");
         codeBuilder.append("}\n");
     }
 

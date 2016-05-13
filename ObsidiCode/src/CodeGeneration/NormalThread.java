@@ -5,7 +5,7 @@ package CodeGeneration;
  */
 public abstract class NormalThread extends  Thread {
     private final RobotMutex.Execution THREAD_ID = RobotMutex.Execution.Normal;
-    RobotMutex mutex;
+    protected RobotMutex mutex;
 
     public NormalThread (RobotMutex mut)
     {
