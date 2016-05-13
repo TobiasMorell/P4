@@ -29,6 +29,7 @@ VOID RefactorTest(NUM x, NUM y, NUM z)
 
     LIST MyList
     RFNum = (RFNum + String22) + (String23 + RFCoord)
+    RFNum = RFNum + String22 + String23 + RFCoord
     RFNum = RFNum + RFNum1 * RFNum / RFNum - RFNum1
     COORD RFCoord14 = RFNum1
     COORD RFCoord2 = RFCoord + RFNum

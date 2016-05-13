@@ -590,9 +590,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(ParenNode node) {
         codeBuilder.append("(");
-        codeBuilder.append(visit(node.GetLeftChild()));
+        visit(node.GetLeftChild());
         codeBuilder.append(")");
-
         return null;
     }
 
