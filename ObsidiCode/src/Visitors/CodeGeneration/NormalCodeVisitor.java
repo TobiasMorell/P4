@@ -263,7 +263,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            CoordSimplifier(node, 1, '/');
+            CoordSimplifier(node, InputTypes.COORDNUM, '/');
         }
         else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
         {
@@ -273,11 +273,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 2, '/');
+            CoordSimplifier(node, InputTypes.NUMCOORD, '/');
         }
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 3, '/');
+            CoordSimplifier(node, InputTypes.COORDCOORD, '/');
         }
         else
         {
@@ -315,7 +315,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            CoordSimplifier(node, 1, '-');
+            CoordSimplifier(node, InputTypes.COORDNUM, '-');
         }
 
         else if(node.GetLeftChild().type ==  Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
@@ -324,11 +324,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type ==  Node.Type.num && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 2, '-');
+            CoordSimplifier(node, InputTypes.NUMCOORD, '-');
         }
         else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 3, '-');
+            CoordSimplifier(node, InputTypes.COORDCOORD, '-');
         }
         else {visitExpressionGeneric(node, keywords.MINUS); }
         return null;
@@ -372,7 +372,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            CoordSimplifier(node, 1, '*');
+            CoordSimplifier(node, InputTypes.COORDNUM, '*');
         }
         else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
         {
@@ -380,11 +380,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 2, '*');
+            CoordSimplifier(node, InputTypes.NUMCOORD, '*');
         }
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 3, '*');
+            CoordSimplifier(node, InputTypes.COORDCOORD, '*');
         }
         else
         {
@@ -437,7 +437,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         //makes: oldcoord.x += 10; oldcoord.y +=
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
         {
-            CoordSimplifier(node,1,'+');
+            CoordSimplifier(node,InputTypes.COORDNUM,'+');
         }
 
         else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.bool)
@@ -458,12 +458,12 @@ public class NormalCodeVisitor extends AbstractVisitor {
         }
         else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 2, '+');
+            CoordSimplifier(node, InputTypes.NUMCOORD, '+');
         }
 
         else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
         {
-            CoordSimplifier(node, 3, '+');
+            CoordSimplifier(node, InputTypes.COORDCOORD, '+');
         }
         else { visitExpressionGeneric(node, keywords.PLUS); }
         return null;
@@ -699,80 +699,84 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
-    public void CoordSimplifier(ExprNode x, int y, char z)
+    public void CoordSimplifier(ExprNode node, InputTypes inputtypes, char operator)
     {
-        switch (y) {
-            case 1: codeBuilder.append(keywords.NEW);
+        switch (inputtypes) {
+            case COORDNUM: codeBuilder.append(keywords.NEW);
                 codeBuilder.append(" ");
                 codeBuilder.append(keywords.COORD);
                 codeBuilder.append("(");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".x ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(", ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".y ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(", ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".z ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(")");
                 break;
-            case 2: codeBuilder.append(keywords.NEW);
+            case NUMCOORD: codeBuilder.append(keywords.NEW);
                 codeBuilder.append(" ");
                 codeBuilder.append(keywords.COORD);
                 codeBuilder.append("(");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(" ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".x, ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(" ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".y, ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(" ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".z)");
                 break;
-            case 3: codeBuilder.append(keywords.NEW);
+            case COORDCOORD: codeBuilder.append(keywords.NEW);
                 codeBuilder.append(" ");
                 codeBuilder.append(keywords.COORD);
                 codeBuilder.append("(");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".x ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".x, ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".y ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".y, ");
-                visit(x.GetLeftChild());
+                visit(node.GetLeftChild());
                 codeBuilder.append(".z ");
-                codeBuilder.append(z);
+                codeBuilder.append(operator);
                 codeBuilder.append(" ");
-                visit(x.GetRightChild());
+                visit(node.GetRightChild());
                 codeBuilder.append(".z)");
-                break;
-            default: codeBuilder.append("This behaviour is uintended");
                 break;
         }
     }
+
+    public enum InputTypes {
+        COORDNUM, NUMCOORD, COORDCOORD
+    }
+
+
 }
