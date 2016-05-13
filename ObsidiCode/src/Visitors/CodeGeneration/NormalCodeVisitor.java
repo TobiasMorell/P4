@@ -560,10 +560,13 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append(keywords.COORD);
         codeBuilder.append("(");
         codeBuilder.append(x);
+        codeBuilder.append("f");
         codeBuilder.append(", ");
         codeBuilder.append(y);
+        codeBuilder.append("f");
         codeBuilder.append(", ");
         codeBuilder.append(z);
+        codeBuilder.append("f");
         codeBuilder.append(")");
         return null;
     }
@@ -647,7 +650,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        codeBuilder.append("r.");
+        codeBuilder.append("Robot.");
         visit(node.GetLeftChild());
         codeBuilder.append("(");
         int i = node.GetChildren().size();

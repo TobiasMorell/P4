@@ -22,6 +22,7 @@ VOID RefactorTest()
     BOOL RFBool2 = TRUE
     BOOL RFBool3 = TRUE
     n1 = n2 + n3
+    BOOL RFCOORD = (1,2,3)
     RFBool = (RFBool1 + RFBool2) * (RFBool - RFBool1)
     RFNum = RFNum + RFNum1 * RFNum / RFNum - RFNum1
     COORD RFCoord14 = RFNum1
