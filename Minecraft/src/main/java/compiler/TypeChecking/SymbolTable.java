@@ -26,9 +26,9 @@ public class SymbolTable {
     {
         _ASTRoot = ASTRoot;
         HashTable = new Hashtable();
-        scopeDisplay = new ArrayList<>();
-        symbols = new ArrayList<>();
-        functions = new ArrayList<>();
+        scopeDisplay = new ArrayList<Symbol>();
+        symbols = new ArrayList<Symbol>();
+        functions = new ArrayList<Func>();
         addNativeFunctions();
         dclvisitor = new DeclVisitor(this);
     }
@@ -117,7 +117,7 @@ public class SymbolTable {
     public Func[] RetrieveAllMethodsWithName(String name)
     {
         //Make a new list to store all methods
-        ArrayList<Func> funcs = new ArrayList<>();
+        ArrayList<Func> funcs = new ArrayList<Func>();
         //Find all methods with the given name and store in list
         for(Func F : functions)
         {

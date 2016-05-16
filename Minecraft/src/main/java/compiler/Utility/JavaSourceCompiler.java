@@ -1,6 +1,5 @@
 package compiler.Utility;
 
-import com.sun.org.apache.xalan.internal.xsltc.cmdline.Compile;
 
 import javax.tools.*;
 import java.io.File;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class JavaSourceCompiler {
     private static String targetDir;
-    private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
     public void CompileJavaSource(JavaSourceBuffer[] jsb)
     {
@@ -45,7 +44,7 @@ public class JavaSourceCompiler {
         }
 
         //Create an iteratable data-structure to store compilation-files
-        List<JavaSourceBuffer> compilationUnits = new ArrayList<>();
+        List<JavaSourceBuffer> compilationUnits = new ArrayList<JavaSourceBuffer>();
 
         for (int i = 0; i < jsb.length; i++)
         {

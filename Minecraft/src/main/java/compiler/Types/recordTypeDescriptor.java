@@ -1,6 +1,6 @@
 package compiler.Types;
 
-import TypeChecking.SymbolTable;
+import compiler.TypeChecking.SymbolTable;
 
 /**
  * Created by Lasse on 14/04/2016.

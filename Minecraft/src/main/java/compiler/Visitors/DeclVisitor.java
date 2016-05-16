@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class DeclVisitor extends AbstractVisitor {
     SymbolTable _table;
-    public static ArrayList<String> seenfiles = new ArrayList<>();
+    public static ArrayList<String> seenfiles = new ArrayList<String>();
     int breakable = 0;
 
     /***
@@ -663,7 +663,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        ArrayList<Node.Type> types = new ArrayList<>();
+        ArrayList<Node.Type> types = new ArrayList<Node.Type>();
         for (Node n: node.GetChildren()) {
             types.add((Node.Type)visit(n));
         }

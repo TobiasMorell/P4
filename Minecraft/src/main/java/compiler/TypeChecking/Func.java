@@ -23,7 +23,7 @@ public class Func {
      * @param methodNode The AST node that represents the method
      */
     public Func(MethodDcl methodNode){
-            parameters = new ArrayList<>();
+            parameters = new ArrayList<Node.Type>();
             returnType = methodNode.type;
             name = methodNode.id;
             for (Node n :methodNode.parameters) {
@@ -33,7 +33,7 @@ public class Func {
         }
     public Func(String Name, Node.Type ret, Node.Type... params){
         if(params != null) {
-            parameters = new ArrayList<>(Arrays.asList(params));
+            parameters = new ArrayList<Node.Type>(Arrays.asList(params));
         }
         returnType = ret;
         name = Name;

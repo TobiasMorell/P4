@@ -156,7 +156,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	public Node visitRoboDcl(ObsidiCodeParser.RoboDclContext ctx) {
 		line = ctx.getStart().getLine();
 		String robotName = ctx.id.getText();
-		ArrayList<Node> stmts = new ArrayList<>();
+		ArrayList<Node> stmts = new ArrayList<Node>();
 		return new ProgNode(stmts, robotName);
 	}
 
@@ -458,7 +458,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		CollectionNode args = (CollectionNode) visit(ctx.args);
 		ArrayList<Node> argList;
 		if(args == null)
-			argList = new ArrayList<>();
+			argList = new ArrayList<Node>();
 		else
 			argList = args.GetChildren();
 

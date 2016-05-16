@@ -1,6 +1,6 @@
 package com.obsidiskrivemaskine;
 
-import Utility.Coord;
+import compiler.Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;

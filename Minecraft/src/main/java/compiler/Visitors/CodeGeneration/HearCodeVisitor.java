@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by morell on 5/1/16.
  */
 public class HearCodeVisitor extends NormalCodeVisitor {
-    private ArrayList<String> hearMethods = new ArrayList<>();
+    private ArrayList<String> hearMethods = new ArrayList<String>();
 
     public HearCodeVisitor(AbstractKeywordSheet aks)
     {
