@@ -1,13 +1,9 @@
 package compiler.ASTNodes.Declarations;
 
-import compiler.ASTNodes.GeneralNodes.BinaryNode;
 import compiler.ASTNodes.GeneralNodes.Node;
 import compiler.ASTNodes.GeneralNodes.UnaryNode;
 import compiler.ASTNodes.SyntaxNodes.BlockNode;
-import compiler.ASTNodes.SyntaxNodes.IDNode;
 import compiler.Visitors.AbstractVisitor;
-import compiler.Visitors.Visitable;
-import org.antlr.v4.codegen.model.decl.Decl;
 
 import java.util.ArrayList;
 

@@ -4,8 +4,10 @@ import com.obsidiskrivemaskine.Entity.RobotEntity;
 import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
 import com.obsidiskrivemaskine.Handler.ObsidiGuiHandler;
 import com.obsidiskrivemaskine.Proxy.ObsidiServerProxy;
+import com.obsidiskrivemaskine.item.ErrorBook;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -25,23 +27,26 @@ public class ObsidiSkriveMaskineMod
     public static ObsidiSkriveMaskineMod INSTANCE;
 
     public static Block obsidiblock;
+    public static Item errorBook;
 
     @SidedProxy(clientSide = "com.obsidiskrivemaskine.Proxy.ObsidiClientProxy", serverSide = "com.obsidiskrivemaskine.Proxy.ObsidiServerProxy")
     public static ObsidiServerProxy PROXY;
 
-    public static int kurtguiid;
+    public static int obsidiguiid;
 
     @EventHandler
     public void preinit (FMLPreInitializationEvent event)
     {
         obsidiblock = new ObsidiSkriveMaskineBlock().setUnlocalizedName("ObsidiSkriveMaskineBlock").setCreativeTab(CreativeTabs.tabRedstone);
-        kurtguiid = 1;
+        errorBook = new ErrorBook();
+        obsidiguiid = 1;
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         registerBlocks();
+        registerItems();
         registerHandlers();
         RobotEntity.RegisterEntity();
     }
@@ -56,6 +61,7 @@ public class ObsidiSkriveMaskineMod
     {
         GameRegistry.registerBlock(obsidiblock, "ObsidiSkriveMaskineBlock");
     }
+    public void registerItems () { GameRegistry.registerItem(errorBook, "Error_Book");}
 
     public void registerHandlers ()
     {

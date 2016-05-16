@@ -1,10 +1,20 @@
 package com.obsidiskrivemaskine;
 
+import compiler.CodeGeneration.Signal;
 import compiler.Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import scala.NotImplementedError;
+import scala.tools.nsc.Global;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by esben on 28/04/16.
@@ -14,6 +24,11 @@ public class SyncRobot extends Thread{
     private static World world;
     private static RobotEntity Robot;
     private static EntityPlayer player;
+
+    protected Queue<Signal> signalQueue = new LinkedList<Signal>();
+    protected SignalMutex mutex = new SignalMutex();
+    protected Thread normal_thread = new Thread(new NormalThread());
+    protected Thread hear_thread;
 
     public SyncRobot(){
         start();
@@ -232,5 +247,106 @@ public class SyncRobot extends Thread{
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
+    }
+
+    protected abstract class HearThread implements Runnable {
+        @Override
+        public void run() {
+            System.out.println();
+            try {
+                synchronized (mutex) {
+                    mutex.wait();
+                }
+                while (true) {
+                    Signal s = signalQueue.poll();
+                    Handle(s);
+                    if (signalQueue.isEmpty()) {
+                        synchronized (mutex) {
+                            mutex.SwitchTurns(false);
+                            mutex.wait();
+                        }
+                    }
+                }
+            } catch (InterruptedException e)
+            {
+                System.out.println("Something wrong in HearThread.");
+            }
+        }
+
+        /***
+         * Find a hear-method that corresponds to a given signal
+         * @param si The current signal
+         * @return Either null or the method corresponding to the current signal
+         */
+        protected Method findMethodFromSignal(Signal si)
+        {
+            Object[] objs = si.GetArguments();
+            Class[] argClasses = new Class[objs.length];
+            for(int i = 0; i < objs.length; i++) {
+                argClasses[i] = objs[i].getClass();
+            }
+            try {
+                return this.getClass().getDeclaredMethod(si.GetID(), argClasses);
+            } catch (NoSuchMethodException e)
+            {
+                return null;
+            }
+        }
+
+        /***
+         * Invokes a method with the parameters of a given signal
+         * @param m the method to invoke
+         * @param si the signal with the parameters to invoke with
+         */
+        protected void invokeMethod(Method m, Signal si)
+        {
+            Object[] objs = si.GetArguments();
+            try {
+                m.invoke(this, objs);
+            } catch (InvocationTargetException e)
+            {
+                //Should never reach this point, as parameters have been checked.
+                e.printStackTrace();
+            } catch (IllegalAccessException e)
+            {
+                //If this exception is thrown the method is private
+                System.out.println("The method was not accessible.");
+            }
+        }
+
+        public abstract void Handle(Signal signal);
+    }
+
+    protected class NormalThread implements Runnable {
+        @Override
+        public void run() {
+            Start();
+        }
+    }
+
+    protected class SignalMutex {
+        private AtomicBoolean pendingSignals = new AtomicBoolean(false);
+
+        public synchronized void SwitchTurns(boolean setTo)
+        {
+            pendingSignals.set(setTo);
+            notifyAll();
+        }
+
+        public synchronized void WaitForTurn()
+        {
+            try {
+                if(pendingSignals.get())
+                    wait();
+            } catch (InterruptedException e)
+            {
+                System.out.println("Failed to wait for turn.");
+            }
+        }
+    }
+
+    protected void Start()
+    {
+        throw new NotImplementedException();
     }
 }

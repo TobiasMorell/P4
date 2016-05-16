@@ -1,5 +1,6 @@
 // Generated from /home/morell/Documents/Java/P4/ObsidiCode/ObsidiCode.g4 by ANTLR 4.5.1
 package compiler.ObsidiCodeAntlr;
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**

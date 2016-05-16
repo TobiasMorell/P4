@@ -1,42 +1,107 @@
 package com.company;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
- * Created by Gedesnegl on 13-05-2016.
+ * Created by morell on 5/13/16.
  */
 public class Robot {
-    int position = 0;
-    public enum Direction{
-        Forwards, Backwards
+    private Queue<String> signalQueue = new LinkedList<>();
+
+    private Thread normal = new Thread(new NormalThread());
+    private Thread hear = new Thread(new HearThread());
+    private SignalMutex sm = new SignalMutex();
+
+    public Robot ()
+    {
+        normal.start();
+        hear.start();
     }
 
-    public void MoveForward(int steps) {
+    public void Move() {  System.out.println("Robot moving"); }
 
-        for(int i = 0; i < steps; i++){
-            Move(Direction.Forwards);
+    public void Start()
+    {
+        while (true) {
+            sm.WaitForTurn();
+            Move();
+            try {
+                synchronized (this) {
+                    wait(1000);
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Failed to pause the execution of normal thread.");
+            }
+       }
+    }
+
+    public void Signal(String signal)
+    {
+        signalQueue.add(signal);
+        sm.SwitchTurns(true);
+    }
+
+    private class SignalMutex {
+        private AtomicBoolean pendingSignals = new AtomicBoolean(false);
+
+        public synchronized void SwitchTurns(boolean setTo)
+        {
+            pendingSignals.set(setTo);
+            notifyAll();
+        }
+
+        public synchronized void WaitForTurn()
+        {
+            try {
+                if(pendingSignals.get())
+                    wait();
+            } catch (InterruptedException e)
+            {
+                System.out.println("Failed to wait for turn.");
+            }
         }
     }
 
-    public void MoveBackwards(int steps){
-        for(int i = 0; i < steps; i++){
-            Move(Direction.Backwards);
+    private class NormalThread implements Runnable {
+        @Override
+        public void run() {
+            Start();
         }
     }
 
-    public synchronized void Move(Direction d){
-        System.out.println("Robot: Moving " + d);
-        switch (d){
-            case Forwards:
-                position++;
-                break;
-            case Backwards:
-                position--;
-                break;
-        }
-        try {
-            wait(500);
-        }catch(InterruptedException e){
-            System.out.println("ERROR!");
-            return;
+    private class HearThread implements Runnable {
+        @Override
+        public void run() {
+            System.out.println();
+            try {
+                synchronized (sm) {
+                    sm.wait();
+                }
+                while (true) {
+                    String s = signalQueue.poll();
+                    System.out.println(String.format("Now handling %s.", s));
+                    int sig_no = Integer.parseInt(s);
+                    for(int i = 0; i <= sig_no; i++)
+                    {
+                        System.out.println(i);
+                        Move();
+                        synchronized (this) {
+                            wait(300);
+                        }
+                    }
+                    if (signalQueue.isEmpty()) {
+                        synchronized (sm) {
+                            sm.SwitchTurns(false);
+                            sm.wait();
+                        }
+                    }
+                }
+            } catch (InterruptedException e)
+            {
+                System.out.println("Something wrong in HearThread.");
+            }
         }
     }
 }

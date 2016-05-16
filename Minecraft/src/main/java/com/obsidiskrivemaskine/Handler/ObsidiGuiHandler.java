@@ -19,7 +19,7 @@ public class ObsidiGuiHandler implements IGuiHandler
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if(ID == ObsidiSkriveMaskineMod.kurtguiid) {
+        if(ID == ObsidiSkriveMaskineMod.obsidiguiid) {
             return new ObsidiGUIScreen();
         }
 

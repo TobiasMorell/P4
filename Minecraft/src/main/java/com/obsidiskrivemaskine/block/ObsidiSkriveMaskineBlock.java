@@ -40,7 +40,7 @@ public class ObsidiSkriveMaskineBlock extends Block
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        player.openGui(ObsidiSkriveMaskineMod.INSTANCE, ObsidiSkriveMaskineMod.kurtguiid, world, pos.getX(), pos.getY(), pos.getZ());
+        player.openGui(ObsidiSkriveMaskineMod.INSTANCE, ObsidiSkriveMaskineMod.obsidiguiid, world, pos.getX(), pos.getY(), pos.getZ());
         SyncRobot.init(world, player);
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
     }

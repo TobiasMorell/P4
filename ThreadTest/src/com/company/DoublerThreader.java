@@ -5,11 +5,11 @@ package com.company;
  */
 public class DoublerThreader implements Runnable {
     private int i = 0;
-    HearHandler he;
+    Robot r;
 
-    public DoublerThreader (HearHandler hh)
+    public DoublerThreader (Robot r)
     {
-        he = hh;
+        this.r = r;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class DoublerThreader implements Runnable {
                 System.out.println("DoubleThreader was interrupted!");
             }
 
-            he.Signal(Integer.toString(i));
+            r.Signal(Integer.toString(i));
             System.out.println("Sending signal.");
             i++;
         }
