@@ -5,7 +5,7 @@ import compiler.ASTNodes.GeneralNodes.Node;
 import compiler.ASTNodes.SyntaxNodes.IDNode;
 import compiler.ASTNodes.SyntaxNodes.MethodInvocationNode;
 import compiler.Utility.ErrorHandling;
-import compiler.Visitors.DeclVisitor;
+import compiler.Visitors.SemanticVisitor;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -19,7 +19,7 @@ public class SymbolTable {
     public int depth = -1;
     ArrayList<Symbol> scopeDisplay;
     Hashtable HashTable;
-    public DeclVisitor dclvisitor;
+    public SemanticVisitor semvisitor;
     public Node _ASTRoot;
 
     public SymbolTable(Node ASTRoot)
@@ -30,7 +30,7 @@ public class SymbolTable {
         symbols = new ArrayList<Symbol>();
         functions = new ArrayList<Func>();
         addNativeFunctions();
-        dclvisitor = new DeclVisitor(this);
+        semvisitor = new SemanticVisitor(this);
     }
 
     private void addNativeFunctions() {

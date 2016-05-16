@@ -6,7 +6,6 @@ import compiler.Utility.*;
 import compiler.Visitors.CodeGeneration.HearCodeVisitor;
 import compiler.Visitors.CodeGeneration.NormalCodeVisitor;
 import compiler.Visitors.CodeGeneration.RobotCodeVisitor;
-import compiler.Visitors.SemanticsVisitor;
 
 public class Compiler {
 	public static void main( String[] args) throws Exception 
@@ -50,9 +49,6 @@ public class Compiler {
             //Build the symbol table
             SymbolTable st = new SymbolTable(root);
 
-            SemanticsVisitor smv = new SemanticsVisitor();
-
-            smv.visit(root);
             //Compile either to java or java-byte code
             JavaKeywordSheet jsk = new JavaKeywordSheet();
             NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);

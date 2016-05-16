@@ -7,7 +7,6 @@ import compiler.Utility.*;
 import compiler.Visitors.CodeGeneration.HearCodeVisitor;
 import compiler.Visitors.CodeGeneration.NormalCodeVisitor;
 import compiler.Visitors.CodeGeneration.RobotCodeVisitor;
-import compiler.Visitors.SemanticsVisitor;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -75,8 +74,6 @@ public class ObsidiGUIScreen extends GuiScreen
         Node var15 = var14.Compile(args);
         if(var15 != null) {
             new SymbolTable(var15);
-            SemanticsVisitor smv = new SemanticsVisitor();
-            smv.visit(var15);
             JavaKeywordSheet jsk = new JavaKeywordSheet();
             NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
             HearCodeVisitor hcv = new HearCodeVisitor(jsk);

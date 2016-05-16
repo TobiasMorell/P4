@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by Gedesnegl on 12-04-2016.
  */
-public class DeclVisitor extends AbstractVisitor {
+public class SemanticVisitor extends AbstractVisitor {
     SymbolTable _table;
     public static ArrayList<String> seenfiles = new ArrayList<String>();
     int breakable = 0;
@@ -24,7 +24,7 @@ public class DeclVisitor extends AbstractVisitor {
     /***
      * @param Table The symboltable that the visitor should fills
      */
-    public DeclVisitor(SymbolTable Table){
+    public SemanticVisitor(SymbolTable Table){
         _table = Table;
         visit(_table._ASTRoot);
     }
@@ -51,7 +51,7 @@ public class DeclVisitor extends AbstractVisitor {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.bool) {
                 return Node.Type.bool;
             }else{
-                _table.MakeError("Error: Trying to initialize boolian with unmatching type ");
+                ErrorHandling.Error("Trying to initialize boolean with unmatching type ",node.line);
             }
         }
         return null;
@@ -64,7 +64,7 @@ public class DeclVisitor extends AbstractVisitor {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.coord) {
                 return Node.Type.coord;
             }else{
-                _table.MakeError("Error: Trying to initialize coordinate with unmatching type ");
+                ErrorHandling.Error("Trying to initialize coordinate with unmatching type ",node.line);
             }
         }
         return null;
@@ -84,11 +84,21 @@ public class DeclVisitor extends AbstractVisitor {
 
     public void VisitMethod(MethodDcl method){
         _table.OpenScope();
+        boolean foundReturn = false;
         for(Node n : method.parameters){
             visit(n);
         }
         for (Node n:((BlockNode)method.GetLeftChild()).GetChildren()) {
             visit(n);
+            if(n instanceof ReturnNode){
+                foundReturn = true;
+                if(n.type != method.type){
+                    ErrorHandling.Error("Trying to return "+method.type+" in method of type "+ n.type,method.line);
+                }
+            }
+        }
+        if ( method.type != null && !foundReturn){
+            ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable",method.line);
         }
         _table.CloseScope();
     }
@@ -100,7 +110,7 @@ public class DeclVisitor extends AbstractVisitor {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.num) {
                 return Node.Type.num;
             }else{
-                _table.MakeError("Error: Trying to initialize number with unmatching type ");
+                ErrorHandling.Error("Trying to initialize number with unmatching type ",node.line);
             }
         }
         return null;
@@ -127,7 +137,7 @@ public class DeclVisitor extends AbstractVisitor {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.string) {
                 return Node.Type.string;
             }else{
-                _table.MakeError("Error: Trying to initialize string with unmatching type ");
+                ErrorHandling.Error("Trying to initialize string with unmatching type ",node.line);
             }
         }
         return null;
@@ -141,7 +151,7 @@ public class DeclVisitor extends AbstractVisitor {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.List) {
                 return Node.Type.List;
             }else{
-                _table.MakeError("Error: Trying to initialize List with unmatching type ");//todo: lists should not work this way.
+                ErrorHandling.Error("Trying to initialize List with unmatching type ",node.line);//todo: lists should probably not work this way.
             }
         }
         return null;
@@ -183,7 +193,7 @@ public class DeclVisitor extends AbstractVisitor {
     public Object visit(AssignNode node) {
         Node.Type t1, t2;
         if(!(node.GetLeftChild() instanceof ReferenceNode)){
-            _table.MakeError("Error: trying to assign to non variable");
+            ErrorHandling.Error("trying to assign to non variable",node.line);
         }else{
             t2 = (Node.Type)visit(node.GetRightChild());
             String refID = ((ReferenceNode)node.GetLeftChild()).GetId()._id;
@@ -191,13 +201,14 @@ public class DeclVisitor extends AbstractVisitor {
             if (s!= null)
                 t1 = s.getType();
             else{
-                _table.MakeError("Error: Variable "+refID+" does not exist in current scope");
+                ErrorHandling.Error("Variable "+refID+" does not exist in current scope",node.line);
                 return null;
             }
             if(t1 == t2) {
+                ((ReferenceNode) node.GetLeftChild()).set_isValue(false);
                 return t1;
             }else{
-                _table.MakeError("Error: Trying to assign value of type " + t2 + " to variable of type " + t1 + " on line " + node.line);
+                ErrorHandling.Error("Trying to assign value of type " + t2 + " to variable of type " + t1,node.line);
             }
         }
 
@@ -210,7 +221,7 @@ public class DeclVisitor extends AbstractVisitor {
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
-            _table.MakeError("Error: Element in Division on line "+node.line+" has no type");
+            ErrorHandling.Error("Element in Division has no type",node.line);
         switch (t1){
             case num:
                 switch (t2){
@@ -221,10 +232,10 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     case List:case bool:case string:
-                        _table.MakeError("Error: Numbers can only be divided with numbers and coords");
+                        ErrorHandling.Error("Numbers can only be divided with numbers and coords",node.line);
                         break;
                     default:
-                        _table.MakeError("Shouldn't happen");
+                        ErrorHandling.Error("Shouldn't happen",node.line);
                 }
                 break;
             case bool:
@@ -232,7 +243,7 @@ public class DeclVisitor extends AbstractVisitor {
                     node.type = Node.Type.bool;
                     return Node.Type.bool;
                 }
-                _table.MakeError("Error: Boolean can only be Divided with boolean");
+                ErrorHandling.Error("Boolean can only be Divided with boolean",node.line);
                 break;
             case string:
                 switch (t2){
@@ -240,7 +251,7 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.string;
                         return Node.Type.string;
                     default:
-                        _table.MakeError("Error: String can only be divided with string");
+                        ErrorHandling.Error("String can only be divided with string",node.line);
                 }
                 break;
             case coord:
@@ -252,14 +263,14 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     default:
-                        _table.MakeError("Error: Coordinates can only be divided with numbers and coordinates");
+                        ErrorHandling.Error("Coordinates can only be divided with numbers and coordinates",node.line);
                 }
                 break;
             case List:
-                _table.MakeError("Error: Lists cannot be divided with anything");
+                ErrorHandling.Error("Lists cannot be divided with anything",node.line);
                 break;
             default:
-                _table.MakeError("Error: Left side of assign on line "+node.line+" statement has no type");
+                ErrorHandling.Error("Left side of division has no type",node.line);
         }
 
         return null;
@@ -310,7 +321,7 @@ public class DeclVisitor extends AbstractVisitor {
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
-            _table.MakeError("Error: Element in MinusNode on line "+node.line+" has no type");
+            ErrorHandling.Error("Element in MinusNode has no type",node.line);
         switch (t1){
             case num:
                 switch (t2){
@@ -321,10 +332,10 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     case List:case bool:case string:
-                        _table.MakeError("Error: Cannot subtract Lists, Booleans or strings from numbers");
+                        ErrorHandling.Error("Cannot subtract Lists, Booleans or strings from numbers",node.line);
                         break;
                     default:
-                        _table.MakeError("Shouldn't happen");
+                        ErrorHandling.Error("Shouldn't happen",node.line);
                 }
                 break;
             case bool:
@@ -332,7 +343,7 @@ public class DeclVisitor extends AbstractVisitor {
                     node.type = Node.Type.bool;
                     return Node.Type.bool;
                 }
-                _table.MakeError("Error: nothing but boolean can be subtracted from boolean");
+                ErrorHandling.Error("nothing but boolean can be subtracted from boolean",node.line);
                 break;
             case string:
                 switch (t2){
@@ -340,7 +351,7 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.string;
                         return Node.Type.string;
                     default:
-                        _table.MakeError("Error: nothing but strings can be subtracted form string");
+                        ErrorHandling.Error("nothing but strings can be subtracted form string",node.line);
                 }
                 break;
             case coord:
@@ -352,7 +363,7 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     default:
-                        _table.MakeError("Error: only coordinates and numbers can be subtracted from coordinate");
+                        ErrorHandling.Error("only coordinates and numbers can be subtracted from coordinate",node.line);
                 }
                 break;
             case List:
@@ -363,7 +374,7 @@ public class DeclVisitor extends AbstractVisitor {
                 }
                 break;
             default:
-                _table.MakeError("Error: Left side of assign on line "+node.line+" statement has no type");
+                ErrorHandling.Error("Left side of minus statement has no type",node.line);
         }
 
         return null;
@@ -375,7 +386,7 @@ public class DeclVisitor extends AbstractVisitor {
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
-            _table.MakeError("Error: Element in Multiplication on line "+node.line+" has no type");
+            ErrorHandling.Error("Element in Multiplication has no type",node.line);
         else switch (t1){
             case num:
                 switch (t2){
@@ -386,10 +397,10 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     case List:case bool:case string:
-                        _table.MakeError("Error: Cannot multiply Lists, Booleans or strings with numbers");
+                        ErrorHandling.Error("Cannot multiply Lists, Booleans or strings with numbers",node.line);
                         break;
                     default:
-                        _table.MakeError("Shouldn't happen");
+                        ErrorHandling.Error("Shouldn't happen",node.line);
                 }
                 break;
             case bool:
@@ -397,7 +408,7 @@ public class DeclVisitor extends AbstractVisitor {
                     node.type = Node.Type.bool;
                     return Node.Type.bool;
                 }
-                _table.MakeError("Error: nothing but boolean can be multiplied with boolean");
+                ErrorHandling.Error("nothing but boolean can be multiplied with boolean",node.line);
                 break;
             case string:
                 switch (t2){
@@ -408,7 +419,7 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.string;
                         return Node.Type.string;
                     default:
-                        _table.MakeError("Error: nothing but strings and numbers can be multiplied with string");
+                        ErrorHandling.Error("nothing but strings and numbers can be multiplied with string",node.line);
                 }
                 break;
             case coord:
@@ -420,14 +431,14 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     default:
-                        _table.MakeError("Error: only coordinates and numbers can be multiplied with coordinate");
+                        ErrorHandling.Error("only coordinates and numbers can be multiplied with coordinate",node.line);
                 }
                 break;
             case List:
-                _table.MakeError("Error: Lists cannot be multiplied with anything");
+                ErrorHandling.Error("Lists cannot be multiplied with anything",node.line);
                 break;
             default:
-                _table.MakeError("Error: Left side of assign on line "+node.line+" statement has no type");
+                ErrorHandling.Error("Left side of multiplication statement has no type",node.line);
         }
 
         return null;
@@ -440,7 +451,7 @@ public class DeclVisitor extends AbstractVisitor {
         if(t1== Node.Type.bool){
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Error: Trying to negate non boolean expression on line "+node.line);
+            ErrorHandling.Error("Trying to negate non boolean expression",node.line);
             return null;
         }
     }
@@ -457,7 +468,7 @@ public class DeclVisitor extends AbstractVisitor {
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null) {
-            _table.MakeError("Error: Element in PlusNode on line " + node.line + " has no type");
+            ErrorHandling.Error("Element in PlusNode has no type",node.line);
             return null;
         }
         switch (t1){
@@ -473,10 +484,10 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.coord;
                         return Node.Type.coord;
                     case List:case bool:
-                        _table.MakeError("Error: Cannot add Lists or Booleans to numbers");
+                        ErrorHandling.Error("Cannot add Lists or Booleans to numbers",node.line);
                         break;
                     default:
-                        _table.MakeError("Shouldn't happen");
+                        ErrorHandling.Error("Shouldn't happen",node.line);
                 }
                 break;
             case bool:
@@ -496,7 +507,7 @@ public class DeclVisitor extends AbstractVisitor {
                         node.type = Node.Type.string;
                         return Node.Type.string;
                     default:
-                        _table.MakeError("Shouldn't happen");
+                        ErrorHandling.Error("Shouldn't happen",node.line);
                     }
                 break;
             case coord:
@@ -521,7 +532,7 @@ public class DeclVisitor extends AbstractVisitor {
                 }
                 break;
             default:
-                _table.MakeError("Error: Left side of assign on line "+node.line+" statement has no type");
+                ErrorHandling.Error("Left side of addition statement has no type",node.line);
         }
 
         return null;
@@ -532,7 +543,7 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1;
         t1 = (Node.Type)visit(node.GetLeftChild());
         if(t1 == null)
-            _table.MakeError("Error: Element in unary minus on line "+node.line+" has no type");
+            ErrorHandling.Error("Element in unary minus has no type",node.line);
         switch (t1){
             case num:
                 node.type = Node.Type.num;
@@ -544,9 +555,9 @@ public class DeclVisitor extends AbstractVisitor {
                 node.type = Node.Type.bool;
                 return Node.Type.bool;
             case List:case string:
-                _table.MakeError("Error: Lists and strings can not be negative");
+                ErrorHandling.Error("Lists and strings can not be negative",node.line);
             default:
-                _table.MakeError("This cannot happn'");
+                ErrorHandling.Error("This cannot happn'",node.line);
         }
         return null;
     }
@@ -740,7 +751,7 @@ public class DeclVisitor extends AbstractVisitor {
         if(t1 == Node.Type.bool && t1 == t2){
             return t1;
         }
-        _table.MakeError(String.format("Error : %s on line %d is not a boolean expression", typename, node.line));
+        ErrorHandling.Error(String.format("both sides %s expression must be of type boolean", typename),node.line);
         return null;
     }
 }

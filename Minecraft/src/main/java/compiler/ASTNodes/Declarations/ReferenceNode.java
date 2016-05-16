@@ -10,7 +10,7 @@ import compiler.Visitors.Visitable;
 
 public class ReferenceNode extends LeafNode {
 	IDNode referencedIdentifier;
-	private boolean _isValue;
+	private boolean _isValue = true;
 	public boolean _GlobalRef = false;
 
 	public void set_isValue(boolean _isValue) {
