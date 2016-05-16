@@ -5,6 +5,7 @@ import compiler.ASTNodes.SyntaxNodes.ProgNode;
 import compiler.ObsidiCodeAntlr.ObsidiCodeLexer;
 import compiler.ObsidiCodeAntlr.ObsidiCodeParser;
 import compiler.Visitors.BuildASTVisitor;
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -30,6 +31,7 @@ public class AntlrASTBuilder {
             //Create parser and start parsing
             ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
             ParseTree tree = parser.prog(); //<--Specify the start-rule of the parser
+
 
             //Close file-stream!
             fis.close();

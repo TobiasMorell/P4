@@ -65,7 +65,7 @@ public class JavaSourceCompiler {
 
             try {
                 if (!task.call())
-                    System.out.println("Compilation failed, should provide some errors in console.");
+                    ErrorHandling.Error(getDiagnostics());
             } catch (UnsupportedOperationException e)
             {
                 System.out.println(e.getMessage());

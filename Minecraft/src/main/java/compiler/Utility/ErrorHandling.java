@@ -29,4 +29,9 @@ public class ErrorHandling {
             System.out.println(error);
         }
     }
+
+    public static ArrayList<String> GetErrors()
+    {
+        return errors;
+    }
 }
