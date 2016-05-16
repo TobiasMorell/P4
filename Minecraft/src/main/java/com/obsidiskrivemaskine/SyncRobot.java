@@ -1,5 +1,6 @@
 package com.obsidiskrivemaskine;
 
+import Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,61 @@ public class SyncRobot extends Thread{
 
     public SyncRobot(){
         start();
+    }
+
+    public synchronized float GetHealth(){
+        try {
+            Robot.getLock().isLockOpen();
+            Robot.getLock().changeLockState(false);
+            return AbstractRobot.GetHealth();
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+        return 0;
+    }
+
+    public synchronized float GetX() {
+        try {
+            Robot.getLock().isLockOpen();
+            Robot.getLock().changeLockState(false);
+            return AbstractRobot.getX();
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+        return 0;
+    }
+
+    public synchronized Coord GetPosition() {
+        try {
+            Robot.getLock().isLockOpen();
+            Robot.getLock().changeLockState(false);
+            return AbstractRobot.getPosition();
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+        return new Coord(0 ,0 ,0);
+    }
+
+    public synchronized float GetY() {
+        try {
+            Robot.getLock().isLockOpen();
+            Robot.getLock().changeLockState(false);
+            return AbstractRobot.getY();
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+        return 0;
+    }
+
+    public synchronized float GetZ() {
+        try {
+            Robot.getLock().isLockOpen();
+            Robot.getLock().changeLockState(false);
+            return AbstractRobot.getZ();
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+        return 0;
     }
 
     public synchronized void Move(String direction){

@@ -9,9 +9,9 @@ import java.net.MalformedURLException;
 /**
  * Created by esben on 14/04/16.
  */
-public class DynamicSuperClassLoader extends ClassLoader{
+public class DynamicClassLoader extends ClassLoader{
 
-    public DynamicSuperClassLoader(ClassLoader parent) {
+    public DynamicClassLoader(ClassLoader parent) {
         super(parent);
     }
 
@@ -24,7 +24,9 @@ public class DynamicSuperClassLoader extends ClassLoader{
             while(data != -1){
                 buffer.write(data);
                 data = input.read();
+                System.out.println("Printing Data: " + data);
             }
+
 
             input.close();
 

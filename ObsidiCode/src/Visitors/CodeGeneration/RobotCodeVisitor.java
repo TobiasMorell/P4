@@ -31,6 +31,7 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append("package CompiledRobots;\n");
         codeBuilder.append("import CodeGeneration.*;\n");
         codeBuilder.append("import Utility.Coord;\n");
+        codeBuilder.append("import com.obsidiskrivemaskine.SyncRobot;\n");
         codeBuilder.append(String.format("public class %sRobot extends SyncRobot {\n", robotName));
 
         //Append global variables

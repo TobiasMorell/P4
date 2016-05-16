@@ -1,5 +1,6 @@
 package com.obsidiskrivemaskine;
 
+import Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -238,6 +239,22 @@ public abstract class AbstractRobot {
 
     public static float GetHealth(){
         return Robot.getHealth();
+    }
+
+    public static float getX() {
+        return Robot.getPosition().getX();
+    }
+
+    public static float getY() {
+        return Robot.getPosition().getY();
+    }
+
+    public static float getZ() {
+        return Robot.getPosition().getZ();
+    }
+
+    public static Coord getPosition(){
+        return new Coord(Robot.getPosition().getX(), Robot.getPosition().getY(), Robot.getPosition().getZ());
     }
 
     private static ItemStack searchInventory(String item){

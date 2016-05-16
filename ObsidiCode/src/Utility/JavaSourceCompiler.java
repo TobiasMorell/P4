@@ -1,9 +1,12 @@
 package Utility;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.Compile;
+
 import javax.tools.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +23,12 @@ public class JavaSourceCompiler {
         //Loads current directory and specify where to store compiled files
         targetDir = System.getProperty("user.dir");
 
+        jsb[0].getClassName();
         if(targetDir.contains("ObsidiCode"))
             targetDir += "/CompiledSources/";
         else if(targetDir.contains("Minecraft")) {
             targetDir += "/saves/";
             File targetFolder = new File(targetDir + "CompiledSources/");
-
             if(!targetFolder.exists())
             {
                 try {
@@ -52,7 +55,6 @@ public class JavaSourceCompiler {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         try {
-            boolean succes = true;
             //Open an out-stream for code output
             FileWriter codeOutput = new FileWriter(targetDir + jsb[0].getClassName() + ".class", false); //false means override existing file
             //Compile and store in the output-stream
@@ -62,19 +64,15 @@ public class JavaSourceCompiler {
             codeOutput.flush();
             codeOutput.close();
 
-
             try {
                 if (!task.call())
-                    succes = false;
+                    System.out.println("Compilation failed, should provide some errors in console.");
             } catch (UnsupportedOperationException e)
             {
                 System.out.println(e.getMessage());
             }
-            if(!succes) {
-                System.out.println("Compilation failed, should provide some errors in console.");
-            }
             //For debugging!
-            System.out.println(getDiagnostics());
+            //System.out.println(getDiagnostics());
         }
         catch (IOException e)
         {
@@ -84,10 +82,8 @@ public class JavaSourceCompiler {
 
     }
 
-    public String getDiagnostics()
-    {
+    public String getDiagnostics() {
         StringBuilder sb = new StringBuilder();
-        //Generate error-pages here, right now just writing to console
         for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
             sb.append(diagnostic.getSource() + "\n");
             sb.append("Line " + diagnostic.getLineNumber());
@@ -96,8 +92,15 @@ public class JavaSourceCompiler {
             sb.append(diagnostic.getMessage(null));
             sb.append("\n\n");
         }
+        //Generate error-pages here, right now just writing to console
 
+        try {
+            FileWriter fw = new FileWriter("Compilation Diagnostics.txt");
+            fw.write(sb.toString());
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return sb.toString();
     }
-
 }

@@ -1,16 +1,19 @@
 package com.obsidiskrivemaskine.GUI;
 
-import ASTNodes.GeneralNodes.Node;
-import TypeChecking.SymbolTable;
-import Utility.*;
-import Visitors.CodeGeneration.HearCodeVisitor;
-import Visitors.CodeGeneration.NormalCodeVisitor;
-import Visitors.CodeGeneration.RobotCodeVisitor;
-import Visitors.SemanticsVisitor;
+
+import compiler.ASTNodes.GeneralNodes.Node;
+import compiler.TypeChecking.SymbolTable;
+import compiler.Utility.*;
+import compiler.Visitors.CodeGeneration.HearCodeVisitor;
+import compiler.Visitors.CodeGeneration.NormalCodeVisitor;
+import compiler.Visitors.CodeGeneration.RobotCodeVisitor;
+import compiler.Visitors.SemanticsVisitor;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
+
+import javax.tools.*;
 import java.io.*;
 
 /**
@@ -49,11 +52,11 @@ public class ObsidiGUIScreen extends GuiScreen
                 text.deleteCharAt(cursorLocation);
                 saveFile();
                 //Todo call compiler from this location + load classes
-                String currentDir = new File(System.getProperty("user.dir")).getParent() + "/ObsidiCode";
-                try{compileOC("SimpleMiner.oc");}
+                try{compileOC(robotName + ".oc");}
                 catch(Exception e){
                     e.printStackTrace();
                 }
+                //compile();
                 loadRobot();
                 break;
             case 1:
@@ -68,38 +71,6 @@ public class ObsidiGUIScreen extends GuiScreen
     }
 
     public static void compileOC(String args) throws Exception {
-        if(args == null) {
-            System.out.println("No file was specified for compilation, attempting to find files.");
-            String astBuilder = System.getProperty("os.name");
-            String root = System.getProperty("user.dir");
-            System.out.println("Attempting to find OS.");
-            if(astBuilder.startsWith("Windows")) {
-                System.out.println("Running on Windows - compiling esben_test.oc");
-                if(!root.endsWith("\\ObsidiCode")) {
-                    root = root + "\\ObsidiCode";
-                }
-
-                root = root + "\\Test\\esben_test.oc";
-            } else if(astBuilder.startsWith("Linux")) {
-                System.out.println("Running on Linux - compiling esben_test.oc");
-                if(!root.endsWith("/ObsidiCode")) {
-                    root = root + "/ObsidiCode";
-                }
-
-                root = root + "/Test/esben_test.oc";
-            } else {
-                if(!astBuilder.startsWith("Mac")) {
-                    System.out.println("Could not correctly determine the operating system, aborting compilation.");
-                    throw new IllegalArgumentException("No file was specified when calling the compiler, please do so.");
-                }
-
-                System.out.println("Running on mac - compiling esben_test.oc");
-                root = root + "/Test/esben_test.oc";
-            }
-
-            args = root;
-        }
-
         AntlrASTBuilder var14 = new AntlrASTBuilder();
         Node var15 = var14.Compile(args);
         if(var15 != null) {
@@ -132,26 +103,34 @@ public class ObsidiGUIScreen extends GuiScreen
     }
 
     void loadRobot(){
-        ClassLoader parentClassLoader = DynamicSuperClassLoader.class.getClassLoader();
-        DynamicSuperClassLoader newClassLoader = new DynamicSuperClassLoader(parentClassLoader);
+        ClassLoader parentClassLoader = DynamicClassLoader.class.getClassLoader();
+        DynamicClassLoader newClassLoader = new DynamicClassLoader(parentClassLoader);
         String classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "NormalThread.class");
+        System.out.println("ClassFile = " + classFile);
         try{newClassLoader.loadClass(robotName + "NormalThread", classFile);}
         catch(Exception e){
             e.printStackTrace();
             System.out.println("Failed to load NormalThread class");
         }
         classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "HearThread.class");
+        System.out.println("ClassFile = " + classFile);
         try{newClassLoader.loadClass(robotName + "HearThread", classFile);}
         catch(Exception e){
             e.printStackTrace();
             System.out.println("Failed to load HearThread class");
         }
         classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "Robot.class");
+        System.out.println("ClassFile = " + classFile);
         try{newClassLoader.loadClass(robotName + "Robot", classFile).newInstance();}
         catch(Exception e){
             e.printStackTrace();
             System.out.println("Failed to load Robot class");
         }
+    }
+
+    void compile(){
+        JavaCompiler JC = ToolProvider.getSystemJavaCompiler();
+        JC.run(null, null, null, "Test.java");
     }
 
     void saveFile(){
