@@ -12,7 +12,7 @@ public abstract class Node implements Visitable
     public enum Type {
         num, string, Coord, bool, Void, List, unknown
     }
-    public Type type;
+    protected Type type;
     public Node _parent;
     protected Node _leftmostChild;
 

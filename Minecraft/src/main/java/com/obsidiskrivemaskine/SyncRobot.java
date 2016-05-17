@@ -381,4 +381,53 @@ public class SyncRobot extends Thread{
     protected void START()
     {
     }
+
+    protected String multStringString(String s1, String s2)
+    {
+        char[] chars = new char[s1.length() + s2.length()];
+        int full_length = 0;
+        int first = 0;
+        int second = 0;
+
+        while(full_length < s1.length() + s2.length()) {
+            if(first < s1.length()) {
+                chars[full_length] = s1.charAt(first);
+                first++;
+                full_length++;
+            }
+            if(second < s2.length()) {
+                chars[full_length] = s2.charAt(second);
+                second++;
+                full_length++;
+            }
+        }
+
+        return String.valueOf(chars);
+    }
+
+    protected String multStringNum(String s1, float n1)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < n1; i++)
+        {
+            sb.append(s1);
+        }
+
+        return sb.toString();
+    }
+
+    protected String divStringString(String s1, String s2)
+    {
+        StringBuilder sb = new StringBuilder();
+        //Run through s1 and find out if the chars are in s2
+        for (int i = 0; i < s1.length(); i++) {
+            char current = s1.charAt(i);
+            if(s2.contains(String.valueOf(current)))
+            {
+                sb.append(current);
+            }
+        }
+
+        return sb.toString();
+    }
 }

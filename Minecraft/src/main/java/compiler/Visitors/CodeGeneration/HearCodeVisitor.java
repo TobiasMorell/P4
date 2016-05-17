@@ -66,7 +66,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
             if(i > 0)
                 codeBuilder.append(',');
             DeclarationNode n = (DeclarationNode) node.parameters.get(i);
-            codeBuilder.append(n.type);
+            codeBuilder.append(n.getT());
             codeBuilder.append(' ');
             codeBuilder.append(n.GetID());
         }

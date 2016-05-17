@@ -28,7 +28,7 @@ public class Func {
             name = methodNode.id;
             for (Node n :methodNode.parameters) {
                 DeclarationNode N = (DeclarationNode)n;
-                parameters.add(N.type);
+                parameters.add(N.getT());
             }
         }
     public Func(String Name, Node.Type ret, Node.Type... params){

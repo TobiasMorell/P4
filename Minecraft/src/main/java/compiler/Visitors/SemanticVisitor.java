@@ -92,12 +92,12 @@ public class SemanticVisitor extends AbstractVisitor {
             visit(n);
             if(n instanceof ReturnNode){
                 foundReturn = true;
-                if(n.type != method.type){
-                    ErrorHandling.Error("Trying to return "+method.type+" in method of type "+ n.type,method.line);
+                if(n.getT() != method.type){
+                    ErrorHandling.Error("Trying to return "+method.type+" in method of type "+ n.getT(),method.line);
                 }
             }
         }
-        if ( method.type != null && !foundReturn){
+        if ( method.getT() != Node.Type.Void && !foundReturn){
             ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable",method.line);
         }
         _table.CloseScope();
@@ -124,8 +124,8 @@ public class SemanticVisitor extends AbstractVisitor {
             if(_table.depth == 0){
                 node._GlobalRef = true;
             }
-            node.type = s.getType();
-            return node.type;
+            node.setT(s.getType());
+            return node.getT();
         }
         return null;
     }
@@ -162,7 +162,7 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Greater than Or Equal operator", node.line);
@@ -175,7 +175,7 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Less than Or Equal operator", node.line);
@@ -185,7 +185,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(AndNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "And");
     }
 
@@ -226,10 +226,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case List:case bool:case string:
                         ErrorHandling.Error("Numbers can only be divided with numbers and coords",node.line);
@@ -240,7 +240,7 @@ public class SemanticVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 ErrorHandling.Error("Boolean can only be Divided with boolean",node.line);
@@ -248,7 +248,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("String can only be divided with string",node.line);
@@ -257,10 +257,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case Coord:
                 switch (t2){
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     default:
                         ErrorHandling.Error("Coordinates can only be divided with numbers and coordinates",node.line);
@@ -281,7 +281,7 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Greater than operator", node.line);
@@ -291,7 +291,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IsNode node) {//todo: discuss weather Is is a good representation of ==<
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1==t2){
@@ -307,7 +307,7 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the less than operator", node.line);
@@ -326,10 +326,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case List:case bool:case string:
                         ErrorHandling.Error("Cannot subtract Lists, Booleans or strings from numbers",node.line);
@@ -340,7 +340,7 @@ public class SemanticVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 ErrorHandling.Error("nothing but boolean can be subtracted from boolean",node.line);
@@ -348,7 +348,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT( Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("nothing but strings can be subtracted form string",node.line);
@@ -357,10 +357,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case Coord:
                 switch (t2){
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT( Node.Type.Coord);
                         return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     default:
                         ErrorHandling.Error("only coordinates and numbers can be subtracted from coordinate",node.line);
@@ -369,7 +369,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case List:
                 switch (t2){
                     case num:case bool:case string:case Coord:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                 }
                 break;
@@ -391,10 +391,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case List:case bool:case string:
                         ErrorHandling.Error("Cannot multiply Lists, Booleans or strings with numbers",node.line);
@@ -405,7 +405,7 @@ public class SemanticVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 ErrorHandling.Error("nothing but boolean can be multiplied with boolean",node.line);
@@ -413,10 +413,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     case num:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("nothing but strings and numbers can be multiplied with string",node.line);
@@ -425,10 +425,10 @@ public class SemanticVisitor extends AbstractVisitor {
             case Coord:
                 switch (t2){
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     default:
                         ErrorHandling.Error("only coordinates and numbers can be multiplied with coordinate",node.line);
@@ -446,7 +446,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NotNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         if(t1== Node.Type.bool){
             return Node.Type.bool;
@@ -458,7 +458,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(OrNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "or");
     }
 
@@ -475,13 +475,13 @@ public class SemanticVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT( Node.Type.Coord);
                         return Node.Type.Coord;
                     case List:case bool:
                         ErrorHandling.Error("Cannot add Lists or Booleans to numbers",node.line);
@@ -493,7 +493,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case bool:
                 switch (t2){
                     case bool:
-                        node.type = Node.Type.bool;
+                        node.setT(Node.Type.bool);
                         return Node.Type.bool;
                     case string:
                         return Node.Type.string;
@@ -504,7 +504,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case num:case string:case bool:case Coord:case List:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("Shouldn't happen",node.line);
@@ -513,13 +513,13 @@ public class SemanticVisitor extends AbstractVisitor {
             case Coord:
                 switch (t2){
                     case Coord:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.Coord;
+                        node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("Trying to add value of uncompatible type to coordinate",node.line);
@@ -527,7 +527,7 @@ public class SemanticVisitor extends AbstractVisitor {
                 break;
             case List:
                 if(t2 != null) {
-                    node.type = Node.Type.List;
+                    node.setT(Node.Type.List);
                     return Node.Type.List;
                 }
                 break;
@@ -546,13 +546,13 @@ public class SemanticVisitor extends AbstractVisitor {
             ErrorHandling.Error("Element in unary minus has no type",node.line);
         switch (t1){
             case num:
-                node.type = Node.Type.num;
+                node.setT(Node.Type.num);
                 return Node.Type.num;
             case Coord:
-                node.type = Node.Type.Coord;
+                node.setT(Node.Type.Coord);
                 return Node.Type.Coord;
             case bool:
-                node.type = Node.Type.bool;
+                node.setT(Node.Type.bool);
                 return Node.Type.bool;
             case List:case string:
                 ErrorHandling.Error("Lists and strings can not be negative",node.line);
@@ -564,13 +564,13 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(XnorNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "Xnor");
     }
 
     @Override
     public Object visit(XorNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "Xor");
     }
 
@@ -594,7 +594,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolLit node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return Node.Type.bool;
     }
 
@@ -608,7 +608,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordLit node) {
-        node.type = Node.Type.Coord;
+        node.setT(Node.Type.Coord);
         return Node.Type.Coord;
     }
 
@@ -629,7 +629,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(ParenNode node) {
         //System.out.println("Visiting Parentheses " + _table.depth + "on line " + node.line);
         Node.Type t = (Node.Type) visit(node.GetLeftChild());
-        node.type = t;
+        node.setT(t);
         return t;
     }
 
@@ -680,7 +680,7 @@ public class SemanticVisitor extends AbstractVisitor {
         }
         Func function =_table.RetrieveMethod(node, types);
         if(function!=null) {
-            node.type = function.returnType;
+            node.setT(function.returnType);
             return function.returnType;
         }
         return null;
@@ -688,7 +688,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumLit node) {
-        node.type = Node.Type.num;
+        node.setT(Node.Type.num);
         return Node.Type.num;
     }
 
@@ -735,7 +735,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringLit node) {
-        node.type = Node.Type.string;
+        node.setT(Node.Type.string);
         return Node.Type.string;
     }
 

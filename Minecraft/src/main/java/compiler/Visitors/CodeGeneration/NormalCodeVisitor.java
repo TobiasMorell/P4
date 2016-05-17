@@ -256,26 +256,41 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(DivNode node) {
-        if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string)
+        if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.string)
         {
-            //picks out all chars of rhs in lhs.
-            //todo this
+            codeBuilder.append("divStringString(");
+            visit(node.GetLeftChild());
+            codeBuilder.append(", ");
+            visit(node.GetRightChild());
+            codeBuilder.append(")");
         }
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '/');
         }
-        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        else if(node.GetLeftChild().getT() == Node.Type.bool && node.GetRightChild().getT() == Node.Type.bool)
         {
-            //todo this
-           //boolean exclusive and visit(node.GetLeftChild()); codeBuilder.append(""); visit(node.GetRightChild());
-            //wtf is exclusive and?
+            //(b1 && b2)
+            codeBuilder.append("((");
+            visit(node.GetLeftChild());
+            codeBuilder.append(" && ");
+            visit(node.GetRightChild());
+            codeBuilder.append(")");
+
+            codeBuilder.append(" || ");
+
+            //(!b1 && !b2)
+            codeBuilder.append("(!");
+            visit(node.GetLeftChild());
+            codeBuilder.append(" && !");
+            visit(node.GetRightChild());
+            codeBuilder.append("))");
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.num && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '/');
         }
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '/');
         }
@@ -306,27 +321,41 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MinusNode node) {
-        if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string)
+        if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.string)
         {
             visit(node.GetLeftChild());
             codeBuilder.append(".replaceAll(");
             visit(node.GetRightChild());
             codeBuilder.append(", \"\")");
         }
-        else if(node.GetLeftChild().type ==  Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() ==  Node.Type.Coord && node.GetRightChild().getT() == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '-');
         }
 
-        else if(node.GetLeftChild().type ==  Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        else if(node.GetLeftChild().getT() ==  Node.Type.bool && node.GetRightChild().getT() == Node.Type.bool)
         {
-            visit(node.GetLeftChild()); codeBuilder.append(" ^ "); visit(node.GetRightChild());
+            //(b1 && !b2)
+            codeBuilder.append("((");
+            visit(node.GetLeftChild());
+            codeBuilder.append(" && !");
+            visit(node.GetRightChild());
+            codeBuilder.append(")");
+
+            codeBuilder.append(" || ");
+
+            //(!b1 && b2)
+            codeBuilder.append("(!");
+            visit(node.GetLeftChild());
+            codeBuilder.append(" && ");
+            visit(node.GetRightChild());
+            codeBuilder.append("))");
         }
-        else if(node.GetLeftChild().type ==  Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() ==  Node.Type.num && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '-');
         }
-        else if(node.GetLeftChild().type ==  Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() ==  Node.Type.Coord && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '-');
         }
@@ -336,53 +365,38 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MultNode node) {
-        if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.string) {
+        if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.string) {
             //takes first char in lhs then first char in rhs and so forth
-            //lave while ikke tom og så take hvert element over i en ny string
-            //todo this
-            String string1 = "ExampleString";
-            String string2 = "ExampleString";
-            char[] chars = new char[1000];
-
-            //while (string1.length() > 0)
-              //  chars[1] = string1.charAt(1);
-
-            for (int i = 0, x = 0; i < string1.length() + string2.length(); i += 2, x++)
-            {
-                chars[i] = string1.charAt(x);
-                chars[i + 1] = string2.charAt(x);
-                codeBuilder.append(i);
-            }
-            codeBuilder.append(chars);
+            codeBuilder.append("multStringString(");
+            visit(node.GetLeftChild());
+            codeBuilder.append(", ");
+            visit(node.GetRightChild());
+            codeBuilder.append(");\n");
         }
 
-        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.num)
         {
-            /*
-            String teststring = "Beers"; float myfloat = 4; String test = ""; int j = 0;
-            codeBuilder.append("String test; ");
-            codeBuilder.append("for(int i = 0; i < ");
-            visit(node.GetRightChild()); codeBuilder.append("; 1++){ ");
-            codeBuilder.append("test += "); visit(node.GetLeftChild()); codeBuilder.append("}");
-            visit(node.GetLeftChild()); codeBuilder.append(" = test");
-            */
-            //repeat string num times.
-            //todo this
+            //repeat the string a given number of times
+            codeBuilder.append("multStringNum(");
+            visit(node.GetLeftChild());
+            codeBuilder.append(", ");
+            visit(node.GetRightChild());
+            codeBuilder.append(")");
         }
 
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '*');
         }
-        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        else if(node.GetLeftChild().getT() == Node.Type.bool && node.GetRightChild().getT() == Node.Type.bool)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" && "); visit(node.GetRightChild());
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.num && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '*');
         }
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '*');
         }
@@ -410,58 +424,55 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(PlusNode node) {
 
-        if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.string)
+        if(node.GetLeftChild().getT() == Node.Type.num && node.GetRightChild().getT() == Node.Type.string)
         {
             visit(node.GetLeftChild());  codeBuilder.append(".toString()"); codeBuilder.append(" + "); visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.string)
+        else if(node.GetLeftChild().getT() == Node.Type.bool && node.GetRightChild().getT() == Node.Type.string)
         {
             codeBuilder.append("String.valueOf("); visit(node.GetLeftChild()); codeBuilder.append(").toUpperCase()");
             codeBuilder.append(" + "); visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.string)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.string)
         {
             visit(node.GetLeftChild()); codeBuilder.append(".toString()"); codeBuilder.append(" + ");
             visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.num)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" + "); visit(node.GetRightChild()); codeBuilder.append(".toString()");
         }
 
-        //This may have to change
-        //else it could produce in example: oldcoord = oldcoord + 10
-        //makes: oldcoord.x += 10; oldcoord.y +=
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.num)
         {
             CoordSimplifier(node,InputTypes.COORDNUM,'+');
         }
 
-        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.bool)
+        else if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.bool)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" + "); codeBuilder.append("String.valueOf(");
             visit(node.GetRightChild()); codeBuilder.append(").toUpperCase()");
         }
 
-        else if(node.GetLeftChild().type == Node.Type.bool && node.GetRightChild().type == Node.Type.bool)
+        else if(node.GetLeftChild().getT() == Node.Type.bool && node.GetRightChild().getT() == Node.Type.bool)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" || "); visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.Coord)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" + "); visit(node.GetRightChild());
             codeBuilder.append(".toString()");
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.num && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '+');
         }
 
-        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
+        else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '+');
         }
