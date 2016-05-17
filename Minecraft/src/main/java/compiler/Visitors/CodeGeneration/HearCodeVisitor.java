@@ -5,6 +5,7 @@ import compiler.ASTNodes.Declarations.HearDcl;
 import compiler.ASTNodes.Declarations.MethodDcl;
 import compiler.ASTNodes.GeneralNodes.Node;
 import compiler.ASTNodes.SyntaxNodes.LoadNode;
+import compiler.ASTNodes.SyntaxNodes.MethodInvocationNode;
 import compiler.ASTNodes.SyntaxNodes.ProgNode;
 import compiler.Utility.AbstractKeywordSheet;
 import compiler.Utility.JavaSourceBuffer;
@@ -82,6 +83,22 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     @Override
     public Object visit(LoadNode node) {
         //Todo must find out how to import other robots
+        return null;
+    }
+
+    @Override
+    public Object visit(MethodInvocationNode node) {
+        // codeBuilder.append("Robot.");
+        //todo Add call to WaitForTurn()
+        visit(node.GetLeftChild());
+        codeBuilder.append("(");
+        int i = node.GetChildren().size();
+        for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
+        codeBuilder.append(") ");
+        if(node._parent._parent instanceof MethodDcl){
+            codeBuilder.append(";");
+        }
+
         return null;
     }
 

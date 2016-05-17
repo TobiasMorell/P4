@@ -12,7 +12,7 @@ public class RobotLock {
 
     public synchronized void changeLockState(boolean state){
         this.lockIsOpen = state;
-        notifyAll();
+        this.notify();
     }
 
     public synchronized void isLockOpen() throws InterruptedException{

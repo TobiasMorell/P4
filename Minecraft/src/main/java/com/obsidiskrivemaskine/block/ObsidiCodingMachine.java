@@ -7,6 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -29,6 +31,7 @@ public class ObsidiCodingMachine extends Block
         this.setUnlocalizedName("ObsidiCodingMachine");
         setCreativeTab(CreativeTabs.tabMisc);
     }
+
     public static void receiveSignal(Signal si){
         if(RobotList != null) {
             for (SyncRobot robot : RobotList) {

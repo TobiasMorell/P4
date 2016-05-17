@@ -25,7 +25,6 @@ public class ObsidiGUIScreen extends GuiScreen
     private FileReader obsidiFileReader;
     private String robotName;
     private FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
-    private Class<? extends SyncRobot> sr;
 
     @Override
     public void initGui() {
@@ -85,7 +84,7 @@ public class ObsidiGUIScreen extends GuiScreen
         String classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot.class");
 
         try{
-            sr = newClassLoader.loadClass(robotName + "Robot", classFile);
+            Class<? extends SyncRobot> sr = newClassLoader.loadClass(robotName + "Robot", classFile);
             classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot$" + robotName + "HearThread.class");
             newClassLoader.loadClass(robotName + "Robot$" + robotName + "HearThread", classFile);
             sr.newInstance().StartThreads();

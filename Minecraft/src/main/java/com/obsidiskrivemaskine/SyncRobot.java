@@ -29,7 +29,6 @@ public class SyncRobot extends Thread{
     protected Thread hear_thread;
 
     public SyncRobot(){
-        start();
         ObsidiCodingMachine.RobotList.add(this);
     }
 
@@ -275,26 +274,27 @@ public class SyncRobot extends Thread{
 
     public synchronized void Signal(Signal signal){
         signalQueue.add(signal);
+        System.out.println("Signal added");
         mutex.SwitchTurns(true);
     }
 
     protected abstract class HearThread implements Runnable {
         @Override
         public void run() {
-            System.out.println();
             try {
-                synchronized (mutex) {
-                    mutex.wait();
-                }
                 while (true) {
-                    Signal s = signalQueue.poll();
-                    Handle(s);
                     if (signalQueue.isEmpty()) {
+                        System.out.println("SignlQueue is empty");
                         synchronized (mutex) {
                             mutex.SwitchTurns(false);
+                            System.out.println("Turn switched, time for sleeping");
                             mutex.wait();
+                            System.out.println("Resuming signalQueue check");
                         }
                     }
+                    Signal s = signalQueue.poll();
+                    Handle(s);
+                    System.out.println("After handle");
                 }
             } catch (InterruptedException e)
             {
@@ -360,14 +360,17 @@ public class SyncRobot extends Thread{
         public synchronized void SwitchTurns(boolean setTo)
         {
             pendingSignals.set(setTo);
-            notifyAll();
+            mutex.notifyAll();
         }
 
         public synchronized void WaitForTurn()
         {
             try {
-                if(pendingSignals.get())
-                    wait();
+                if(pendingSignals.get()) {
+                    System.out.println("Got a signal");
+                    mutex.wait();
+                    System.out.println("Waiting over");
+                }
             } catch (InterruptedException e)
             {
                 System.out.println("Failed to wait for turn.");
@@ -377,6 +380,5 @@ public class SyncRobot extends Thread{
 
     protected void START()
     {
-        System.out.println("Hej");
     }
 }

@@ -3,6 +3,7 @@ package com.obsidiskrivemaskine;
 import compiler.Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDropper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

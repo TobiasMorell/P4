@@ -521,7 +521,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(BlockNode node) {
         codeBuilder.append(" \n { \n");
-        codeBuilder.append("\nmutex.WaitForTurn();\n");
+        //codeBuilder.append("\nmutex.WaitForTurn();\n");
         for (Node n : node.GetChildren()) {
             visit(n);
         }

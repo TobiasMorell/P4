@@ -54,16 +54,17 @@ public class RobotEntity extends EntityCreature
     public void onEntityUpdate(){
         synchronized(this){
             lock.changeLockState(true);
-            notifyAll();
+            this.notify();
         }
         super.onEntityUpdate();
         if(ticksExisted % 5 == 0 || ticksExisted < 5) {
             AxisAlignedBB scanArea = new AxisAlignedBB(posX - 10, posY - 10, posZ - 10, posX + 10, posY + 10, posZ + 10);
             entities = (ArrayList) worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scanArea);
         }
-        if(ticksExisted % 300 == 0 && ticksExisted > 0) {
+        if(ticksExisted % 200 == 0 && ticksExisted > 0) {
             Object[] args = new Object[1];
             args[0] = new Coord(10.0f, 10.0f, 10.0f);
+
             ObsidiCodingMachine.receiveSignal(new Signal("Listen", args));
         }
     }
