@@ -3,6 +3,9 @@ package com.obsidiskrivemaskine.Entity;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.RobotLock;
 import com.obsidiskrivemaskine.Utils;
+import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
+import compiler.CodeGeneration.Signal;
+import compiler.Utility.Coord;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -29,7 +32,7 @@ public class RobotEntity extends EntityCreature
     {
         super(worldIn);
         this.Inventory = new ItemStack[15];
-        this.setSize(1F, 1F);
+        this.setSize(0.75F, 0.75F);
         this.setCanPickUpLoot(true);
     }
 
@@ -57,6 +60,11 @@ public class RobotEntity extends EntityCreature
         if(ticksExisted % 5 == 0 || ticksExisted < 5) {
             AxisAlignedBB scanArea = new AxisAlignedBB(posX - 10, posY - 10, posZ - 10, posX + 10, posY + 10, posZ + 10);
             entities = (ArrayList) worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scanArea);
+        }
+        if(ticksExisted % 300 == 0 && ticksExisted > 0) {
+            Object[] args = new Object[1];
+            args[0] = new Coord(10.0f, 10.0f, 10.0f);
+            ObsidiSkriveMaskineBlock.receiveSignal(new Signal("Listen", args));
         }
     }
 

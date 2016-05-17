@@ -5,9 +5,7 @@ import javax.tools.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,12 +15,12 @@ public class JavaSourceCompiler {
     private static String targetDir;
     private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-    public void CompileJavaSource(JavaSourceBuffer[] jsb)
+    public void CompileJavaSource(JavaSourceBuffer jsb)
     {
         //Loads current directory and specify where to store compiled files
         targetDir = System.getProperty("user.dir");
 
-        jsb[0].getClassName();
+        jsb.getClassName();
         if(targetDir.contains("ObsidiCode"))
             targetDir += "/CompiledSources/";
         else if(targetDir.contains("Minecraft")) {
@@ -46,16 +44,14 @@ public class JavaSourceCompiler {
         //Create an iteratable data-structure to store compilation-files
         List<JavaSourceBuffer> compilationUnits = new ArrayList<JavaSourceBuffer>();
 
-        for (int i = 0; i < jsb.length; i++)
-        {
-            compilationUnits.add(jsb[i]);
-        }
+        compilationUnits.add(jsb);
+
         //And get the compiler from the system
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         try {
             //Open an out-stream for code output
-            FileWriter codeOutput = new FileWriter(targetDir + jsb[0].getClassName() + ".class", false); //false means override existing file
+            FileWriter codeOutput = new FileWriter(targetDir + jsb.getClassName() + ".class", false); //false means override existing file
             //Compile and store in the output-stream
             JavaCompiler.CompilationTask task = compiler.getTask(codeOutput, null, diagnostics, null, null, compilationUnits);
 
@@ -75,10 +71,8 @@ public class JavaSourceCompiler {
         }
         catch (IOException e)
         {
-            System.out.println("Could not create compilation output.");//todo: IO exception thrown.. why?
+            System.out.println("Could not create compilation output.");
         }
-
-
     }
 
     public String getDiagnostics() {

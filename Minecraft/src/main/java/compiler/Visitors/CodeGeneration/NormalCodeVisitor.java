@@ -13,7 +13,7 @@ import compiler.Visitors.AbstractVisitor;
 /**
  * Created by morell on 4/26/16.
  */
-public class NormalCodeVisitor extends AbstractVisitor {
+public abstract class NormalCodeVisitor extends AbstractVisitor {
     //todo: Implement use of SymbolTable, must also use the approach defined by Arne & Lee
 
     protected StringBuilder codeBuilder = new StringBuilder();
@@ -25,7 +25,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
     {
         this.keywords = keywords;
         this.symtable = symtab;
-
     }
 
     public  NormalCodeVisitor (AbstractKeywordSheet aks)
@@ -40,19 +39,18 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     private void emitHeader()
     {
-        codeBuilder.append("package CompiledRobots;\n");
-        codeBuilder.append("import java.util.ArrayList;\n");
+        //codeBuilder.append("package CompiledRobots;\n");
+        codeBuilder.append("import compiler.CodeGeneration.*;\n");
+        codeBuilder.append("import compiler.Utility.Coord;\n");
+        codeBuilder.append("import com.obsidiskrivemaskine.SyncRobot;\n");
+        codeBuilder.append("import java.lang.reflect.Method; \n");
+        codeBuilder.append(String.format("public class %sRobot extends SyncRobot {\n", robotName));
 
-        codeBuilder.append("import Utility.Coord;\n");
-        codeBuilder.append("import CodeGeneration.*;\n\n");
-        codeBuilder.append("public class " + robotName + "NormalThread extends NormalThread { \n");
-        codeBuilder.append("private " + robotName +"Robot Robot; \n");
-        codeBuilder.append("public " + robotName + "NormalThread(" + robotName + "Robot r, RobotMutex mut) {");
-        codeBuilder.append("super(mut); Robot = r; }  \n");
-
-
-
-
+        //Append constructor
+        codeBuilder.append(String.format("public %sRobot() {\n", robotName));
+        codeBuilder.append("createEntityIfNotPresent();\n");
+        codeBuilder.append(String.format("hear_thread = new Thread(new %sHearThread(this, mutex));\n", robotName));
+        codeBuilder.append("}\n");
     }
         //Note to self, both generic dcls and blocks all produce \n which kinda seems overkill, unsure what to change
         //Note not all of our custom orthogonality with operators and types can be made directly in code gen,
@@ -121,6 +119,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     private void visitMethodDclGeneric(MethodDcl node, String type)
     {
+        if(node.id.equals("START"))
+            codeBuilder.append("@Override\n");
         codeBuilder.append(keywords.ACCESS);
         codeBuilder.append(' ');
         codeBuilder.append(type);
@@ -172,7 +172,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             case string:
                 typeExt = keywords.STRING;
                 break;
-            case coord:
+            case Coord:
                 typeExt = keywords.COORD;
                 break;
             case Void:
@@ -261,7 +261,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             //picks out all chars of rhs in lhs.
             //todo this
         }
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '/');
         }
@@ -271,11 +271,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
            //boolean exclusive and visit(node.GetLeftChild()); codeBuilder.append(""); visit(node.GetRightChild());
             //wtf is exclusive and?
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '/');
         }
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '/');
         }
@@ -313,7 +313,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetRightChild());
             codeBuilder.append(", \"\")");
         }
-        else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().type ==  Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '-');
         }
@@ -322,11 +322,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         {
             visit(node.GetLeftChild()); codeBuilder.append(" ^ "); visit(node.GetRightChild());
         }
-        else if(node.GetLeftChild().type ==  Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type ==  Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '-');
         }
-        else if(node.GetLeftChild().type ==  Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type ==  Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '-');
         }
@@ -340,8 +340,8 @@ public class NormalCodeVisitor extends AbstractVisitor {
             //takes first char in lhs then first char in rhs and so forth
             //lave while ikke tom og så take hvert element over i en ny string
             //todo this
-            String string1 = "Elefant";
-            String string2 = "Elefant";
+            String string1 = "ExampleString";
+            String string2 = "ExampleString";
             char[] chars = new char[1000];
 
             //while (string1.length() > 0)
@@ -370,7 +370,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             //todo this
         }
 
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
         {
             CoordSimplifier(node, InputTypes.COORDNUM, '*');
         }
@@ -378,11 +378,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
         {
             visit(node.GetLeftChild()); codeBuilder.append(" && "); visit(node.GetRightChild());
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '*');
         }
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '*');
         }
@@ -421,7 +421,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
             codeBuilder.append(" + "); visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.string)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.string)
         {
             visit(node.GetLeftChild()); codeBuilder.append(".toString()"); codeBuilder.append(" + ");
             visit(node.GetRightChild());
@@ -435,7 +435,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
         //This may have to change
         //else it could produce in example: oldcoord = oldcoord + 10
         //makes: oldcoord.x += 10; oldcoord.y +=
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.num)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.num)
         {
             CoordSimplifier(node,InputTypes.COORDNUM,'+');
         }
@@ -451,17 +451,17 @@ public class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetLeftChild()); codeBuilder.append(" || "); visit(node.GetRightChild());
         }
 
-        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.string && node.GetRightChild().type == Node.Type.Coord)
         {
             visit(node.GetLeftChild()); codeBuilder.append(" + "); visit(node.GetRightChild());
             codeBuilder.append(".toString()");
         }
-        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.num && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.NUMCOORD, '+');
         }
 
-        else if(node.GetLeftChild().type == Node.Type.coord && node.GetRightChild().type == Node.Type.coord)
+        else if(node.GetLeftChild().type == Node.Type.Coord && node.GetRightChild().type == Node.Type.Coord)
         {
             CoordSimplifier(node, InputTypes.COORDCOORD, '+');
         }
@@ -521,9 +521,11 @@ public class NormalCodeVisitor extends AbstractVisitor {
     @Override
     public Object visit(BlockNode node) {
         codeBuilder.append(" \n { \n");
+        codeBuilder.append("\nmutex.WaitForTurn();\n");
         for (Node n : node.GetChildren()) {
             visit(n);
         }
+
         codeBuilder.append(" \n } \n");
         return null;
     }
@@ -601,9 +603,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
         return null;
     }
 
-
-
-
     @Override
     public Object visit(IfNode node) {
 
@@ -640,6 +639,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
+        //todo Add call to WaitForTurn();
         codeBuilder.append("while(!(");
         visit(node.GetLeftChild());
         codeBuilder.append("))");
@@ -649,7 +649,9 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        codeBuilder.append("Robot.");
+       // codeBuilder.append("Robot.");
+        //todo Add call to WaitForTurn()
+        codeBuilder.append("\nmutex.WaitForTurn();\n");
         visit(node.GetLeftChild());
         codeBuilder.append("(");
         int i = node.GetChildren().size();
@@ -664,7 +666,6 @@ public class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumLit node) {
-
         codeBuilder.append(node._value);
         codeBuilder.append("f");
         return null;
@@ -678,7 +679,7 @@ public class NormalCodeVisitor extends AbstractVisitor {
              ) { visit(n);
         }
 
-        codeBuilder.append("}");
+        //codeBuilder.append("}");
         return null;
     }
 

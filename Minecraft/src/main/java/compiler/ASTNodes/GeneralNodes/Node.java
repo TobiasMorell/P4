@@ -10,14 +10,14 @@ public abstract class Node implements Visitable
         line = BuildASTVisitor.line;
     }
     public enum Type {
-        num, string, coord, bool, Void, List, unknown
+        num, string, Coord, bool, Void, List, unknown
     }
     public Type type;
     public Node _parent;
     protected Node _leftmostChild;
 
     public final Type getT() {
-        return type;
+        return this.type;
     }
 
     public final void setT(Type t) {

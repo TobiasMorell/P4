@@ -126,9 +126,23 @@ public abstract class AbstractRobot {
     }
 
     public static void Place(String name){
-        if(searchInventory(name) != null)
+        ItemStack toPlace = searchInventory(name);
+        if(toPlace != null)
         {
-            searchInventory(name).onItemUse(player, world, Robot.getPosition().add(0, 0, 1), Robot.getHorizontalFacing(), 0, 0, 0);
+            toPlace.onItemUse(player, world, Robot.getPosition().add(0, 0, 1), Robot.getHorizontalFacing(), 0, 0, 0);
+            removeFromInventory(toPlace);
+        }
+    }
+
+    private static void removeFromInventory(ItemStack toPlace) {
+        ItemStack[] inventory = Robot.getInventory();
+        Boolean removed = false;
+        int i = 0;
+        while(i < inventory.length && !removed){
+            if(inventory[i] != null && inventory[i].getDisplayName().equals(toPlace.getDisplayName()) && inventory[i].stackSize != 0) {
+                inventory[i] = null;
+                removed = true;
+            }
         }
     }
 

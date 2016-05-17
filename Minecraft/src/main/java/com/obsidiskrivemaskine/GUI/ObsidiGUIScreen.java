@@ -1,18 +1,14 @@
 package com.obsidiskrivemaskine.GUI;
 
 
-import compiler.ASTNodes.GeneralNodes.Node;
-import compiler.TypeChecking.SymbolTable;
-import compiler.Utility.*;
-import compiler.Visitors.CodeGeneration.HearCodeVisitor;
-import compiler.Visitors.CodeGeneration.NormalCodeVisitor;
-import compiler.Visitors.CodeGeneration.RobotCodeVisitor;
+import com.obsidiskrivemaskine.SyncRobot;
+import compiler.Compiler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 
-import javax.tools.*;
 import java.io.*;
 
 /**
@@ -27,8 +23,9 @@ public class ObsidiGUIScreen extends GuiScreen
     private File obsidiFile;
     private FileWriter obsidiFileWriter;
     private FileReader obsidiFileReader;
-    private ObsidiGuiTextArea textbox = new ObsidiGuiTextArea();
     private String robotName;
+    private FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+    private Class<? extends SyncRobot> sr;
 
     @Override
     public void initGui() {
@@ -49,9 +46,8 @@ public class ObsidiGUIScreen extends GuiScreen
                 /* Closes screen and saves editor text to "DynamicClass.java" in the run folder */
                 mc.thePlayer.closeScreen();
                 text.deleteCharAt(cursorLocation);
-                saveFile();
-                //Todo call compiler from this location + load classes
-                try{compileOC(robotName + ".oc");}
+                //saveFile();
+                try{Compiler.main(String.format(System.getProperty("user.dir") + "/ObsidiCode/Test/SimpleMiner.oc"));}
                 catch(Exception e){
                     e.printStackTrace();
                 }
@@ -69,40 +65,10 @@ public class ObsidiGUIScreen extends GuiScreen
         super.actionPerformed(button);
     }
 
-    public static void compileOC(String args) throws Exception {
-        AntlrASTBuilder var14 = new AntlrASTBuilder();
-        Node var15 = var14.Compile(args);
-        if(var15 != null) {
-            new SymbolTable(var15);
-            JavaKeywordSheet jsk = new JavaKeywordSheet();
-            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
-            HearCodeVisitor hcv = new HearCodeVisitor(jsk);
-            RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
-            jcv.visit(var15);
-            hcv.visit(var15);
-            rcv.visit(var15);
-            JavaSourceBuffer[] sourceCode = new JavaSourceBuffer[]{jcv.GetSourceCode(), hcv.GetSourceCode(), rcv.GetSourceCode()};
-            JavaSourceBuffer[] jsc = sourceCode;
-            int len$ = sourceCode.length;
-
-            for(int i$ = 0; i$ < len$; ++i$) {
-                JavaSourceBuffer code = jsc[i$];
-                JavaSourcePrinter.PrintSource(code);
-            }
-
-            JavaSourceCompiler var16 = new JavaSourceCompiler();
-            var16.CompileJavaSource(sourceCode);
-        } else {
-            System.out.println("The root was null; could not compile!");
-        }
-
-        ErrorHandling.printErrors();
-    }
-
     void loadRobot(){
         ClassLoader parentClassLoader = DynamicClassLoader.class.getClassLoader();
         DynamicClassLoader newClassLoader = new DynamicClassLoader(parentClassLoader);
-        String classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "NormalThread.class");
+        /*String classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "NormalThread.class");
         System.out.println("ClassFile = " + classFile);
         try{newClassLoader.loadClass(robotName + "NormalThread", classFile);}
         catch(Exception e){
@@ -115,19 +81,21 @@ public class ObsidiGUIScreen extends GuiScreen
         catch(Exception e){
             e.printStackTrace();
             System.out.println("Failed to load HearThread class");
+        }*/
+        String classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot.class");
+
+        try{
+            if(sr != null)
+
+            sr = newClassLoader.loadClass(robotName + "Robot", classFile);
+            classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot$" + robotName + "HearThread.class");
+            newClassLoader.loadClass(robotName + "Robot$" + robotName + "HearThread", classFile);
+            sr.newInstance().StartThreads();
         }
-        classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "Robot.class");
-        System.out.println("ClassFile = " + classFile);
-        try{newClassLoader.loadClass(robotName + "Robot", classFile).newInstance();}
         catch(Exception e){
             e.printStackTrace();
             System.out.println("Failed to load Robot class");
         }
-    }
-
-    void compile(){
-        JavaCompiler JC = ToolProvider.getSystemJavaCompiler();
-        JC.run(null, null, null, "Test.java");
     }
 
     void saveFile(){
@@ -226,7 +194,7 @@ public class ObsidiGUIScreen extends GuiScreen
         }
 
         /* writes the text string to the screen */
-        textbox.drawSplitLines(text.toString(), this.width / 2 - 118, this.height / 2 -119, 238 , 0xFFFFF0);
+        renderer.drawSplitString(text.toString(), this.width / 2 - 118, this.height / 2 -119, 238 , 0xFFFFF0);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

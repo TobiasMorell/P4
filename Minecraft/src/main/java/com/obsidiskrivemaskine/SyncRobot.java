@@ -1,14 +1,12 @@
 package com.obsidiskrivemaskine;
 
+import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
 import compiler.CodeGeneration.Signal;
 import compiler.Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import scala.NotImplementedError;
-import scala.tools.nsc.Global;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,6 +30,14 @@ public class SyncRobot extends Thread{
 
     public SyncRobot(){
         start();
+        ObsidiSkriveMaskineBlock.RobotList.add(this);
+    }
+
+    public void StartThreads()
+    {
+        normal_thread.start();
+        if(hear_thread != null)
+            hear_thread.start();
     }
 
     public synchronized float GetHealth(){
@@ -104,6 +110,8 @@ public class SyncRobot extends Thread{
         try {
             Robot.getLock().isLockOpen();
             AbstractRobot.dig(direction);
+            if(direction.equalsIgnoreCase("down"))
+                synchronized (this){wait(1150);}
             Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
@@ -160,9 +168,14 @@ public class SyncRobot extends Thread{
         }
     }
 
-    public void createEntityIfNotPresent(){
+    public synchronized void createEntityIfNotPresent(){
         if(Robot == null || Robot.isDead)
             spawnEntity();
+        try{
+            wait(100);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
     public synchronized void Drop(String toDrop, int amount){
@@ -183,6 +196,7 @@ public class SyncRobot extends Thread{
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
+
     }
 
     public synchronized void LootChest(){
@@ -247,6 +261,21 @@ public class SyncRobot extends Thread{
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
+    }
+
+    public synchronized void sendSignal(String channel, Object[] args){
+        try {
+            Robot.getLock().isLockOpen();
+            ObsidiSkriveMaskineBlock.receiveSignal(new Signal(channel, args));
+            Robot.getLock().changeLockState(false);
+        } catch (InterruptedException e) {
+            System.out.println("Could not sleep the SyncRobot");
+        }
+    }
+
+    public synchronized void Signal(Signal signal){
+        signalQueue.add(signal);
+        mutex.SwitchTurns(true);
     }
 
     protected abstract class HearThread implements Runnable {
@@ -318,9 +347,10 @@ public class SyncRobot extends Thread{
     }
 
     protected class NormalThread implements Runnable {
+
         @Override
         public void run() {
-            Start();
+            START();
         }
     }
 
@@ -345,8 +375,8 @@ public class SyncRobot extends Thread{
         }
     }
 
-    protected void Start()
+    protected void START()
     {
-        throw new NotImplementedException();
+        System.out.println("Hej");
     }
 }

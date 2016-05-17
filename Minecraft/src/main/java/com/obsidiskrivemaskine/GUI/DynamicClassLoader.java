@@ -24,10 +24,7 @@ public class DynamicClassLoader extends ClassLoader{
             while(data != -1){
                 buffer.write(data);
                 data = input.read();
-                System.out.println("Printing Data: " + data);
             }
-
-
             input.close();
 
             byte[] classData = buffer.toByteArray();
@@ -36,6 +33,8 @@ public class DynamicClassLoader extends ClassLoader{
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassFormatError e){
             e.printStackTrace();
         }
         return null;

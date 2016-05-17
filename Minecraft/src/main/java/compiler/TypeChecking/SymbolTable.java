@@ -35,7 +35,7 @@ public class SymbolTable {
 
     private void addNativeFunctions() {
         functions.add(new Func("GetHP", Node.Type.num));
-        functions.add(new Func("GetPosition", Node.Type.coord, null));
+        functions.add(new Func("GetPosition", Node.Type.Coord, null));
         functions.add(new Func("Mine", Node.Type.Void, Node.Type.string));
         functions.add(new Func("LootChest", null));
         functions.add(new Func("Move", null, Node.Type.string));
@@ -43,9 +43,9 @@ public class SymbolTable {
         functions.add(new Func("Drop", null, Node.Type.string, Node.Type.num));
         functions.add(new Func("Talk", null, Node.Type.string));
         functions.add(new Func("Equip", null, Node.Type.string));
-        functions.add(new Func("GetX", Node.Type.num, Node.Type.coord));
-        functions.add(new Func("GetY", Node.Type.num, Node.Type.coord));
-        functions.add(new Func("GetZ", Node.Type.num, Node.Type.coord));
+        functions.add(new Func("GetX", Node.Type.num, Node.Type.Coord));
+        functions.add(new Func("GetY", Node.Type.num, Node.Type.Coord));
+        functions.add(new Func("GetZ", Node.Type.num, Node.Type.Coord));
     }
 
     /**

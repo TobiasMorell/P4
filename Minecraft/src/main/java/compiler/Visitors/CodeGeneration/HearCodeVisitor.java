@@ -1,5 +1,6 @@
 package compiler.Visitors.CodeGeneration;
 
+import compiler.ASTNodes.Declarations.DeclarationNode;
 import compiler.ASTNodes.Declarations.HearDcl;
 import compiler.ASTNodes.Declarations.MethodDcl;
 import compiler.ASTNodes.GeneralNodes.Node;
@@ -28,17 +29,12 @@ public class HearCodeVisitor extends NormalCodeVisitor {
 
     private void placeHeader()
     {
-        //added requested import
-        codeBuilder.append("package CompiledRobots;\n");
-        codeBuilder.append("import CodeGeneration.*;\n");
-        codeBuilder.append("import Utility.Coord;\n\n");
         //Add class header
         codeBuilder.append(String.format("public class %sHearThread extends HearThread {\n", robotName));
         //Add fields
         codeBuilder.append(String.format("private %sRobot r;\n", robotName));
         //Declare a constructor
-        codeBuilder.append(String.format("public %sHearThread (%sRobot r, RobotMutex mut) {\n", robotName, robotName));
-        codeBuilder.append("super(mut);\n");
+        codeBuilder.append(String.format("public %sHearThread (%sRobot r, SignalMutex mut) {\n", robotName, robotName));
         codeBuilder.append("this.r = r;\n");
         codeBuilder.append("}\n");
         //Override the Handle-method
@@ -46,10 +42,16 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append("public void Handle(Signal sig_id) {\n");
         //Create a switch of methods to call correct hear
         codeBuilder.append("switch (sig_id.GetID()){\n");
+
+    }
+
+    @Override
+    public Object visit(HearDcl node) {
+        hearMethods.add(node.id);
         for (String s : hearMethods) {
             codeBuilder.append(String.format("case \"%s\":\n", s));
             //find and possibly invoke the method of the given Signal
-            codeBuilder.append("Method m = findHearFromSignal(sig_id.GetID())");
+            codeBuilder.append("Method m = findMethodFromSignal(sig_id);\n");
             codeBuilder.append("if(m != null) {\n");
             codeBuilder.append("invokeMethod(m, sig_id);\n}");
             codeBuilder.append("break;\n");
@@ -58,14 +60,14 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append("break;\n");
         codeBuilder.append("}\n");
         codeBuilder.append("}\n");
-    }
-
-    @Override
-    public Object visit(HearDcl node) {
-        hearMethods.add(node.id);
-        codeBuilder.append(String.format("private void %s (", node.id));
-        for (Node n : node.parameters) {
-            visit(n);
+        codeBuilder.append(String.format("public void %s (", node.id));
+        for (int i = 0; i < node.parameters.size(); i++) {
+            if(i > 0)
+                codeBuilder.append(',');
+            DeclarationNode n = (DeclarationNode) node.parameters.get(i);
+            codeBuilder.append(n.type);
+            codeBuilder.append(' ');
+            codeBuilder.append(n.GetID());
         }
         codeBuilder.append(")");
         visit(node.GetLeftChild());

@@ -1,6 +1,5 @@
 package compiler.ASTNodes.SyntaxNodes;
 
-import compiler.ASTNodes.GeneralNodes.LeafNode;
 import compiler.Visitors.AbstractVisitor;
 
 /**
@@ -13,7 +12,7 @@ public class CoordLit extends ExprNode{
         this.x = Float.parseFloat(coords[0]);
         this.y = Float.parseFloat(coords[1]);
         this.z = Float.parseFloat(coords[2]);
-        type = Type.coord;
+        type = Type.Coord;
     }
 
     @Override

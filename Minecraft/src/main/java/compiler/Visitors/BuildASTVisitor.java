@@ -288,7 +288,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			dcl = (MethodDcl) visit(ctx.header);
 		else if(ctx.hearDcl() != null)
 			dcl = (HearDcl) visit(ctx.hearDcl());
-		if(dcl != null)
+		if(dcl != null && !(dcl instanceof HearDcl))
 			dcl.AddBody((BlockNode) visit(ctx.body));
 		return dcl;
 	}
@@ -310,7 +310,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 				t = Node.Type.string;
 				break;
 			case ObsidiCodeParser.COORD:
-				t = Node.Type.coord;
+				t = Node.Type.Coord;
 				break;
 			case ObsidiCodeParser.BOOL:
 				t = Node.Type.bool;
@@ -540,7 +540,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	public Node visitRepeatStmt(ObsidiCodeParser.RepeatStmtContext ctx) {
 		line = ctx.getStart().getLine();
 		//Generate nodes for expression and body part
-		ExprNode expr = (ExprNode) visit(ctx.expr);
+		Node expr = visit(ctx.expr);
 		BlockNode bn = (BlockNode) visit(ctx.body);
 		
 		return new LoopNode(expr, bn);

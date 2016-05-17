@@ -1,8 +1,8 @@
 package com.obsidiskrivemaskine.block;
 
-import com.obsidiskrivemaskine.AbstractRobot;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.SyncRobot;
+import compiler.CodeGeneration.Signal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,16 +14,27 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lee on 06-04-2016.
  */
 public class ObsidiCodingMachine extends Block
 {
-    public ObsidiCodingMachine()
-    {
+    public static List<SyncRobot> RobotList = new ArrayList<SyncRobot>();
+    public ObsidiCodingMachine() {
         super(Material.rock);
         this.setUnlocalizedName("ObsidiCodingMachine");
         setCreativeTab(CreativeTabs.tabMisc);
+    }
+    public static void receiveSignal(Signal si){
+        if(RobotList != null) {
+            for (SyncRobot robot : RobotList) {
+                robot.Signal(si);
+            }
+        }
     }
 
 
