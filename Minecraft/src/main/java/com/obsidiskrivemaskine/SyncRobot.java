@@ -1,6 +1,6 @@
 package com.obsidiskrivemaskine;
 
-import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import compiler.CodeGeneration.Signal;
 import compiler.Utility.Coord;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
@@ -30,7 +30,7 @@ public class SyncRobot extends Thread{
 
     public SyncRobot(){
         start();
-        ObsidiSkriveMaskineBlock.RobotList.add(this);
+        ObsidiCodingMachine.RobotList.add(this);
     }
 
     public void StartThreads()
@@ -266,7 +266,7 @@ public class SyncRobot extends Thread{
     public synchronized void sendSignal(String channel, Object[] args){
         try {
             Robot.getLock().isLockOpen();
-            ObsidiSkriveMaskineBlock.receiveSignal(new Signal(channel, args));
+            ObsidiCodingMachine.receiveSignal(new Signal(channel, args));
             Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");

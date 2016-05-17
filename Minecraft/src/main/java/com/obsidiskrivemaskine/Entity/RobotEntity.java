@@ -3,7 +3,7 @@ package com.obsidiskrivemaskine.Entity;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.RobotLock;
 import com.obsidiskrivemaskine.Utils;
-import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import compiler.CodeGeneration.Signal;
 import compiler.Utility.Coord;
 import net.minecraft.block.Block;
@@ -64,7 +64,7 @@ public class RobotEntity extends EntityCreature
         if(ticksExisted % 300 == 0 && ticksExisted > 0) {
             Object[] args = new Object[1];
             args[0] = new Coord(10.0f, 10.0f, 10.0f);
-            ObsidiSkriveMaskineBlock.receiveSignal(new Signal("Listen", args));
+            ObsidiCodingMachine.receiveSignal(new Signal("Listen", args));
         }
     }
 

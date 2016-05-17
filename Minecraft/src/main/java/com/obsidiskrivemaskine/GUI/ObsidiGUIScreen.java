@@ -85,8 +85,6 @@ public class ObsidiGUIScreen extends GuiScreen
         String classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot.class");
 
         try{
-            if(sr != null)
-
             sr = newClassLoader.loadClass(robotName + "Robot", classFile);
             classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot$" + robotName + "HearThread.class");
             newClassLoader.loadClass(robotName + "Robot$" + robotName + "HearThread", classFile);
