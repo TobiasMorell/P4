@@ -61,9 +61,7 @@ public class Compiler {
             jsc.CompileJavaSource(sourceCode);
 
         } else {
-            System.out.println("The root was null; could not compile!");
+            ErrorHandling.Error("The parser was unable to complete; no files generated!");
         }
-        ErrorHandling.printErrors();
-
     }
 }

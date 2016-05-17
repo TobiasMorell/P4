@@ -3,6 +3,7 @@ package com.obsidiskrivemaskine.GUI;
 
 import com.obsidiskrivemaskine.SyncRobot;
 import compiler.Compiler;
+import compiler.Utility.ErrorHandling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ResourceLocation;
@@ -50,8 +51,11 @@ public class ObsidiGUIScreen extends GuiScreen
                 catch(Exception e){
                     e.printStackTrace();
                 }
-                //compile();
-                loadRobot();
+                if(ErrorHandling.GetErrors().size() == 0) {
+                    loadRobot();
+                } else {
+                    
+                }
                 break;
             case 1:
                 text = text.delete(0, text.toString().length());
@@ -124,11 +128,14 @@ public class ObsidiGUIScreen extends GuiScreen
                 }
 
                 obsidiFileReader.close();
-            } catch (Exception e) {
-                System.out.println("Could not load file");
+            } catch (FileNotFoundException e) {
+                ErrorHandling.Error("Could not load file: " + obsidiFile);
+            } catch (IOException e) {
+                ErrorHandling.Error("Could not open the file; " + e.getMessage());
             }
         }
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();

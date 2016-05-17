@@ -26,7 +26,7 @@ public class ErrorHandling {
 
     public static void printErrors(){
         for(String error : errors){
-            //System.out.println(error);//todo reenable
+            System.out.println(error);//todo reenable
         }
     }
 

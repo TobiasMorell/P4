@@ -3,20 +3,22 @@ package com.obsidiskrivemaskine.block;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.SyncRobot;
 import compiler.CodeGeneration.Signal;
+import compiler.Utility.ErrorHandling;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.PositionImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,8 @@ import java.util.List;
 public class ObsidiCodingMachine extends Block
 {
     public static List<SyncRobot> RobotList = new ArrayList<SyncRobot>();
+    public static ArrayList<String> recentErrors;
+
     public ObsidiCodingMachine() {
         super(Material.rock);
         this.setUnlocalizedName("ObsidiCodingMachine");
@@ -57,10 +61,21 @@ public class ObsidiCodingMachine extends Block
         entity.motionY *= 2.3D;
     }
 
+    public void dropErrorLog(World worldIn, BlockPos pos)
+    {
+        IPosition position = new PositionImpl(pos.getX(), pos.getY(), pos.getZ());
+        BehaviorProjectileDispense.doDispense(worldIn, new ItemStack(ObsidiSkriveMaskineMod.error_book), 1,
+                EnumFacing.NORTH, position);
+    }
+
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side,
                                     float hitX, float hitY, float hitZ) {
         player.openGui(ObsidiSkriveMaskineMod.INSTANCE, ObsidiSkriveMaskineMod.obsidiguiid, world, pos.getX(), pos.getY(), pos.getZ());
+        recentErrors = ErrorHandling.GetErrors();
+
+        if(recentErrors.size() > 0)
+            dropErrorLog(world, pos);
         SyncRobot.init(world, player);
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
     }

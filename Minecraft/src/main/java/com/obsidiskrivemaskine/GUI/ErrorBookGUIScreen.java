@@ -1,6 +1,7 @@
 package com.obsidiskrivemaskine.GUI;
 
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import compiler.Utility.ErrorHandling;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,18 +31,19 @@ public class ErrorBookGUIScreen extends GuiScreen {
     @Override
     public void initGui() {
         buttonList.clear();
-
-        ArrayList<String> errors = ErrorHandling.GetErrors();
-        if(errors.size() > 0)
-            for(String error : errors)
-                pageText += error;
-        else
-            pageText = "No errors! Good job.";
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        //Load text to display
+        ArrayList<String> errors = ObsidiCodingMachine.recentErrors;
+        if(errors != null && errors.size() > 0)
+            for(String error : errors)
+                pageText += error;
+        else
+            pageText = "No errors! Good job.";
 
         mc.getTextureManager().bindTexture(texture);
         int offsetFromScreenLeft = (width - book_image_width) / 2;

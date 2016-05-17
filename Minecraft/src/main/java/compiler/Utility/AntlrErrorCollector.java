@@ -1,5 +1,6 @@
 package compiler.Utility;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
@@ -23,11 +24,8 @@ public class AntlrErrorCollector extends BaseErrorListener {
             sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
         }
 
-        errors.add(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
+        ErrorHandling.Error(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
     }
 
-    public ArrayList<String> GetParseErrors()
-    {
-        return errors;
-    }
+
 }

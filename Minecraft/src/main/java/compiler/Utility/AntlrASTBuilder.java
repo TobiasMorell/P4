@@ -40,25 +40,20 @@ public class AntlrASTBuilder {
             parser.addErrorListener(AntlrErrorCollector.INSTANCE);
             ParseTree tree = parser.prog(); //<--Specify the start-rule of the parser
 
-            ArrayList<String> errors = AntlrErrorCollector.INSTANCE.GetParseErrors();
-            for (String error : errors) {
-                ErrorHandling.Error(error);
-            }
-
             //Close file-stream!
             fis.close();
 
-            if(errors.isEmpty()) {
+            if(ErrorHandling.GetErrors().size() == 0) {
                 //Finally build the AST and return it
                 BuildASTVisitor bASTv = new BuildASTVisitor();
                 return bASTv.visit(tree);
             }
         }
         catch (FileNotFoundException e) {
-            System.out.println("The given file was not found:\n" + file);
+            ErrorHandling.Error("The given file was not found:\n" + file);
         }
         catch (IOException e) {
-            System.out.println("Could not open input-stream to read source-file.");
+            ErrorHandling.Error("Could not open input-stream to read source-file." + e.getMessage());
         }
 
         return null;
