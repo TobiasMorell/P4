@@ -1,5 +1,6 @@
 package com.obsidiskrivemaskine.item;
 
+import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBook;
@@ -16,7 +17,23 @@ public class ErrorBook extends ItemBook {
     {
         super();
 
-        this.setUnlocalizedName("Error_Book");
+        this.setMaxStackSize(1);
+        this.setUnlocalizedName("error_book");
         this.setCreativeTab(CreativeTabs.tabMisc);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return "Error Book";
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+        if(!worldIn.isRemote)
+        {
+            ObsidiSkriveMaskineMod.PROXY.openErrorGUI();
+        }
+
+        return itemStackIn;
     }
 }

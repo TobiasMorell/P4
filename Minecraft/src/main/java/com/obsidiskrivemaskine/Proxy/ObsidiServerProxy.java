@@ -17,4 +17,9 @@ public class ObsidiServerProxy
         //Clientstuff
     }
 
+    public void openErrorGUI()
+    {
+
+    }
+
 }

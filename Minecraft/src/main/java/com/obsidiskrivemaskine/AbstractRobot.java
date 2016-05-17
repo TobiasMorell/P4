@@ -271,7 +271,7 @@ public abstract class AbstractRobot {
             Robot.getHeldItem().onItemUse(player, world, Robot.getPosition().add(0, 0, 1), Robot.getHorizontalFacing(), 0, 0, 0);
         }
         catch (Exception e){
-            talk("Unable to use currently held item");
+            talk("Unable to use currently held items");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.obsidiskrivemaskine.Proxy;
 
 import com.obsidiskrivemaskine.Entity.RobotEntity;
+import com.obsidiskrivemaskine.GUI.ErrorBookGUIScreen;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -18,16 +19,17 @@ public class ObsidiClientProxy extends ObsidiServerProxy
 
     public void registerModels()
     {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(Item.getItemFromBlock(ObsidiSkriveMaskineMod.obsidiblock), 0,
-                        new ModelResourceLocation(ObsidiSkriveMaskineMod.MODID + ":KurtSkriveMaskineBlock",
-                                "inventory"));
+        com.obsidiskrivemaskine.block.BlockRenderer.registerBlockRenderer();
+        com.obsidiskrivemaskine.item.ItemRenderer.registerItemRenderer();
     }
 
     @Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
+    }
 
-        //com.obsidiskrivemaskine.item.ItemRenderer.registerItemRenderer();
+    @Override
+    public void openErrorGUI() {
+        Minecraft.getMinecraft().displayGuiScreen(new ErrorBookGUIScreen());
     }
 }

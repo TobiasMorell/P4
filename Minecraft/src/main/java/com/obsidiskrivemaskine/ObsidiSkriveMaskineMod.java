@@ -1,12 +1,11 @@
 package com.obsidiskrivemaskine;
 
 import com.obsidiskrivemaskine.Entity.RobotEntity;
-import com.obsidiskrivemaskine.block.ObsidiSkriveMaskineBlock;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import com.obsidiskrivemaskine.Handler.ObsidiGuiHandler;
 import com.obsidiskrivemaskine.Proxy.ObsidiServerProxy;
 import com.obsidiskrivemaskine.item.ErrorBook;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -26,8 +25,8 @@ public class ObsidiSkriveMaskineMod
     @Mod.Instance(MODID)
     public static ObsidiSkriveMaskineMod INSTANCE;
 
-    public static Block obsidiblock;
-    public static Item errorBook;
+    public static Block ObsidiCodingMachine;
+    public static Item error_book;
 
     @SidedProxy(clientSide = "com.obsidiskrivemaskine.Proxy.ObsidiClientProxy", serverSide = "com.obsidiskrivemaskine.Proxy.ObsidiServerProxy")
     public static ObsidiServerProxy PROXY;
@@ -37,33 +36,39 @@ public class ObsidiSkriveMaskineMod
     @EventHandler
     public void preinit (FMLPreInitializationEvent event)
     {
-        obsidiblock = new ObsidiSkriveMaskineBlock().setUnlocalizedName("ObsidiSkriveMaskineBlock").setCreativeTab(CreativeTabs.tabRedstone);
-        errorBook = new ErrorBook();
+        //Instantiate blocks and items
+        ObsidiCodingMachine = new ObsidiCodingMachine();
+        error_book = new ErrorBook();
         obsidiguiid = 1;
+
+        //Register to the game - makes them appear in game
+        registerBlocks();
+        registerItems();
+        RobotEntity.RegisterEntity();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        registerBlocks();
-        registerItems();
         registerHandlers();
-        RobotEntity.RegisterEntity();
+
+        //Register the models - gives texture and models to items and blocks
+        PROXY.registerModels();
     }
 
     @EventHandler
     public void postinit (FMLPostInitializationEvent event)
     {
-        PROXY.registerModels();
+
     }
 
-    public void registerBlocks ()
+    public static void registerBlocks ()
     {
-        GameRegistry.registerBlock(obsidiblock, "ObsidiSkriveMaskineBlock");
+        GameRegistry.registerBlock(ObsidiCodingMachine, ObsidiCodingMachine.getUnlocalizedName().substring(5));
     }
-    public void registerItems () { GameRegistry.registerItem(errorBook, "Error_Book");}
+    public static void registerItems () { GameRegistry.registerItem(error_book, error_book.getUnlocalizedName().substring(5));}
 
-    public void registerHandlers ()
+    public static void registerHandlers ()
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new ObsidiGuiHandler());
     }

@@ -7,10 +7,13 @@ import compiler.ObsidiCodeAntlr.ObsidiCodeParser;
 import compiler.Visitors.BuildASTVisitor;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * Created by morell on 4/27/16.
@@ -26,19 +29,29 @@ public class AntlrASTBuilder {
 
             //Create a lexer and token stream
             ObsidiCodeLexer lex = new ObsidiCodeLexer(ais);
+            lex.removeErrorListeners();
+            lex.addErrorListener(AntlrErrorCollector.INSTANCE);
             CommonTokenStream tokens = new CommonTokenStream(lex);
 
             //Create parser and start parsing
             ObsidiCodeParser parser = new ObsidiCodeParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(AntlrErrorCollector.INSTANCE);
             ParseTree tree = parser.prog(); //<--Specify the start-rule of the parser
 
+            ArrayList<String> errors = AntlrErrorCollector.INSTANCE.GetParseErrors();
+            for (String error : errors) {
+                ErrorHandling.Error(error);
+            }
 
             //Close file-stream!
             fis.close();
 
-            //Finally build the AST and return it
-            BuildASTVisitor bASTv = new BuildASTVisitor();
-            return bASTv.visit(tree);
+            if(errors.isEmpty()) {
+                //Finally build the AST and return it
+                BuildASTVisitor bASTv = new BuildASTVisitor();
+                return bASTv.visit(tree);
+            }
         }
         catch (FileNotFoundException e) {
             System.out.println("The given file was not found:\n" + file);

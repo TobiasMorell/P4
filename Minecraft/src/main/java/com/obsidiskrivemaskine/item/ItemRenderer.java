@@ -10,10 +10,10 @@ import net.minecraft.item.Item;
  */
 public class ItemRenderer {
     public static void registerItemRenderer() {
-        registerItem(ObsidiSkriveMaskineMod.errorBook);
+        registerItem(ObsidiSkriveMaskineMod.error_book);
     }
 
-    private static void registerItem(Item i)
+    public static void registerItem(Item i)
     {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(i, 0,
                 new ModelResourceLocation(ObsidiSkriveMaskineMod.MODID + ":" + i.getUnlocalizedName().substring(5),
