@@ -654,7 +654,10 @@ public class NormalCodeVisitor extends AbstractVisitor {
         codeBuilder.append("(");
         int i = node.GetChildren().size();
         for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
-        codeBuilder.append("); ");
+        codeBuilder.append(") ");
+        if(node._parent._parent instanceof MethodDcl){
+            codeBuilder.append(";");
+        }
         return null;
     }
 

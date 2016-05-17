@@ -48,7 +48,7 @@ VOID RefactorTest(NUM x, NUM y, NUM z)
     COORD RFCoord13 = RFCoord / RFCoord1
 END RecfactorTest
 
-/*
+
 VOID TestPlus()
     NUM MyNum = 60
     STRING MyString = "Apples wapples"
@@ -80,7 +80,7 @@ VOID TestPlus()
 
     n1 = n2 + n3
 
-    STRING MyString5 = MyString + MyCoord
+    //STRING MyString5 = MyString + MyCoord
 
     COORD MyCoord2 = MyNum + MyCoord
 
@@ -151,7 +151,19 @@ VOID TestDiv()
 
 
 END TestDiv
-*/
+
+NUM TestMethod(NUM a, STRING b)
+    Talk("Hello!")
+    NUM hest = TestMethod(TestMethod(a,b), b)
+    TestDiv()
+    BOOL abe = lol()
+    RETURN 5
+END TestMethod
+
+BOOL lol()
+    RETURN FALSE
+END lol
+
 
 
 

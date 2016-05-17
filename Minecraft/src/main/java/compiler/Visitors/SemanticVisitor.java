@@ -46,7 +46,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool, node.line);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.bool) {
                 return Node.Type.bool;
@@ -59,7 +59,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord, node.line);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.coord) {
                 return Node.Type.coord;
@@ -105,7 +105,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num, node.line);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.num) {
                 return Node.Type.num;
@@ -132,7 +132,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string, node.line);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.string) {
                 return Node.Type.string;
@@ -146,7 +146,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ListDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List, node.line);
         if(node.GetRightChild()!= null) {
             if((Node.Type)visit(node.GetRightChild()) == Node.Type.List) {
                 return Node.Type.List;

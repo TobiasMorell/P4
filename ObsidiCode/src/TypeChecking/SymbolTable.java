@@ -58,11 +58,14 @@ public class SymbolTable {
     }
 
 
-    public void EnterSymbol(String id, Node.Type type)
+    public void EnterSymbol(String id, Node.Type type, int line)
     {
         Symbol oldsym = RetrieveSymbol(id);
-        if (oldsym != null && oldsym.depth == depth) MakeError("TypeChecking.Symbol \"" + id + "\"" +
-                " of type "+ type.toString() + " has already been initialized in this scope");
+        if (oldsym != null && oldsym.depth == depth){
+            ErrorHandling.Error("Variable \"" + id + "\"" +
+                    " of type "+ type.toString() + " has already been initialized in this scope", line);
+            return;
+        }
         Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), depth);
         //mangler at sætte hashvalue
         scopeDisplay.set(depth, newsym);
