@@ -1,5 +1,23 @@
 {
     "textures": {
-        "all": "obsidiskrivemaskine:blocks/ObsidiCodingMachine"
-    }
+        "0": "obsidiskrivemaskine:blocks/ObsidiCodingMachine_front",
+        "1": "obsidiskrivemaskine:blocks/ObsidiCodingMachine_sides",
+        "2": "obsidiskrivemaskine:blocks/ObsidiCodingMachine_back",
+        "3": "obsidiskrivemaskine:blocks/ObsidiCodingMachine_bottom"
+    },
+    "elements": [
+        {
+            "name": "ObsidiCodingMachine",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.0, 16, 16 ] },
+                "east": { "texture": "#1", "uv": [ 0.0, 0.0, 16, 16 ] },
+                "south": { "texture": "#2", "uv": [ 0.0, 0.0, 16, 16 ] },
+                "west": { "texture": "#1", "uv": [ 0.0, 0.0, 16, 16 ] },
+                "up": { "texture": "#3", "uv": [ 0.0, 0.0, 16, 16 ] },
+                "down": { "texture": "#3", "uv": [ 0.0, 0.0, 16, 16 ] }
+            }
+        }
+    ]
 }

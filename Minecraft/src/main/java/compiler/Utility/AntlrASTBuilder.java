@@ -5,6 +5,7 @@ import compiler.ASTNodes.SyntaxNodes.ProgNode;
 import compiler.ObsidiCodeAntlr.ObsidiCodeLexer;
 import compiler.ObsidiCodeAntlr.ObsidiCodeParser;
 import compiler.Visitors.BuildASTVisitor;
+import net.minecraft.client.Minecraft;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
