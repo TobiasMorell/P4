@@ -1,0 +1,19 @@
+package CompiledRobots;
+import CodeGeneration.*;
+import Utility.Coord;
+import com.obsidiskrivemaskine.SyncRobot;
+public class TypeCompatibilityRobot extends SyncRobot {
+private TypeCompatibilityHearThread hearThread;
+private TypeCompatibilityNormalThread normalThread;
+public TypeCompatibilityRobot() {
+RobotMutex mutex = new RobotMutex();
+this.hearThread = new TypeCompatibilityHearThread(this, mutex);
+this.normalThread = new TypeCompatibilityNormalThread(this, mutex);
+}
+String n1 = " ";
+String n2 = " ";
+String n3 = " ";
+float Jeb = 123.0f;
+float Bush = 434.0f;
+float Junior = 911.0f;
+}

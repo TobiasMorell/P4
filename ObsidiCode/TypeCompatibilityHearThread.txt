@@ -1,0 +1,24 @@
+package CompiledRobots;
+import CodeGeneration.*;
+import Utility.Coord;
+
+public class TypeCompatibilityHearThread extends HearThread {
+private TypeCompatibilityRobot r;
+public TypeCompatibilityHearThread (TypeCompatibilityRobot r, RobotMutex mut) {
+super(mut);
+this.r = r;
+}
+@Override
+public void Handle(Signal sig_id) {
+switch (sig_id.GetID()){
+default:
+break;
+}
+}
+String n1 = " ";
+String n2 = " ";
+String n3 = " ";
+float Jeb = 123.0f;
+float Bush = 434.0f;
+float Junior = 911.0f;
+}
