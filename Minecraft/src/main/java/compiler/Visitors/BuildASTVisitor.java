@@ -106,7 +106,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitTypeNameMethodInvoc(ObsidiCodeParser.TypeNameMethodInvocContext ctx) {
 		line = ctx.getStart().getLine();
-		return new DotNode(visit(ctx.meth), ctx.parent.getText()); // Fix dis error monday!
+		return new DotNode(visit(ctx.meth), ctx.parent.getText());
 	}
 
 	@Override

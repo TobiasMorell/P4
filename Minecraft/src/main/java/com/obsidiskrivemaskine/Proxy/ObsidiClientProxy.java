@@ -3,6 +3,9 @@ package com.obsidiskrivemaskine.Proxy;
 import com.obsidiskrivemaskine.Entity.RobotEntity;
 import com.obsidiskrivemaskine.GUI.ErrorBookGUIScreen;
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
+import compiler.CodeGeneration.Signal;
+import compiler.Utility.Coord;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -14,9 +17,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 public class ObsidiClientProxy extends ObsidiServerProxy
 {
-    public void registerRenderThings() {
-    }
-
     public void registerModels()
     {
         com.obsidiskrivemaskine.block.BlockRenderer.registerBlockRenderer();

@@ -1,6 +1,5 @@
 package compiler.ASTNodes.SyntaxNodes;
 
-import compiler.ASTNodes.GeneralNodes.BinaryNode;
 import compiler.ASTNodes.GeneralNodes.NaryNode;
 import compiler.ASTNodes.GeneralNodes.Node;
 import compiler.Visitors.AbstractVisitor;

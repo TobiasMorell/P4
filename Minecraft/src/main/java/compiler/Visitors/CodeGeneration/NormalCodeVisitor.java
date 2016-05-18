@@ -10,6 +10,8 @@ import compiler.Utility.AbstractKeywordSheet;
 import compiler.Utility.JavaSourceBuffer;
 import compiler.Visitors.AbstractVisitor;
 
+import java.util.ArrayList;
+
 /**
  * Created by morell on 4/26/16.
  */
@@ -49,7 +51,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         //Append constructor
         codeBuilder.append(String.format("public %sRobot() {\n", robotName));
         codeBuilder.append("createEntityIfNotPresent();\n");
-        codeBuilder.append(String.format("hear_thread = new Thread(new %sHearThread(this, mutex));\n", robotName));
+        codeBuilder.append(String.format("hear = new %sHearThread(this, mutex);\n", robotName));
         codeBuilder.append("}\n");
     }
         //Note to self, both generic dcls and blocks all produce \n which kinda seems overkill, unsure what to change
@@ -161,7 +163,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(MethodDcl node) {
         String typeExt;
 
-        switch (node.type)
+        switch (node.getT())
         {
             case bool:
                 typeExt = keywords.BOOLEAN;
@@ -426,24 +428,46 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
         if(node.GetLeftChild().getT() == Node.Type.num && node.GetRightChild().getT() == Node.Type.string)
         {
-            visit(node.GetLeftChild());  codeBuilder.append(".toString()"); codeBuilder.append(" + "); visit(node.GetRightChild());
+            //Convert from float to string
+            codeBuilder.append("Float.toString(");
+            visit(node.GetLeftChild());
+            codeBuilder.append(')');
+
+            //And plus the string
+            codeBuilder.append(" + ");
+            visit(node.GetRightChild());
         }
 
         else if(node.GetLeftChild().getT() == Node.Type.bool && node.GetRightChild().getT() == Node.Type.string)
         {
-            codeBuilder.append("String.valueOf("); visit(node.GetLeftChild()); codeBuilder.append(").toUpperCase()");
-            codeBuilder.append(" + "); visit(node.GetRightChild());
+            //Find the value of the bool
+            codeBuilder.append("String.valueOf(");
+            visit(node.GetLeftChild());
+            codeBuilder.append(").toUpperCase()");
+
+            //And plus String
+            codeBuilder.append(" + ");
+            visit(node.GetRightChild());
         }
 
         else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.string)
         {
-            visit(node.GetLeftChild()); codeBuilder.append(".toString()"); codeBuilder.append(" + ");
+            //Convert Coord to string
+            visit(node.GetLeftChild());
+            codeBuilder.append(".toString()");
+
+            //And plus the String
+            codeBuilder.append(" + ");
             visit(node.GetRightChild());
         }
 
         else if(node.GetLeftChild().getT() == Node.Type.string && node.GetRightChild().getT() == Node.Type.num)
         {
-            visit(node.GetLeftChild()); codeBuilder.append(" + "); visit(node.GetRightChild()); codeBuilder.append(".toString()");
+            visit(node.GetLeftChild());
+            codeBuilder.append(" + ");
+            codeBuilder.append("Float.toString(");
+            visit(node.GetRightChild());
+            codeBuilder.append(")");
         }
 
         else if(node.GetLeftChild().getT() == Node.Type.Coord && node.GetRightChild().getT() == Node.Type.num)
@@ -668,7 +692,9 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         int i = node.GetChildren().size();
         for (Node g : node.GetChildren()) { visit(g); --i; if(i > 0) codeBuilder.append(", "); }
         codeBuilder.append(") ");
-        if(node._parent._parent instanceof MethodDcl){
+        /*System.out.println(node + ": Parent is " + node._parent);
+        System.out.println(node + ": Grandparent is " + node._parent._parent );*/
+        if(!(node._parent instanceof ExprNode)){
             codeBuilder.append(";");
         }
 
@@ -705,6 +731,20 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(SignalNode node) {
+        ArrayList<Node> args = ((CollectionNode) node.GetRightChild()).GetChildren();
+        Object[] arg = new Object[] { "hej", 1, 2.4, "banan"};
+
+        codeBuilder.append("sendSignal(\"");
+        codeBuilder.append(((IDNode) node.GetLeftChild())._id);
+        codeBuilder.append("\", new Object[] {");
+        for (int i = 0; i < args.size(); i++) {
+            if(i > 0)
+                codeBuilder.append(',');
+            Node n = args.get(i);
+            visit(n);
+        }
+        codeBuilder.append("});\n");
+
         return null;
     }
 

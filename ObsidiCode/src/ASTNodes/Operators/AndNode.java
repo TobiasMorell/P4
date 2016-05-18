@@ -11,7 +11,7 @@ import Visitors.AbstractVisitor;
 public class AndNode extends ExprNode {
     public AndNode(Node leftChild, Node rightChild) {
         super(leftChild, rightChild);
-        t = Type.bool;
+        type = Type.bool;
     }
 
     @Override

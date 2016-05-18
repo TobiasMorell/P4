@@ -10,9 +10,9 @@ public abstract class Node implements Visitable
         line = BuildASTVisitor.line;
     }
     public enum Type {
-        num, string, coord, bool, Void, List, unknown
+        num, string, Coord, bool, Void, List, unknown
     }
-    public Type type;
+    protected Type type;
     public Node _parent;
     protected Node _leftmostChild;
 

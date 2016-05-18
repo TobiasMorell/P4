@@ -11,7 +11,7 @@ import Visitors.AbstractVisitor;
 public class NotNode extends ExprNode {
     public NotNode(Node child, Node rightChild) {
         super(child, rightChild);
-        t = Type.bool;
+        type = Type.bool;
     }
 
     @Override

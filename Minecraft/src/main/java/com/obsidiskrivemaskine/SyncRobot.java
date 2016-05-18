@@ -26,6 +26,7 @@ public class SyncRobot extends Thread{
     protected Queue<Signal> signalQueue = new LinkedList<Signal>();
     protected SignalMutex mutex = new SignalMutex();
     protected Thread normal_thread = new Thread(new NormalThread());
+    protected HearThread hear;
     protected Thread hear_thread;
 
     public SyncRobot(){
@@ -34,9 +35,11 @@ public class SyncRobot extends Thread{
 
     public void StartThreads()
     {
-        normal_thread.start();
-        if(hear_thread != null)
+        if(hear != null) {
+            hear_thread = new Thread(hear);
             hear_thread.start();
+        }
+        normal_thread.start();
     }
 
     public synchronized float GetHealth(){
@@ -265,6 +268,7 @@ public class SyncRobot extends Thread{
     public synchronized void sendSignal(String channel, Object[] args){
         try {
             Robot.getLock().isLockOpen();
+            System.out.println("sendSignal called - sending signal with id " + channel);
             ObsidiCodingMachine.receiveSignal(new Signal(channel, args));
             Robot.getLock().changeLockState(false);
         } catch (InterruptedException e) {
@@ -273,32 +277,33 @@ public class SyncRobot extends Thread{
     }
 
     public synchronized void Signal(Signal signal){
-        signalQueue.add(signal);
-        System.out.println("Signal added");
-        mutex.SwitchTurns(true);
+        hear.Signal(signal);
     }
 
     protected abstract class HearThread implements Runnable {
+        protected Queue<Signal> signalQueue = new LinkedList<Signal>();
+
+        public synchronized void Signal(Signal signal) {
+            signalQueue.add(signal);
+            mutex.SwitchTurns(true);
+        }
+
         @Override
         public void run() {
             try {
                 while (true) {
                     if (signalQueue.isEmpty()) {
-                        System.out.println("SignlQueue is empty");
                         synchronized (mutex) {
                             mutex.SwitchTurns(false);
-                            System.out.println("Turn switched, time for sleeping");
                             mutex.wait();
-                            System.out.println("Resuming signalQueue check");
                         }
                     }
                     Signal s = signalQueue.poll();
                     Handle(s);
-                    System.out.println("After handle");
                 }
             } catch (InterruptedException e)
             {
-                System.out.println("Something wrong in HearThread.");
+                System.out.println("HearThread interrupted.");
             }
         }
 

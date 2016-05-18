@@ -9,7 +9,7 @@ public class LessNode extends ExprNode {
 
 	public LessNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
-		t = Type.bool;
+		type = Type.bool;
 	}
 
 	@Override

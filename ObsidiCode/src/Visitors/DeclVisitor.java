@@ -60,10 +60,10 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordDcl node) {
-        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.coord, node.line);
+        _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.Coord, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.coord) {
-                return Node.Type.coord;
+            if((Node.Type)visit(node.GetRightChild()) == Node.Type.Coord) {
+                return Node.Type.Coord;
             }else{
                 _table.MakeError("Error: Trying to initialize coordinate with unmatching type ");
             }
@@ -115,8 +115,8 @@ public class DeclVisitor extends AbstractVisitor {
             if(_table.depth == 0){
                 node._GlobalRef = true;
             }
-            node.type = s.getType();
-            return node.type;
+            node.setT(s.getType());
+            return node.getT();
         }
         return null;
     }
@@ -153,7 +153,7 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Greater than Or Equal operator", node.line);
@@ -166,7 +166,7 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Less than Or Equal operator", node.line);
@@ -176,7 +176,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(AndNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "And");
     }
 
@@ -216,11 +216,11 @@ public class DeclVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case List:case bool:case string:
                         _table.MakeError("Error: Numbers can only be divided with numbers and coords");
                         break;
@@ -230,7 +230,7 @@ public class DeclVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 _table.MakeError("Error: Boolean can only be Divided with boolean");
@@ -238,20 +238,20 @@ public class DeclVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         _table.MakeError("Error: String can only be divided with string");
                 }
                 break;
-            case coord:
+            case Coord:
                 switch (t2){
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     default:
                         _table.MakeError("Error: Coordinates can only be divided with numbers and coordinates");
                 }
@@ -271,7 +271,7 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT( Node.Type.bool);
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the Greater than operator", node.line);
@@ -281,7 +281,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(IsNode node) {//todo: discuss weather Is is a good representation of ==<
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1==t2){
@@ -297,7 +297,7 @@ public class DeclVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.bool && t2 == Node.Type.bool){
-            node.type = Node.Type.bool;//todo check shit;
+            node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
             ErrorHandling.Error("Only numbers can be compared with the less than operator", node.line);
@@ -316,11 +316,11 @@ public class DeclVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case List:case bool:case string:
                         _table.MakeError("Error: Cannot subtract Lists, Booleans or strings from numbers");
                         break;
@@ -330,7 +330,7 @@ public class DeclVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 _table.MakeError("Error: nothing but boolean can be subtracted from boolean");
@@ -338,28 +338,28 @@ public class DeclVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         _table.MakeError("Error: nothing but strings can be subtracted form string");
                 }
                 break;
-            case coord:
+            case Coord:
                 switch (t2){
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     default:
                         _table.MakeError("Error: only coordinates and numbers can be subtracted from coordinate");
                 }
                 break;
             case List:
                 switch (t2){
-                    case num:case bool:case string:case coord:
-                        node.type = Node.Type.string;
+                    case num:case bool:case string:case Coord:
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                 }
                 break;
@@ -381,11 +381,11 @@ public class DeclVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case List:case bool:case string:
                         _table.MakeError("Error: Cannot multiply Lists, Booleans or strings with numbers");
                         break;
@@ -395,7 +395,7 @@ public class DeclVisitor extends AbstractVisitor {
                 break;
             case bool:
                 if(t2 == Node.Type.bool) {
-                    node.type = Node.Type.bool;
+                    node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
                 _table.MakeError("Error: nothing but boolean can be multiplied with boolean");
@@ -403,23 +403,23 @@ public class DeclVisitor extends AbstractVisitor {
             case string:
                 switch (t2){
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     case num:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         _table.MakeError("Error: nothing but strings and numbers can be multiplied with string");
                 }
                 break;
-            case coord:
+            case Coord:
                 switch (t2){
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     default:
                         _table.MakeError("Error: only coordinates and numbers can be multiplied with coordinate");
                 }
@@ -436,7 +436,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NotNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         if(t1== Node.Type.bool){
             return Node.Type.bool;
@@ -448,7 +448,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(OrNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "or");
     }
 
@@ -465,14 +465,14 @@ public class DeclVisitor extends AbstractVisitor {
             case num:
                 switch (t2){
                     case num:
-                        node.type = Node.Type.num;
+                        node.setT(Node.Type.num);
                         return Node.Type.num;
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case List:case bool:
                         _table.MakeError("Error: Cannot add Lists or Booleans to numbers");
                         break;
@@ -483,7 +483,7 @@ public class DeclVisitor extends AbstractVisitor {
             case bool:
                 switch (t2){
                     case bool:
-                        node.type = Node.Type.bool;
+                        node.setT(Node.Type.bool);
                         return Node.Type.bool;
                     case string:
                         return Node.Type.string;
@@ -493,23 +493,23 @@ public class DeclVisitor extends AbstractVisitor {
                 }
             case string:
                 switch (t2){
-                    case num:case string:case bool:case coord:case List:
-                        node.type = Node.Type.string;
+                    case num:case string:case bool:case Coord:case List:
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         _table.MakeError("Shouldn't happen");
                     }
                 break;
-            case coord:
+            case Coord:
                 switch (t2){
-                    case coord:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                    case Coord:
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case num:
-                        node.type = Node.Type.coord;
-                        return Node.Type.coord;
+                        node.setT(Node.Type.Coord);
+                        return Node.Type.Coord;
                     case string:
-                        node.type = Node.Type.string;
+                        node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
                         ErrorHandling.Error("Trying to add value of uncompatible type to coordinate",node.line);
@@ -517,7 +517,7 @@ public class DeclVisitor extends AbstractVisitor {
                 break;
             case List:
                 if(t2 != null) {
-                    node.type = Node.Type.List;
+                    node.setT(Node.Type.List);
                     return Node.Type.List;
                 }
                 break;
@@ -536,13 +536,13 @@ public class DeclVisitor extends AbstractVisitor {
             _table.MakeError("Error: Element in unary minus on line "+node.line+" has no type");
         switch (t1){
             case num:
-                node.type = Node.Type.num;
+                node.setT(Node.Type.num);
                 return Node.Type.num;
-            case coord:
-                node.type = Node.Type.coord;
-                return Node.Type.coord;
+            case Coord:
+                node.setT(Node.Type.Coord);
+                return Node.Type.Coord;
             case bool:
-                node.type = Node.Type.bool;
+                node.setT(Node.Type.bool);
                 return Node.Type.bool;
             case List:case string:
                 _table.MakeError("Error: Lists and strings can not be negative");
@@ -554,13 +554,13 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(XnorNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "Xnor");
     }
 
     @Override
     public Object visit(XorNode node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return CheckBool(node, "Xor");
     }
 
@@ -584,7 +584,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(BoolLit node) {
-        node.type = Node.Type.bool;
+        node.setT(Node.Type.bool);
         return Node.Type.bool;
     }
 
@@ -598,8 +598,8 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(CoordLit node) {
-        node.type = Node.Type.coord;
-        return Node.Type.coord;
+        node.setT(Node.Type.Coord);
+        return Node.Type.Coord;
     }
 
     @Override
@@ -619,7 +619,7 @@ public class DeclVisitor extends AbstractVisitor {
     public Object visit(ParenNode node) {
         //System.out.println("Visiting Parentheses " + _table.depth + "on line " + node.line);
         Node.Type t = (Node.Type) visit(node.GetLeftChild());
-        node.type = t;
+        node.setT(t);
         return t;
     }
 
@@ -670,7 +670,7 @@ public class DeclVisitor extends AbstractVisitor {
         }
         Func function =_table.RetrieveMethod(node, types);
         if(function!=null) {
-            node.type = function.returnType;
+            node.setT(function.returnType);
             return function.returnType;
         }
         return null;
@@ -678,7 +678,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(NumLit node) {
-        node.type = Node.Type.num;
+        node.setT(Node.Type.num);
         return Node.Type.num;
     }
 
@@ -725,7 +725,7 @@ public class DeclVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(StringLit node) {
-        node.type = Node.Type.string;
+        node.setT(Node.Type.string);
         return Node.Type.string;
     }
 
