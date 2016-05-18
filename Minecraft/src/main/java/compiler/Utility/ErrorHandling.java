@@ -32,6 +32,12 @@ public class ErrorHandling {
 
     public static ArrayList<String> GetErrors()
     {
+        //ArrayList<String> tempErrorList = (ArrayList<String>)errors.clone();
+        //errors = new ArrayList<String>();
         return errors;
+    }
+
+    public static void CleanErrors(){
+        errors = new ArrayList<String>();
     }
 }

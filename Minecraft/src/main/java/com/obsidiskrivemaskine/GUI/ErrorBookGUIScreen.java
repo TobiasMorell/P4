@@ -2,6 +2,7 @@ package com.obsidiskrivemaskine.GUI;
 
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
+import com.obsidiskrivemaskine.item.ErrorBook;
 import compiler.Utility.ErrorHandling;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,38 +20,45 @@ import java.util.ArrayList;
 public class ErrorBookGUIScreen extends GuiScreen {
     private final int book_image_height = 250;
     private final int book_image_width = 250;
-    private static String pageText;
     private static ResourceLocation texture;
-    private boolean textureBound = false;
+    public static ErrorBook errorLog;
+    public StringBuilder text;
+    private boolean pendingErrors = true;
 
     public ErrorBookGUIScreen()
     {
         texture = new ResourceLocation(ObsidiSkriveMaskineMod.MODID + ":GUI/error_book.png");
+        text = new StringBuilder();
     }
 
     @Override
     public void initGui() {
         buttonList.clear();
+        super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
         //Load text to display
-        ArrayList<String> errors = ObsidiCodingMachine.recentErrors;
-        if(errors != null && errors.size() > 0)
-            for(String error : errors)
-                pageText += error;
-        else
-            pageText = "No errors! Good job.";
+        if(pendingErrors) {
+            if (errorLog.errors != null && errorLog.errors.size() > 0) {
+                for (String error : errorLog.errors) {
+                    text.append(error);
+                    text.append("\n");
+                }
+            } else {
+                text.append("No Errors, why do you have this book?\n");
+            }
+            pendingErrors = false;
+        }
 
         mc.getTextureManager().bindTexture(texture);
         int offsetFromScreenLeft = (width - book_image_width) / 2;
         drawTexturedModalRect(offsetFromScreenLeft, 2, 0, 0, book_image_width, book_image_height);
 
-        fontRendererObj.drawSplitString(pageText, offsetFromScreenLeft + 36, 34, 116, 0);
-
+        fontRendererObj.drawSplitString(text.toString(), offsetFromScreenLeft + 36, 34, 200, 0);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -66,7 +74,7 @@ public class ErrorBookGUIScreen extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
-        return true;
+        return false;
     }
 
 

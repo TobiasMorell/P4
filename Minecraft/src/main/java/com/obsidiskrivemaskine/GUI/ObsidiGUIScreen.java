@@ -1,7 +1,10 @@
 package com.obsidiskrivemaskine.GUI;
 
 
+import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
 import com.obsidiskrivemaskine.SyncRobot;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
+import com.obsidiskrivemaskine.item.ErrorBook;
 import compiler.Compiler;
 import compiler.Utility.ErrorHandling;
 import net.minecraft.client.Minecraft;
@@ -11,6 +14,7 @@ import org.lwjgl.input.Keyboard;
 
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by Lee on 06-04-2016.
@@ -43,18 +47,23 @@ public class ObsidiGUIScreen extends GuiScreen
     protected void actionPerformed(GuiButton button) throws IOException {
         switch(button.id) {
             case 0:
+                ErrorHandling.CleanErrors();
                 /* Closes screen and saves editor text to "DynamicClass.java" in the run folder */
                 mc.thePlayer.closeScreen();
                 text.deleteCharAt(cursorLocation);
-                //saveFile();
-                try{Compiler.main(String.format(System.getProperty("user.dir") + "/ObsidiCode/Test/SimpleMiner.oc"));}
+                saveFile();
+                try{
+                    Compiler.main(String.format(System.getProperty("user.dir") + "/ObsidiCode/Test/SimpleMiner.oc"));
+                }
                 catch(Exception e){
                     e.printStackTrace();
                 }
-                if(ErrorHandling.GetErrors().size() == 0) {
+                ArrayList<String> currentErrors = (ArrayList<String>)ErrorHandling.GetErrors().clone();
+                if(currentErrors.size() == 0) {
                     loadRobot();
                 } else {
-                    
+                    ErrorBook eb = ObsidiSkriveMaskineMod.errorBook();
+                    ObsidiCodingMachine.dropErrorLog(eb);
                 }
                 break;
             case 1:
@@ -102,7 +111,7 @@ public class ObsidiGUIScreen extends GuiScreen
     void saveFile(){
         File testFile = new File(robotName + ".oc");
         try {
-            obsidiFileWriter = new FileWriter(testFile);
+            obsidiFileWriter = new FileWriter(obsidiFile);
             obsidiFileWriter.write(text.toString());
             obsidiFileWriter.flush();
             obsidiFileWriter.close();

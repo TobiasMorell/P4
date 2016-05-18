@@ -38,17 +38,15 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append(String.format("public %sHearThread (%sRobot r, SignalMutex mut) {\n", robotName, robotName));
         codeBuilder.append("this.r = r;\n");
         codeBuilder.append("}\n");
+    }
+
+    private void placeHandleMethod()
+    {
         //Override the Handle-method
         codeBuilder.append("@Override\n");
         codeBuilder.append("public void Handle(Signal sig_id) {\n");
         //Create a switch of methods to call correct hear
         codeBuilder.append("switch (sig_id.GetID()){\n");
-
-    }
-
-    @Override
-    public Object visit(HearDcl node) {
-        hearMethods.add(node.id);
         for (String s : hearMethods) {
             codeBuilder.append(String.format("case \"%s\":\n", s));
             //find and possibly invoke the method of the given Signal
@@ -61,6 +59,11 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         codeBuilder.append("break;\n");
         codeBuilder.append("}\n");
         codeBuilder.append("}\n");
+    }
+
+    @Override
+    public Object visit(HearDcl node) {
+        hearMethods.add(node.id);
         codeBuilder.append(String.format("public void %s (", node.id));
         for (int i = 0; i < node.parameters.size(); i++) {
             if(i > 0)
@@ -109,6 +112,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
         for (Node n: node.GetChildren()) {
             visit(n);
         }
+        placeHandleMethod();
         codeBuilder.append("}");
         return null;
     }

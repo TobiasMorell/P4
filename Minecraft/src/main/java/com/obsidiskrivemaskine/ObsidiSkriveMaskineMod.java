@@ -31,7 +31,17 @@ public class ObsidiSkriveMaskineMod
     @SidedProxy(clientSide = "com.obsidiskrivemaskine.Proxy.ObsidiClientProxy", serverSide = "com.obsidiskrivemaskine.Proxy.ObsidiServerProxy")
     public static ObsidiServerProxy PROXY;
 
-    public static int obsidiguiid;
+    public static int obsidiguiid, errorguiid;
+
+    public static ErrorBook errorBook(){
+        ErrorBook tempBook = (ErrorBook)error_book;
+        try {
+            return (ErrorBook)tempBook.clone();
+        } catch (CloneNotSupportedException e){
+            System.out.println("Unable to clone Error Book");
+            return null;
+        }
+    }
 
     @EventHandler
     public void preinit (FMLPreInitializationEvent event)
@@ -40,6 +50,7 @@ public class ObsidiSkriveMaskineMod
         ObsidiCodingMachine = new ObsidiCodingMachine();
         error_book = new ErrorBook();
         obsidiguiid = 1;
+        errorguiid = 2;
 
         //Register to the game - makes them appear in game
         registerBlocks();
