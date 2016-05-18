@@ -11,11 +11,11 @@ import Visitors.Visitable;
  */
 public class CoordDcl extends DeclarationNode {
     public CoordDcl(Node leftChild, Node rightChild) {
-        super(Node.Type.coord, (IDNode)leftChild, rightChild);
+        super(Node.Type.Coord, (IDNode)leftChild, rightChild);
     }
     public CoordDcl(String id, Node rightChild)
     {
-        super(Type.coord, null, rightChild);
+        super(Type.Coord, null, rightChild);
         this.SetLeftmostNode(new IDNode(id, this));
     }
 

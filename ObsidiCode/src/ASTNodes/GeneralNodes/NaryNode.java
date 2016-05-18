@@ -25,6 +25,9 @@ public abstract class NaryNode extends Node {
     public void SetChildren(ArrayList<Node> aln)
     {
         this.children = aln;
+        for (Node n : children) {
+            n._parent = this;
+        }
     }
     
     public void AddNode(Node n)

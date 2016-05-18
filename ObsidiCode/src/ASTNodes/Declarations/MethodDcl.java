@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class MethodDcl extends UnaryNode {
 	public ArrayList<Node> parameters;
-	public Type type;
 	public String id;
 
 	public void AddBody(BlockNode body)

@@ -5,7 +5,6 @@ package ASTNodes.GeneralNodes;
  */
 public abstract class BinaryNode extends Node {
     protected Node rightChild;
-    protected Type t;
 
     public Node GetRightChild()
     {
@@ -15,6 +14,7 @@ public abstract class BinaryNode extends Node {
     public void SetLeftmostNode(Node n)
     {
     	this._leftmostChild = n;
+        this._parent = this;
     }
 
     public BinaryNode (Node leftChild, Node rightChild){

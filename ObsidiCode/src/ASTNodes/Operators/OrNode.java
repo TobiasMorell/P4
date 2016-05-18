@@ -11,7 +11,7 @@ import Visitors.AbstractVisitor;
 public class OrNode extends ExprNode {
     public OrNode(Node leftChild, Node rightChild) {
         super(leftChild, rightChild);
-        t = Type.bool;
+        type = Type.bool;
     }
 
     @Override

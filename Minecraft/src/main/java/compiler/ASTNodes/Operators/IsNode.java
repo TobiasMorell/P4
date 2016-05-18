@@ -11,7 +11,7 @@ import compiler.Visitors.AbstractVisitor;
 public class IsNode extends ExprNode {
     public IsNode(Node leftChild, Node rightChild) {
         super(leftChild, rightChild);
-        t = Type.bool;
+        type = Type.bool;
     }
 
     @Override

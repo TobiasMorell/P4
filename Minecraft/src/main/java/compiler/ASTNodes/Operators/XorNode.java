@@ -11,7 +11,7 @@ import compiler.Visitors.AbstractVisitor;
 public class XorNode extends ExprNode {
     public XorNode(Node leftChild, Node rightChild) {
         super(leftChild, rightChild);
-        t = Type.bool;
+        type = Type.bool;
     }
 
     @Override

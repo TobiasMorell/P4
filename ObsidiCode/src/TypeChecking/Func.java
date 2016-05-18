@@ -24,11 +24,11 @@ public class Func {
      */
     public Func(MethodDcl methodNode){
             parameters = new ArrayList<>();
-            returnType = methodNode.type;
+            returnType = methodNode.getT();
             name = methodNode.id;
             for (Node n :methodNode.parameters) {
                 DeclarationNode N = (DeclarationNode)n;
-                parameters.add(N.type);
+                parameters.add(N.getT());
             }
         }
     public Func(String Name, Node.Type ret, Node.Type... params){

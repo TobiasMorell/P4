@@ -7,7 +7,7 @@ import Visitors.AbstractVisitor;
  * Created by morell on 3/31/16.
  */
 public class LoopNode extends BinaryNode{
-    public LoopNode(ExprNode condition, BlockNode stmts){
+    public LoopNode(Node condition, BlockNode stmts){
         super(condition, stmts);
     }
 

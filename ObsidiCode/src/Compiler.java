@@ -2,15 +2,7 @@
 import ASTNodes.GeneralNodes.Node;
 import TypeChecking.SymbolTable;
 import Utility.*;
-import ASTNodes.Declarations.ReferenceNode;
-import ASTNodes.Operators.AssignNode;
-import ASTNodes.SyntaxNodes.NumLit;
-import Visitors.CodeGeneration.HearCodeVisitor;
-import Visitors.CodeGeneration.NormalCodeVisitor;
-import Visitors.CodeGeneration.RobotCodeVisitor;
-import Visitors.SemanticsVisitor;
-
-import java.io.File;
+import Visitors.DeclVisitor;
 
 public class Compiler {
 	public static void main( String[] args) throws Exception 
@@ -54,30 +46,8 @@ public class Compiler {
             //Build the symbol table
             SymbolTable st = new SymbolTable(root);
 
-            SemanticsVisitor smv = new SemanticsVisitor();
-
+            DeclVisitor smv = new DeclVisitor(st);
             smv.visit(root);
-            //Compile either to java or java-byte code
-            JavaKeywordSheet jsk = new JavaKeywordSheet();
-            NormalCodeVisitor jcv = new NormalCodeVisitor(jsk);
-            HearCodeVisitor hcv = new HearCodeVisitor(jsk);
-            RobotCodeVisitor rcv = new RobotCodeVisitor(jsk);
-
-            jcv.visit(root);
-            hcv.visit(root);
-            rcv.visit(root);
-
-            JavaSourceBuffer[] sourceCode = new JavaSourceBuffer[3];
-            sourceCode[2] = jcv.GetSourceCode();
-            sourceCode[1] = hcv.GetSourceCode();
-            sourceCode[0] = rcv.GetSourceCode();
-
-
-            for (JavaSourceBuffer code : sourceCode)
-                JavaSourcePrinter.PrintSource(code);
-
-            JavaSourceCompiler jsc = new JavaSourceCompiler();
-            jsc.CompileJavaSource(sourceCode);
         } else {
             System.out.println("The root was null; could not compile!");
         }
