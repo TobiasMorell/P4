@@ -24,7 +24,7 @@ public class Func {
      */
     public Func(MethodDcl methodNode){
             parameters = new ArrayList<Node.Type>();
-            returnType = methodNode.type;
+            returnType = methodNode.getT();
             name = methodNode.id;
             for (Node n :methodNode.parameters) {
                 DeclarationNode N = (DeclarationNode)n;

@@ -1,5 +1,9 @@
 package com.obsidiskrivemaskine.Proxy;
 
+import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
+import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
+import compiler.CodeGeneration.Signal;
+import compiler.Utility.Coord;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
@@ -7,19 +11,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 public class ObsidiServerProxy
 {
-    public void registerRenderThings() {
-
-    }
     public void init(FMLInitializationEvent e) {
         //CustomCow.RegisterEntity();
     }
     public void registerModels() {
-        //Clientstuff
+        //Client method only.
     }
 
     public void openErrorGUI()
     {
-
+        //Nothing here - client method only!
     }
-
 }

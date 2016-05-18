@@ -61,7 +61,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(CoordDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.Coord, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.Coord) {
+            if(visit(node.GetRightChild()) == Node.Type.Coord) {
                 return Node.Type.Coord;
             }else{
                 ErrorHandling.Error("Trying to initialize coordinate with unmatching type ",node.line);
@@ -92,13 +92,13 @@ public class SemanticVisitor extends AbstractVisitor {
             visit(n);
             if(n instanceof ReturnNode){
                 foundReturn = true;
-                if(n.getT() != method.type){
-                    ErrorHandling.Error("Trying to return "+method.type+" in method of type "+ n.getT(),method.line);
+                if(n.getT() != method.getT()){
+                    ErrorHandling.Error("Trying to return "+ n.getT() +" in method of type "+ method.getT(),method.line);
                 }
             }
         }
         if ( method.getT() != Node.Type.Void && !foundReturn){
-            ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable",method.line);
+            ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable ",method.line);
         }
         _table.CloseScope();
     }
@@ -107,10 +107,10 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(NumDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.num) {
+            if(visit(node.GetRightChild()) == Node.Type.num) {
                 return Node.Type.num;
             }else{
-                ErrorHandling.Error("Trying to initialize number with unmatching type ",node.line);
+                ErrorHandling.Error("Trying to initialize number with unmatching type ", node.line);
             }
         }
         return null;
@@ -642,7 +642,8 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(IfNode node) {
         breakable++;
         if(node != null) {
-            if(visit(node.GetCondition()) == Node.Type.bool) {
+            Node n = node.GetCondition();
+            if(n != null && visit(n) == Node.Type.bool) {
                 visit(node.GetBody());
                 visit(node.GetElseIf());
                 visit(node.GetElse());

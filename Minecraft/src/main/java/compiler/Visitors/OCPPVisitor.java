@@ -62,7 +62,7 @@ public class OCPPVisitor extends AbstractVisitor {
         String id = node.id;
         StringBuilder sb = new StringBuilder();
 
-        sb.append(node.type);
+        sb.append(node.getT());
         sb.append(' ');
         sb.append(node.id);
         sb.append('(');

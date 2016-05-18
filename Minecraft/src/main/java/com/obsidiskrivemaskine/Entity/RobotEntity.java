@@ -1,12 +1,14 @@
 package com.obsidiskrivemaskine.Entity;
 
 import com.obsidiskrivemaskine.ObsidiSkriveMaskineMod;
+import com.obsidiskrivemaskine.Proxy.ObsidiClientProxy;
 import com.obsidiskrivemaskine.RobotLock;
 import com.obsidiskrivemaskine.Utils;
 import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import compiler.CodeGeneration.Signal;
 import compiler.Utility.Coord;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -19,7 +21,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 
@@ -62,12 +67,17 @@ public class RobotEntity extends EntityCreature
             entities = (ArrayList) worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scanArea);
         }
         if(ticksExisted % 200 == 0 && ticksExisted > 0) {
-            Object[] args = new Object[1];
-            args[0] = new Coord(10.0f, 10.0f, 10.0f);
+            if ( FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                //The getEffectiveSide() has a harsh runtime, but it does the trick.
+                Object[] args = new Object[1];
+                args[0] = new Coord(10.0f, 10.0f, 10.0f);
 
-            ObsidiCodingMachine.receiveSignal(new Signal("Listen", args));
+                ObsidiCodingMachine.receiveSignal(new Signal("Listen", args));
+            }
         }
     }
+
+
 
     public ArrayList<EntityLivingBase> getHostileEntities() {
         ArrayList<EntityLivingBase> hostileMobs = new ArrayList<EntityLivingBase>();
