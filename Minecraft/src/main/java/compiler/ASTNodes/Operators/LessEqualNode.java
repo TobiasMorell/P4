@@ -9,7 +9,7 @@ public class LessEqualNode extends ExprNode {
 
 	public LessEqualNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
-		t = Type.bool;
+		type = Type.bool;
 	}
 
 	@Override

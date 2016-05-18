@@ -9,7 +9,7 @@ public class GreaterNode extends ExprNode {
 
 	public GreaterNode(Node leftChild, Node rightChild) {
 		super(leftChild, rightChild);
-		t = Type.bool;
+		type = Type.bool;
 	}
 
 	@Override

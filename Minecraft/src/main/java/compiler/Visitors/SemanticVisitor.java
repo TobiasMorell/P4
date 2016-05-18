@@ -725,7 +725,8 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReturnNode node) {
-        return visit(node.GetLeftChild());
+        node.setT((Node.Type)visit(node.GetLeftChild()));
+        return node.getT();
     }
 
     @Override
