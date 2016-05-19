@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -34,8 +35,9 @@ import java.util.List;
 public class ObsidiCodingMachine extends Block
 {
     public static List<SyncRobot> RobotList = new ArrayList<SyncRobot>();
-    private static BlockPos pos;
-    private static World world;
+    private static BlockPos thePos;
+    private static World theWorld;
+    private static EntityPlayer thePlayer;
 
     public ObsidiCodingMachine() {
         super(Material.rock);
@@ -67,19 +69,20 @@ public class ObsidiCodingMachine extends Block
 
     public static void dropErrorLog(ErrorBook errorBook)
     {
-        IPosition position = new PositionImpl(pos.getX(), pos.getY(), pos.getZ());
+        IPosition position = new PositionImpl(thePos.getX(), thePos.getY(), thePos.getZ());
         ErrorBook.errors = (ArrayList<String>)ErrorHandling.GetErrors().clone();
         if(!Minecraft.getMinecraft().thePlayer.inventory.hasItemStack(new ItemStack(errorBook)))
-            BehaviorProjectileDispense.doDispense(world, new ItemStack(errorBook), 1, EnumFacing.NORTH, position);
-        AbstractRobot.talk("Compilation failed, check provided error log");
+            BehaviorProjectileDispense.doDispense(theWorld, new ItemStack(errorBook), 1, EnumFacing.NORTH, position);
+        thePlayer.addChatMessage(new ChatComponentText("\247f" + "Compilation failed, check provided error log"));
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side,
                                     float hitX, float hitY, float hitZ) {
         player.openGui(ObsidiSkriveMaskineMod.INSTANCE, ObsidiSkriveMaskineMod.obsidiguiid, world, pos.getX(), pos.getY(), pos.getZ());
-        this.pos = pos;
-        this.world = world;
+        thePos = pos;
+        theWorld = world;
+        thePlayer = player;
         SyncRobot.init(world, player);
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
     }

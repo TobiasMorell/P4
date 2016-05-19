@@ -263,6 +263,18 @@ public class SyncRobot extends Thread{
             }
     }
 
+    public void Talk(Coord coord){
+        Talk(coord.toString());
+    }
+
+    public void Talk(Float floatOut){
+        Talk(floatOut.toString());
+    }
+
+    public void Talk(Boolean bool){
+        Talk(bool.toString());
+    }
+
     public synchronized void TargetNearestEnemy(){
         try {
             Robot.getLock().isLockOpen();
