@@ -148,10 +148,10 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(ListDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.List) {
+            if(node.GetRightChild() instanceof CollectionNode) {
                 return Node.Type.List;
             }else{
-                ErrorHandling.Error("Trying to initialize List with unmatching type ",node.line);//todo: lists should probably not work this way.
+                ErrorHandling.Error("Trying to initialize List with unmatching type ",node.line);
             }
         }
         return null;
