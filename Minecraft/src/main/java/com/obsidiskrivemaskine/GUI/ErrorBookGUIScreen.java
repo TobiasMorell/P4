@@ -41,7 +41,7 @@ public class ErrorBookGUIScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        //Load text to display
+        //Load text to display. As drawScreen is called each tick, pendingScreen is used to avoid the errors being written multiple times
         if(pendingErrors) {
             if (errorLog.errors != null && errorLog.errors.size() > 0) {
                 for (String error : errorLog.errors) {
@@ -49,7 +49,7 @@ public class ErrorBookGUIScreen extends GuiScreen {
                     text.append("\n");
                 }
             } else {
-                text.append("No Errors, why do you have this book?\n");
+                text.append("No Errors... Yet\n");
             }
             pendingErrors = false;
         }

@@ -27,13 +27,16 @@ public abstract class AbstractRobot {
             player.addChatMessage(new ChatComponentText("\247f" + msg));
     }
 
+
     public static void init(World worldIn, EntityPlayer playerIn){
         world = worldIn;
         player = playerIn;
     }
 
+
     public static void move(String direction) {
         double targetX, targetY,targetZ;
+        //Sets the target position based on argument
         if (direction.equalsIgnoreCase("east")){
             targetX = Robot.posX + 1;
             targetY = Robot.posY;
@@ -61,21 +64,21 @@ public abstract class AbstractRobot {
             targetZ = Robot.posZ;
         }
         BlockPos targetPos = new BlockPos(targetX, targetY, targetZ);
+        /*Checks whether the targetposition is an air block, and attempts to move above it, if it is not.
+        * It is necessary to use .setLocationAndAngles, as the PathEntity Minecraft uses to move entities only tend to go
+        * near the target location but not exactly. Therefore .setLocationAndAngles is used to "teleport" the entity
+        * to the intended location after the Robot has walked near it. */
         if(!world.getBlockState(targetPos).getBlock().isAir(world, targetPos)) {
             targetPos = new BlockPos(targetX, ++targetY, targetZ);
             if(world.getBlockState(targetPos).getBlock().isAir(world, targetPos)){
                 Robot.getNavigator().clearPathEntity();
                 Robot.getNavigator().setPath(Robot.getNavigator().getPathToPos(targetPos), 0.8D);
-                //The path tends to lead the entity close to the intended location but not to the exact location.
-                //This is to ensure that it ends up in the intended location.
                 Robot.setLocationAndAngles(targetX, targetY, targetZ, Robot.rotationYaw, Robot.rotationPitch);
             }
         }
         else{
             Robot.getNavigator().clearPathEntity();
             Robot.getNavigator().setPath(Robot.getNavigator().getPathToPos(targetPos), 0.8D);
-            //The path tends to lead the entity close to the intended location but not to the exact location.
-            //This is to ensure that it ends up in the intended location.
             Robot.setLocationAndAngles(targetX, targetY, targetZ, Robot.rotationYaw, Robot.rotationPitch);
         }
         Robot.getNavigator().clearPathEntity();
@@ -99,6 +102,7 @@ public abstract class AbstractRobot {
             blockToDig = Robot.getPosition().south();
         else
             talk("Invalid direction");
+        //Checks if there is a digable block at the target location, and adds it to inventory before removing it
         if(blockToDig != null && !world.getBlockState(blockToDig).getBlock().isAir(world, blockToDig)) {
             AddToInventory(world.getBlockState(blockToDig).getBlock());
             world.destroyBlock(blockToDig, false);
@@ -152,6 +156,7 @@ public abstract class AbstractRobot {
         ItemStack item = new ItemStack(block);
         int i = 0, emptySlot = 16;
         while(i < inventory.length && item != null){
+            //Checks if the item is already present in somewhere inventory and if it has reached it's stack limit.
             if(inventory[i] != null && inventory[i].getDisplayName().equals(item.getDisplayName()) && inventory[i].stackSize != inventory[i].getMaxStackSize()){
                 inventory[i].stackSize++;
                 item = null;
@@ -160,6 +165,7 @@ public abstract class AbstractRobot {
                 emptySlot = i;
             i++;
         }
+        //If the item is not in the inventory already, it is added to the first empty slot
         if(item != null && emptySlot != 16) {
             inventory[emptySlot] = new ItemStack(block);
         }
@@ -167,6 +173,7 @@ public abstract class AbstractRobot {
     }
 
     public static void StoreAllInChest() {
+        //Attempts to find a chest near the Robot
         TileEntityChest chestEntity = (TileEntityChest) world.getTileEntity(new BlockPos(Robot.posX, Robot.posY, Robot.posZ - 1));
         if (chestEntity == null)
             chestEntity = (TileEntityChest) world.getTileEntity(new BlockPos(Robot.posX, Robot.posY, Robot.posZ + 1));
@@ -177,6 +184,7 @@ public abstract class AbstractRobot {
         if (chestEntity != null) {
             try {
                 ItemStack[] RoboInventory = Robot.getInventory();
+                //Runs through both RobotInventory and ChestInventory to fill up already present itemstacks before adding new ones.
                 for (int i = 0; i < RoboInventory.length; i++) {
                     for (int j = 0; j < chestEntity.getSizeInventory(); j++) {
                         if (chestEntity.getStackInSlot(j) == null && RoboInventory[i] != null) {
@@ -205,6 +213,7 @@ public abstract class AbstractRobot {
             talk("Unable to find nearby chest");
     }
 
+    //Does the same as StoreAllInChest, however this only stores a specified amount of a specified item
     public static void StoreInChest(String name, int amount){
         ItemStack itemToStore = searchInventory(name);
         TileEntityChest chestEntity = (TileEntityChest)world.getTileEntity(new BlockPos(Robot.posX, Robot.posY, Robot.posZ - 1));
@@ -244,6 +253,7 @@ public abstract class AbstractRobot {
             talk("Unable to find nearby chest");
     }
 
+    //Removes any itemstack with a stacksize of 0 from the inventory, as this item technically doesn't exist
     private static void cleanInventory() {
         ItemStack[] inventory = Robot.getInventory();
         for (int i = 0; i < inventory.length; i++) {
@@ -290,6 +300,7 @@ public abstract class AbstractRobot {
         }
     }
 
+
     public static void drop(String toDrop, int amount){
         ItemStack itemToDrop = searchInventory(toDrop);
         if(itemToDrop != null && itemToDrop.stackSize > amount) {
@@ -328,6 +339,7 @@ public abstract class AbstractRobot {
             talk("Unable to find nearby chest");
     }
 
+    //Attempts to obtain a viable target if not already present before swinging.
     public static void swing(){
         if (Robot.getAttackTarget() == null || Robot.getDistanceToEntity(Robot.getAttackTarget()) > 1.5 || Robot.getAttackTarget().isDead)
             targetNearestEnemy();

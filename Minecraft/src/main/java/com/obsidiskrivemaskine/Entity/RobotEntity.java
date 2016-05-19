@@ -55,17 +55,21 @@ public class RobotEntity extends EntityCreature
         return false;
     }
 
+    //This method is called by the base Entity class once every tick
     @Override
     public void onEntityUpdate(){
+        //Opens the lock
         synchronized(this){
             lock.changeLockState(true);
             this.notify();
         }
         super.onEntityUpdate();
+        //Scans the nearby area for any entity, and adds them to the entities list
         if(ticksExisted % 5 == 0 || ticksExisted < 5) {
             AxisAlignedBB scanArea = new AxisAlignedBB(posX - 10, posY - 10, posZ - 10, posX + 10, posY + 10, posZ + 10);
             entities = (ArrayList) worldObj.getEntitiesWithinAABB(EntityLivingBase.class, scanArea);
         }
+        //Fake signal sent on the "Listen" channel every 10th second/200th tick
         if(ticksExisted % 200 == 0 && ticksExisted > 0) {
             if ( FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                 //The getEffectiveSide() has a harsh runtime, but it does the trick.
@@ -76,8 +80,6 @@ public class RobotEntity extends EntityCreature
             }
         }
     }
-
-
 
     public ArrayList<EntityLivingBase> getHostileEntities() {
         ArrayList<EntityLivingBase> hostileMobs = new ArrayList<EntityLivingBase>();
@@ -184,16 +186,6 @@ public class RobotEntity extends EntityCreature
     {
         return 0.4F;
     }
-
-    protected Item getDropItem()
-    {
-        return Items.leather;
-    }
-
-    /**
-     * Drop 0-2 items of this living's type
-     */
-    protected void dropFewItems(boolean p_70628_1_, int p_70628_2_){}
 
     public float getEyeHeight()
     {

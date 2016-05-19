@@ -33,6 +33,7 @@ public class ObsidiSkriveMaskineMod
 
     public static int obsidiguiid, errorguiid;
 
+    //Makes it possible to obtain clones of the ErrorBook
     public static ErrorBook errorBook(){
         ErrorBook tempBook = (ErrorBook)error_book;
         try {

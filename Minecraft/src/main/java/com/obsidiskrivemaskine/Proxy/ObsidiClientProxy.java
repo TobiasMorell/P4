@@ -1,7 +1,5 @@
 package com.obsidiskrivemaskine.Proxy;
 
-import com.obsidiskrivemaskine.GUI.ErrorBookGUIScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
@@ -18,10 +16,5 @@ public class ObsidiClientProxy extends ObsidiServerProxy
     @Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
-    }
-
-    @Override
-    public void openErrorGUI() {
-        Minecraft.getMinecraft().displayGuiScreen(new ErrorBookGUIScreen());
     }
 }

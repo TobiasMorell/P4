@@ -34,7 +34,6 @@ import java.util.List;
 public class ObsidiCodingMachine extends Block
 {
     public static List<SyncRobot> RobotList = new ArrayList<SyncRobot>();
-    public static ArrayList<String> recentErrors = new ArrayList<String>();
     private static BlockPos pos;
     private static World world;
 

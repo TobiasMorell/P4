@@ -13,9 +13,4 @@ public class ObsidiServerProxy
     public void registerModels() {
         //Client method only.
     }
-
-    public void openErrorGUI()
-    {
-        //Nothing here - client method only!
-    }
 }

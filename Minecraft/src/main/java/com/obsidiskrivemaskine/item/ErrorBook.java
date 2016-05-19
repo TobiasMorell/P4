@@ -39,9 +39,9 @@ public class ErrorBook extends ItemBook implements Cloneable{
         return "Error Book";
     }
 
+    //Sets the errorlog and attempst to open the gui.
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
-        //errors = ObsidiCodingMachine.recentErrors;
         if(!worldIn.isRemote)
         {
             ErrorBookGUIScreen.errorLog = this;
@@ -50,6 +50,7 @@ public class ErrorBook extends ItemBook implements Cloneable{
         return itemStackIn;
     }
 
+    //Allows ErrorBook to be cloned.
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

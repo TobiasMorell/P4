@@ -48,7 +48,7 @@ public class ObsidiGUIScreen extends GuiScreen
         switch(button.id) {
             case 0:
                 ErrorHandling.CleanErrors();
-                /* Closes screen and saves editor text to "DynamicClass.java" in the run folder */
+                /* Closes the text editor, saves the .oc file and attempts to compile and load it */
                 mc.thePlayer.closeScreen();
                 text.deleteCharAt(cursorLocation);
                 saveFile();
@@ -67,6 +67,7 @@ public class ObsidiGUIScreen extends GuiScreen
                 }
                 break;
             case 1:
+                // Resets the text on the screen.
                 text = text.delete(0, text.toString().length());
                 cursorLocation = 0;
                 break;
@@ -78,24 +79,11 @@ public class ObsidiGUIScreen extends GuiScreen
     }
 
     void loadRobot(){
+        //Creates new ClassLoader for whenever the class needs to be reloaded.
         ClassLoader parentClassLoader = DynamicClassLoader.class.getClassLoader();
         DynamicClassLoader newClassLoader = new DynamicClassLoader(parentClassLoader);
-        /*String classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "NormalThread.class");
-        System.out.println("ClassFile = " + classFile);
-        try{newClassLoader.loadClass(robotName + "NormalThread", classFile);}
-        catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Failed to load NormalThread class");
-        }
-        classFile = String.format(System.getProperty("user.dir") + "/saves/CompiledSources/" + robotName + "HearThread.class");
-        System.out.println("ClassFile = " + classFile);
-        try{newClassLoader.loadClass(robotName + "HearThread", classFile);}
-        catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Failed to load HearThread class");
-        }*/
         String classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot.class");
-
+        //A new instance is created of the main Robot class in order to start the normal and hear threads
         try{
             Class<? extends SyncRobot> sr = newClassLoader.loadClass(robotName + "Robot", classFile);
             classFile = String.format(System.getProperty("user.dir") + "/" + robotName + "Robot$" + robotName + "HearThread.class");
@@ -108,8 +96,8 @@ public class ObsidiGUIScreen extends GuiScreen
         }
     }
 
+    //Saves the .oc file
     void saveFile(){
-        File testFile = new File(robotName + ".oc");
         try {
             obsidiFileWriter = new FileWriter(obsidiFile);
             obsidiFileWriter.write(text.toString());
@@ -121,6 +109,7 @@ public class ObsidiGUIScreen extends GuiScreen
         }
     }
 
+    //Loads any preexisting file. Also sets the RobotName.
     void loadFile(){
         if(text.toString().equals("")) {
             try {
@@ -152,7 +141,6 @@ public class ObsidiGUIScreen extends GuiScreen
         mc.getTextureManager().bindTexture(skrivemaskinegui);
 
         this.drawTexturedModalRect(this.width / 2 - 128, this.height / 2 - 128, 0, 0, 256, 256);
-
 
         /* this is where the editor reads keys and writes to the screen */
         if (org.lwjgl.input.Keyboard.getEventKeyState()) {

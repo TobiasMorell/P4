@@ -41,7 +41,10 @@ public class SyncRobot extends Thread{
         }
         normal_thread.start();
     }
-
+    /*most SyncRobot methods follow the same basic pattern
+    * First it checks if the lock is openend
+    * Once it is, it calls the corresponding method in AbstractRobot
+    * and finally it locks the lock again*/
     public synchronized float GetHealth(){
         try {
             Robot.getLock().isLockOpen();
@@ -72,7 +75,7 @@ public class SyncRobot extends Thread{
         } catch (InterruptedException e) {
             System.out.println("Could not sleep the SyncRobot");
         }
-        return new Coord(0 ,0 ,0);
+        return new Coord(0, 0, 0);
     }
 
     public synchronized float GetY() {
@@ -235,7 +238,12 @@ public class SyncRobot extends Thread{
         world = worldIn;
         player = playerIn;
     }
-
+    /* Robot is initialized by createEntitybyName, which finds the entity with the given name
+    * The location of the robot is then set to be 5 blocks west of the player
+    * The reason for the cast to int and then back to double is to round the number.
+    * 5.5 is then added to the X coordinate to set it 5 blocks west for the user. The .5 is to center the Robot.
+    * spawnExplosionParticle is just for some fancy particles on spawn.
+    * */
     public void spawnEntity(){
         Robot = (RobotEntity)EntityList.createEntityByName("obsidiskrivemaskine.RobotEntity", world);
         Robot.setLocationAndAngles(((double)(int)player.posX) + 5.5, (double)(int)player.posY, ((double)(int)player.posZ) + 0.5, player.rotationYaw, 15.0F);
@@ -279,7 +287,7 @@ public class SyncRobot extends Thread{
     public synchronized void Signal(Signal signal){
         hear.Signal(signal);
     }
-
+    // The base class for the HearThread, it is a nested class so that the ObsidiCode Robot HearThread class has access to it
     protected abstract class HearThread implements Runnable {
         protected Queue<Signal> signalQueue = new LinkedList<Signal>();
 
