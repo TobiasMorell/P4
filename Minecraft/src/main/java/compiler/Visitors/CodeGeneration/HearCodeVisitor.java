@@ -92,6 +92,8 @@ public class HearCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
+        if(!(node._parent instanceof ExprNode))
+            codeBuilder.append("mutex.WaitForTurn();\n");
         visit(node.GetLeftChild());
         codeBuilder.append("(");
         ArrayList<Node> args  = node.GetChildren();
