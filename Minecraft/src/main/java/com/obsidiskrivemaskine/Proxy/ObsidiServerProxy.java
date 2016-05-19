@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 public class ObsidiServerProxy
 {
-    public void init(FMLInitializationEvent e) {
+    public void preInit() {
         //CustomCow.RegisterEntity();
     }
     public void registerModels() {
