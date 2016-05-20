@@ -1,5 +1,7 @@
 package com.obsidiskrivemaskine.Proxy;
 
+import com.obsidiskrivemaskine.Entity.RobotEntity;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
@@ -14,7 +16,7 @@ public class ObsidiClientProxy extends ObsidiServerProxy
     }
 
     @Override
-    public void init(FMLInitializationEvent e) {
-        super.init(e);
+    public void preInit() {
+
     }
 }

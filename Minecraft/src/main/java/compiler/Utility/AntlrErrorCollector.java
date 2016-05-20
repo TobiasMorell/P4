@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * Created by morell on 5/16/16.
  */
 public class AntlrErrorCollector extends BaseErrorListener {
+    //This class collects syntax-errors from the ANTLR-generated parser and stores them in the ErrorHandling-class
     public static AntlrErrorCollector INSTANCE = new AntlrErrorCollector();
-    private ArrayList<String> errors = new ArrayList<String>();
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,

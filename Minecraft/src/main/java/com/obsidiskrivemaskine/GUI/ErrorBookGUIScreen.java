@@ -18,8 +18,8 @@ import java.util.ArrayList;
  * Created by morell on 5/16/16.
  */
 public class ErrorBookGUIScreen extends GuiScreen {
-    private final int book_image_height = 250;
-    private final int book_image_width = 250;
+    private final int book_image_height = 256;
+    private final int book_image_width = 256;
     private static ResourceLocation texture;
     public static ErrorBook errorLog;
     public StringBuilder text;

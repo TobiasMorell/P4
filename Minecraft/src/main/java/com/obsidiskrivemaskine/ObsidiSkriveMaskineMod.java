@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = ObsidiSkriveMaskineMod.MODID, version = ObsidiSkriveMaskineMod.VERSION)
 public class ObsidiSkriveMaskineMod
@@ -63,6 +64,8 @@ public class ObsidiSkriveMaskineMod
     public void init(FMLInitializationEvent event)
     {
         registerHandlers();
+
+        LanguageRegistry.instance().addStringLocalization("tile.ObsidiCodingMachine.name", "en_US", "Obsidi Coding Machine");
 
         //Register the models - gives texture and models to items and blocks
         PROXY.registerModels();

@@ -114,7 +114,8 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 		line = ctx.getStart().getLine();
 		String id = ctx.id.getText();
 		Node ref;
-		
+
+		//The DotNodes does not work ATM - it is not needed in current version of the language
 		if(ctx.getChild(0) instanceof ObsidiCodeParser.TypeNameContext)
 			ref = new DotNode(visit(ctx.parent), id);
 		else
@@ -248,7 +249,6 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 			return n;
 		}
 		else {
-			System.out.println("Could not figure out what to do"); //Shitty error-handling again!
 			ErrorHandling.Error("Found no AssignNodes or ReferenceNodes in ", n);
 			return null;
 		}

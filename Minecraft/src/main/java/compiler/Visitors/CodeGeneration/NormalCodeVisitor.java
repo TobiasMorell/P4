@@ -320,14 +320,12 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         Node.Type left = node.GetLeftChild().getT();
         Node.Type right = node.GetRightChild().getT();
 
-        if(left == Node.Type.string)
+        if(left == Node.Type.string && right == Node.Type.string)
         {
-            if(right == Node.Type.string) {
-                visit(node.GetLeftChild());
-                codeBuilder.append(".replaceAll(");
-                visit(node.GetRightChild());
-                codeBuilder.append(", \"\")");
-            }
+            visit(node.GetLeftChild());
+            codeBuilder.append(".replaceAll(");
+            visit(node.GetRightChild());
+            codeBuilder.append(", \"\")");
         }
         else if(left ==  Node.Type.Coord)
         {
@@ -682,10 +680,10 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
     public Object visit(MethodInvocationNode node) {
         boolean outermethod = (node._parent instanceof BlockNode);
         if(outermethod){
-            System.out.println("NODE IS "+node+" AND PARENT IS "+node._parent+ " AND GRANDPARENT IS" +node._parent._parent);
             codeBuilder.append("\nmutex.WaitForTurn();\n");
         }
         visit(node.GetLeftChild());
+        //Append arguments
         codeBuilder.append("(");
         ArrayList<Node> args = node.GetChildren();
         for (int i = 0; i < args.size(); i++) {
