@@ -184,14 +184,33 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReferenceNode node) {
+        if(node.getT() == Node.Type.List && node._parent instanceof DeclarationNode) {
+            codeBuilder.append('(');
+            switch (node._parent.getT()) {
+                case num:
+                    codeBuilder.append("float)");
+                    break;
+                case string:
+                    codeBuilder.append("String)");
+                    break;
+                case Coord:
+                    codeBuilder.append("Coord)");
+                    break;
+                case bool:
+                    codeBuilder.append("boolean)");
+                    break;
+            }
+        }
         //Append ID
         IDNode id = node.GetId();
         codeBuilder.append(id.GetID());
+        System.out.println("Parent of " + id._id + " is " + node._parent);
+        System.out.println("Grandparent of " + id._id + " is " + node._parent._parent);
         //Append indexing if it's a list
-        if(node.getT() == Node.Type.List) {
-            codeBuilder.append(".get(");
+        if(node.getT() == Node.Type.List && node._parent instanceof DeclarationNode) {
+            codeBuilder.append(".get(Math.round(");
             visit(id._extension);
-            codeBuilder.append(')');
+            codeBuilder.append("))");
         }
         return null;
     }
@@ -358,9 +377,11 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
             CoordSimplifier(node, InputTypes.NUMCOORD, '-');
         }
         else if(left == Node.Type.List) {
-            //minus removes the element from the list
             visit(node.GetLeftChild());
-            codeBuilder.append(".removeAll("); //Can be replaced with removeAll depending on the semantics
+            if(right != Node.Type.List)
+                codeBuilder.append(".removeAll(");
+            else
+                codeBuilder.append(".removeAll(");
             visit(node.GetRightChild());
             codeBuilder.append(");\n");
         }
@@ -502,7 +523,10 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         else if(left == Node.Type.List)
         {
             visit(node.GetLeftChild());
-            codeBuilder.append(".add(");
+            if(right != Node.Type.List)
+                codeBuilder.append(".add(");
+            else
+                codeBuilder.append(".addAll(");
             visit(node.GetRightChild());
             codeBuilder.append(");\n");
         }
@@ -771,6 +795,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
                     codeBuilder.append(".divCoord(");
                 //Add argument and close parenthesis
                 visit(node.GetRightChild());
+                codeBuilder.append(')');
                 break;
         }
     }
@@ -791,6 +816,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
         //Append Num and close parenthesis
         visit(num);
+        codeBuilder.append(')');
     }
 
     public enum InputTypes {
