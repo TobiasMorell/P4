@@ -33,12 +33,6 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     {
         //Add class header
         codeBuilder.append(String.format("\npublic class %sHearThread extends HearThread {\n", robotName));
-        /*//Add fields
-        codeBuilder.append(String.format("private %sRobot r;\n", robotName));
-        //Declare a constructor
-        codeBuilder.append(String.format("public %sHearThread (%sRobot r, SignalMutex mut) {\n", robotName, robotName));
-        codeBuilder.append("this.r = r;\n");
-        codeBuilder.append("}\n");*/
     }
 
     private void placeHandleMethod()
@@ -64,7 +58,9 @@ public class HearCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(HearDcl node) {
+        //Store the ID in a list for use in method-switch
         hearMethods.add(node.id);
+        //Same procedure as a method-declaration
         codeBuilder.append(String.format("public void %s (", node.id));
         for (int i = 0; i < node.parameters.size(); i++) {
             if(i > 0)
@@ -80,9 +76,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
     }
 
     @Override
-    public Object visit(MethodDcl node) {
-        return null;
-    }
+    public Object visit(MethodDcl node) { /*Just skip all methods - they are declared in outer-class*/return null; }
 
     @Override
     public Object visit(LoadNode node) {
@@ -92,8 +86,7 @@ public class HearCodeVisitor extends NormalCodeVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        if(!(node._parent instanceof ExprNode))
-            codeBuilder.append("mutex.WaitForTurn();\n");
+        //Same procedure as in NormalCodeVisitor, except this does not ask for it's turn
         visit(node.GetLeftChild());
         codeBuilder.append("(");
         ArrayList<Node> args  = node.GetChildren();

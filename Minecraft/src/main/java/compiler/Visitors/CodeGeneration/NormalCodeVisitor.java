@@ -320,14 +320,12 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         Node.Type left = node.GetLeftChild().getT();
         Node.Type right = node.GetRightChild().getT();
 
-        if(left == Node.Type.string)
+        if(left == Node.Type.string && right == Node.Type.string)
         {
-            if(right == Node.Type.string) {
-                visit(node.GetLeftChild());
-                codeBuilder.append(".replaceAll(");
-                visit(node.GetRightChild());
-                codeBuilder.append(", \"\")");
-            }
+            visit(node.GetLeftChild());
+            codeBuilder.append(".replaceAll(");
+            visit(node.GetRightChild());
+            codeBuilder.append(", \"\")");
         }
         else if(left ==  Node.Type.Coord)
         {
@@ -680,9 +678,12 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        //todo Add call to WaitForTurn()
-        codeBuilder.append("\nmutex.WaitForTurn();\n");
+        //Wait for turn if the call is not part of an expression
+        if(!(node._parent instanceof ExprNode))
+            codeBuilder.append("\nmutex.WaitForTurn();\n");
+        //Append method-id
         visit(node.GetLeftChild());
+        //Append arguments
         codeBuilder.append("(");
         ArrayList<Node> args = node.GetChildren();
         for (int i = 0; i < args.size(); i++) {
@@ -692,6 +693,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         }
         codeBuilder.append(") ");
 
+        //Append a semi-colon if not child of an ExprNode
         if(!(node._parent instanceof ExprNode)){
             codeBuilder.append(";");
         }

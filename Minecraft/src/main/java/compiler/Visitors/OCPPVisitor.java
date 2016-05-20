@@ -10,6 +10,10 @@ import java.util.ArrayList;
 /**
  * Created by morell on 4/19/16.
  */
+
+/*
+ * A test-class for determining if the amount of Nodes in the AST was sufficient to generate the source-code.
+ */
 public class OCPPVisitor extends AbstractVisitor {
 
     @Override

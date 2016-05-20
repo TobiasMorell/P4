@@ -38,8 +38,7 @@ public class RobotCodeVisitor extends NormalCodeVisitor {
             codeBuilder.append(hcv.GetSourceCode().getCharContent(false));
         } catch(IOException e){
             e.printStackTrace();
-        }
-        codeBuilder.append("\n}");
+        }        codeBuilder.append("\n}");
         return null;
     }
 }
