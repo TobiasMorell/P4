@@ -7,6 +7,7 @@ import com.obsidiskrivemaskine.Entity.RobotEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

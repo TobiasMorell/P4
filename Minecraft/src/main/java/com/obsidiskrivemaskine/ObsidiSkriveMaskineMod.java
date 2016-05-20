@@ -5,6 +5,7 @@ import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import com.obsidiskrivemaskine.Handler.ObsidiGuiHandler;
 import com.obsidiskrivemaskine.Proxy.ObsidiServerProxy;
 import com.obsidiskrivemaskine.item.ErrorBook;
+import compiler.Utility.Coord;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +17,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
+
+import java.lang.instrument.Instrumentation;
 
 @Mod(modid = ObsidiSkriveMaskineMod.MODID, version = ObsidiSkriveMaskineMod.VERSION)
 public class ObsidiSkriveMaskineMod

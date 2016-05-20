@@ -668,7 +668,6 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(LoopNode node) {
-        //todo Add call to WaitForTurn();
         codeBuilder.append("while(!(");
         visit(node.GetLeftChild());
         codeBuilder.append("))");
@@ -758,7 +757,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
             case NUMCOORD:
                     HandleNumCoord(node.GetRightChild(), node.GetLeftChild(), operator);
                 break;
-            case COORDCOORD: codeBuilder.append(keywords.NEW);
+            case COORDCOORD:
                 //Append left Coord
                 visit(node.GetLeftChild());
                 //Determine the operator and call corresponding method
@@ -772,7 +771,6 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
                     codeBuilder.append(".divCoord(");
                 //Add argument and close parenthesis
                 visit(node.GetRightChild());
-                codeBuilder.append(");\n");
                 break;
         }
     }
@@ -793,7 +791,6 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
         //Append Num and close parenthesis
         visit(num);
-        codeBuilder.append(");\n");
     }
 
     public enum InputTypes {
