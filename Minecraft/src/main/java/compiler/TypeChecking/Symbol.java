@@ -11,10 +11,6 @@ public class Symbol {
         return type;
     }
 
-    public Symbol getVar() {
-        return var;
-    }
-
     public Symbol getLevel() {
         return level;
     }
@@ -28,17 +24,13 @@ public class Symbol {
     String name;
     Node.Type type;
 
-    public void setVar(Symbol var) {
-        this.var = var;
-    }
 
-    Symbol var, level;
+    Symbol level;
     int depth, hashvalue;
 
-    public Symbol(String name, Node.Type type, Symbol level, int depth){
+    public Symbol(String name, Node.Type type, int depth){
         this.name = name;
         this.type = type;
-        this.level = level;
         this.depth = depth;
     }
 

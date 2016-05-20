@@ -14,20 +14,16 @@ import java.util.Hashtable;
  * Created by Gedesnegl on 08-04-2016.
  */
 public class SymbolTable {
-    public ArrayList<Symbol> symbols;
     public ArrayList<Func> functions;
     public int depth = -1;
-    ArrayList<Symbol> scopeDisplay;
-    Hashtable HashTable;
+    private ArrayList<ArrayList<Symbol>> scopeDisplay;
     public SemanticVisitor semvisitor;
     public Node _ASTRoot;
 
     public SymbolTable(Node ASTRoot)
     {
         _ASTRoot = ASTRoot;
-        HashTable = new Hashtable();
-        scopeDisplay = new ArrayList<Symbol>();
-        symbols = new ArrayList<Symbol>();
+        scopeDisplay = new ArrayList<ArrayList<Symbol>>();
         functions = new ArrayList<Func>();
         addNativeFunctions();
         semvisitor = new SemanticVisitor(this);
@@ -48,16 +44,12 @@ public class SymbolTable {
         functions.add(new Func("GetZ", Node.Type.num, Node.Type.Coord));
     }
 
-    /**
-     * Prints a simple error message and exits the compiler afterwards.
-     * @param s Error message
+    /***
+     * Enters a new symbol by first checking that the chosen name isn't already taken in the current scope
+     * @param id The name for the symbol
+     * @param type The type of the symbol
+     * @param line The line in the code, in which the symbol is defined(error messages)
      */
-    public void MakeError(String s) {
-        ErrorHandling.Error(s);
-        //System.exit(-1);
-    }
-
-
     public void EnterSymbol(String id, Node.Type type, int line)
     {
         Symbol oldsym = RetrieveSymbol(id);
@@ -66,32 +58,39 @@ public class SymbolTable {
                     " of type "+ type.toString() + " has already been initialized in this scope", line);
             return;
         }
-        Symbol newsym = new Symbol(id, type, scopeDisplay.get(depth), depth);
-        //mangler at sætte hashvalue
-        scopeDisplay.set(depth, newsym);
-        if(oldsym == null) HashTable.put(newsym.getName(), newsym);
-        else
-        {
-            HashTable.remove(oldsym);
-            HashTable.put(newsym.getName(), newsym);
-
-        }
-        newsym.var = oldsym;
+        Symbol newsym = new Symbol(id, type, depth);
+        scopeDisplay.get(depth).add(newsym);
     }
 
+    /**
+     * Retrieves Closest(scope wise) symbol with given id
+     * @param id String name of the symbol.
+     * @param line line number, for errormessaging and debugging
+     * @return
+     */
+    public Symbol RetrieveSymbol(String id, int line) {
+        Symbol s = RetrieveSymbol(id);
+        if(s==null) {
+            ErrorHandling.Error("Variable " + id + " has not been declared at this point", line);
+            return null;
+        }else{
+            return s;
+        }
+
+    }
     /**
      * Retrieves Closest(scope wise) symbol with given id
      * @param id String name of the symbol.
      * @return
      */
     public Symbol RetrieveSymbol(String id) {
-        Symbol sym = (Symbol)HashTable.get(id);
-        //while(sym != null)
-        //{
-            if(sym != null && sym.name.equals(id))
-                return(sym);
-
-        //}
+        for(int i = depth; i > 0; i--){
+            for(Symbol s : scopeDisplay.get(i)){
+                if(s.name.equals(id)){
+                    return s;
+                }
+            }
+        }
         return null;
     }
 
@@ -101,14 +100,15 @@ public class SymbolTable {
             if(name.equals(F.name) && types.size() == F.parameters.size() ){
                 for (int i = 0; i < F.parameters.size(); i++) {
                     if (F.parameters.get(i) != types.get(i)){
-                        MakeError("Invalid parameters in " + name);
+                        ErrorHandling.Error("Invalid parameter in method invocation '" + name+"', expected "+F.parameters.get(i)
+                        +"but found"+types.get(i));
                         return null;
                     }
                 }
                 return F;
             }
         }
-        MakeError("Invalid Method invocation: " + name);
+        ErrorHandling.Error("Invalid Method invocation: " + name);
         return null;
     }
 
@@ -127,44 +127,40 @@ public class SymbolTable {
             if(name.equals(F.name))
                 funcs.add(F);
         }
-
         //Convert to array and return
         Func[] f = new Func[funcs.size()];
         f = funcs.toArray(f);
         return f;
     }
 
+    /***
+     * Opens a new scope and adds a new entry to scopedisplay
+     */
     public void OpenScope()
     {
         depth++;
-        scopeDisplay.add(null);
+        scopeDisplay.add(new ArrayList<Symbol>());
     }
 
-    /**
-     * Closes current scope and deletes all Symbols contained.
-     *
-     * Ikke særlig effektiv kører igennem hele tablet.
-     *
+    /***
+     * Closes the current scope and removes the content of the previous outermost scope.
      */
     public void CloseScope() {
-        //Needs to be improved so all variabes in the same depth are removed, can be done through the level field;
         scopeDisplay.trimToSize();
         if(scopeDisplay.size()>depth) {
-            Symbol c = scopeDisplay.get(depth);
-            if (c != null) {
-                Symbol prevsym = c.var;
-                HashTable.remove(c.name); //todo: might not work, however is not put to use as of current
-                if (prevsym != null)
-                    HashTable.put(prevsym.getName(), prevsym);
-            }
             scopeDisplay.remove(depth);
         }
         depth--;
     }
 
+    /***
+     * This method is used for byte code generation.
+     * @param name a symbol to be checked
+     * @return a boolean value representing weather or not the symbol is declared locally
+     */
     public Boolean DeclaredLocally(String name)
     {
-        Symbol sym = RetrieveSymbol(name);
+        Symbol sym = RetrieveSymbol(name,0);
         if(sym != null && sym.depth == depth) { return true;     }
         else return false;
     }
@@ -172,5 +168,3 @@ public class SymbolTable {
 
 
 }
-
-//todo: Persistent data?

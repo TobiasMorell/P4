@@ -680,8 +680,11 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(MethodInvocationNode node) {
-        //todo Add call to WaitForTurn()
-        codeBuilder.append("\nmutex.WaitForTurn();\n");
+        boolean outermethod = (node._parent instanceof BlockNode);
+        if(outermethod){
+            System.out.println("NODE IS "+node+" AND PARENT IS "+node._parent+ " AND GRANDPARENT IS" +node._parent._parent);
+            codeBuilder.append("\nmutex.WaitForTurn();\n");
+        }
         visit(node.GetLeftChild());
         codeBuilder.append("(");
         ArrayList<Node> args = node.GetChildren();
@@ -692,7 +695,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         }
         codeBuilder.append(") ");
 
-        if(!(node._parent instanceof ExprNode)){
+        if (outermethod) {
             codeBuilder.append(";");
         }
 

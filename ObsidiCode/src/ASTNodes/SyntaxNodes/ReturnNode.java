@@ -6,7 +6,7 @@ import Visitors.AbstractVisitor;
 
 public class ReturnNode extends UnaryNode {
 
-	public ReturnNode(ExprNode child) {
+	public ReturnNode(Node child) {
 		super(child);
 	}
 

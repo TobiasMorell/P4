@@ -119,7 +119,7 @@ public class SemanticVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReferenceNode node) {
-        Symbol s = _table.RetrieveSymbol(node.GetId()._id); //
+        Symbol s = _table.RetrieveSymbol(node.GetId()._id,node.line); //
         if(s != null) {
             if(_table.depth == 0){
                 node._GlobalRef = true;
@@ -161,7 +161,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(GreaterEqualNode node) {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+        if(t1 == Node.Type.num && t2 == Node.Type.num){
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
@@ -174,7 +174,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(LessEqualNode node) {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+        if(t1 == Node.Type.num && t2 == Node.Type.num){
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
@@ -197,11 +197,10 @@ public class SemanticVisitor extends AbstractVisitor {
         }else{
             t2 = (Node.Type)visit(node.GetRightChild());
             String refID = ((ReferenceNode)node.GetLeftChild()).GetId()._id;
-            Symbol s = _table.RetrieveSymbol(refID);
+            Symbol s = _table.RetrieveSymbol(refID,node.line);
             if (s!= null)
                 t1 = s.getType();
             else{
-                ErrorHandling.Error("Variable "+refID+" does not exist in current scope",node.line);
                 return null;
             }
             if(t1 == t2) {
@@ -280,7 +279,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(GreaterNode node) {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+        if(t1 == Node.Type.num && t2 == Node.Type.num){
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
@@ -306,7 +305,7 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(LessNode node) {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
-        if(t1 == Node.Type.bool && t2 == Node.Type.bool){
+        if(t1 == Node.Type.num && t2 == Node.Type.num){
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
@@ -705,7 +704,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         Func f = new Func((MethodDcl)grandchild);
                         _table.functions.add(f);
                     }else{
-                        _table.MakeError("Error: This should not happen!");
+                        ErrorHandling.Error("Error: This should not happen!",node.line);
                     }
                 }
                 for (Node grandchild: ((CollectionNode)child).GetChildren()) {
