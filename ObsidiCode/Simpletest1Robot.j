@@ -26,9 +26,11 @@ invokespecial Simpletest1Robot/<init>()V
 ldc 13.000000
 ldc 1.370000
 invokevirtual Simpletest1Robot/Test1(FF)F
+dup
 fstore 1
+fstore 10
 getstatic java/lang/System/out Ljava/io/PrintStream;
-fload_1
+fload 10
 invokevirtual java/io/PrintStream/println(F)V
 return
 .end method
