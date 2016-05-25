@@ -9,6 +9,7 @@ import compiler.TypeChecking.SymbolTable;
 import compiler.Utility.AbstractKeywordSheet;
 import compiler.Utility.JavaSourceBuffer;
 import compiler.Visitors.AbstractVisitor;
+import jdk.nashorn.internal.ir.Block;
 
 import java.util.ArrayList;
 
@@ -184,7 +185,8 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(ReferenceNode node) {
-        if(node.getT() == Node.Type.List && node._parent instanceof DeclarationNode) {
+        Node parent = node._parent;
+        if(node.getT() == Node.Type.List && (parent instanceof DeclarationNode || parent instanceof CollectionNode)) {
             codeBuilder.append('(');
             switch (node._parent.getT()) {
                 case num:
@@ -204,13 +206,13 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
         //Append ID
         IDNode id = node.GetId();
         codeBuilder.append(id.GetID());
-        System.out.println("Parent of " + id._id + " is " + node._parent);
-        System.out.println("Grandparent of " + id._id + " is " + node._parent._parent);
         //Append indexing if it's a list
-        if(node.getT() == Node.Type.List && node._parent instanceof DeclarationNode) {
+        if(node.getT() == Node.Type.List && (parent instanceof DeclarationNode || parent instanceof CollectionNode || parent instanceof BlockNode)) {
             codeBuilder.append(".get(Math.round(");
             visit(id._extension);
             codeBuilder.append("))");
+            if(parent instanceof BlockNode)
+                codeBuilder.append(";\n");
         }
         return null;
     }

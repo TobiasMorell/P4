@@ -48,7 +48,7 @@ public class ObsidiGUIScreen extends GuiScreen
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch(button.id) {
-            case 0:
+            case 0: //Means Done
                 ErrorHandling.CleanErrors();
                 /* Closes the text editor, saves the .oc file and attempts to compile and load it */
                 mc.thePlayer.closeScreen();
@@ -68,7 +68,7 @@ public class ObsidiGUIScreen extends GuiScreen
                     ObsidiCodingMachine.dropErrorLog(eb);
                 }
                 break;
-            case 1:
+            case 1: //Means reset
                 // Resets the text on the screen.
                 text = text.delete(0, text.toString().length());
                 cursorLocation = 0;

@@ -51,7 +51,7 @@ public class SemanticVisitor extends AbstractVisitor {
             Node.Type RHS = (Node.Type) visit(node.GetRightChild());
             if(RHS == Node.Type.bool) {
                 return Node.Type.bool;
-            }else if(RHS == Node.Type.List){
+            }else if(RHS != Node.Type.List){
                 ErrorHandling.Error("Trying to initialize boolean with unmatching type",node.line);
             }
         }
