@@ -427,7 +427,7 @@ public class BuildASTVisitor extends ObsidiCodeBaseVisitor<Node> {
 	@Override
 	public Node visitNoSubRet(ObsidiCodeParser.NoSubRetContext ctx) {
 		line = ctx.getStart().getLine();
-		return new ReturnNode((ExprNode) visit(ctx.expr));
+		return new ReturnNode( visit(ctx.expr));
 	}
 
 	@Override
