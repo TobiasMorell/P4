@@ -33,6 +33,7 @@ public class Func {
             }
         }
     public Func(String Name, Node.Type ret, Node.Type... params){
+        parameters = new ArrayList<Node.Type>();
         if(params != null) {
             parameters = new ArrayList<Node.Type>(Arrays.asList(params));
         }

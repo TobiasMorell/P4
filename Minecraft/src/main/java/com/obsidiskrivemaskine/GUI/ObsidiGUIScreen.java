@@ -6,6 +6,7 @@ import com.obsidiskrivemaskine.SyncRobot;
 import com.obsidiskrivemaskine.block.ObsidiCodingMachine;
 import com.obsidiskrivemaskine.item.ErrorBook;
 import compiler.Compiler;
+import compiler.Utility.Coord;
 import compiler.Utility.ErrorHandling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -14,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 
 
 import java.io.*;
+import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 
 /**
@@ -111,6 +113,7 @@ public class ObsidiGUIScreen extends GuiScreen
 
     //Loads any preexisting file. Also sets the RobotName.
     void loadFile(){
+        System.out.println();
         if(text.toString().equals("")) {
             try {
                 obsidiFileReader = new FileReader(obsidiFile);

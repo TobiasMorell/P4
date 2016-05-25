@@ -1,0 +1,59 @@
+.class public Simpletest1Robot
+.super java/lang/Object
+
+.method public <init>()V
+aload_0
+invokenonvirtual java/lang/Object/<init>()V
+return 
+.end method
+
+.method public static main([Ljava/lang/String;)V
+.limit locals 5
+.limit stack 5
+new Simpletest1Robot
+dup
+invokespecial Simpletest1Robot/<init>()V
+invokevirtual Simpletest1Robot/START()V
+return 
+.end method
+
+.method public START()V
+.limit stack 100
+.limit locals 100
+new Simpletest1Robot
+dup
+invokespecial Simpletest1Robot/<init>()V
+ldc 13.000000
+ldc 1.370000
+invokevirtual Simpletest1Robot/Test1(FF)F
+fstore 1
+return
+.end method
+
+.method public Test1(FF)F
+.limit stack 100
+.limit locals 100
+fload 1
+fload 2
+fadd 
+fstore 3
+ldc 14.000000
+ldc 3.140000
+fmul 
+fstore 4
+ldc 12.000000
+ldc 9.000000
+fsub 
+fstore 5
+ldc 999.000000
+ldc 3.000000
+fdiv 
+ldc 2.000000
+fmul 
+fstore 6
+fload 3
+freturn 
+return
+.end method
+
+

@@ -21,7 +21,7 @@ public class AntlrErrorCollector extends BaseErrorListener {
     {
         String sourceName = recognizer.getInputStream().getSourceName();
         if (!sourceName.isEmpty()) {
-            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
+            sourceName = String.format("%d:%d\n", line, charPositionInLine);
         }
 
         ErrorHandling.Error(sourceName+"line "+line+":"+charPositionInLine+" "+msg);

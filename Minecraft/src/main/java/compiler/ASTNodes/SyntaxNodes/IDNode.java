@@ -5,7 +5,7 @@ import compiler.Visitors.AbstractVisitor;
 
 public class  IDNode extends LeafNode{
     public String _id;
-    public ExprNode _extension;
+    public Node _extension;
     
     public IDNode(String identifier, Node parent){
         this._id = identifier;

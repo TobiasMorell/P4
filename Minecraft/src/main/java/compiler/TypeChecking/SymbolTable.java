@@ -35,6 +35,7 @@ public class SymbolTable {
         functions.add(new Func("GetPosition", Node.Type.Coord, null));
         functions.add(new Func("Mine", Node.Type.Void, Node.Type.string));
         functions.add(new Func("LootChest", null));
+        functions.add(new Func("StoreAllInChest", null));
         functions.add(new Func("Move", null, Node.Type.string));
         functions.add(new Func("GiveItem", null, Node.Type.string));
         functions.add(new Func("Drop", null, Node.Type.string, Node.Type.num));

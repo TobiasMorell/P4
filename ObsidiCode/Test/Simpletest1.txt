@@ -1,0 +1,18 @@
+Simpletest1:
+
+VOID START()
+
+NUM f = Test1(13, 1.37)
+
+END START
+
+NUM Test1(NUM X, NUM Y)
+    NUM a = X + Y
+    NUM b = 14 * 3.14
+    NUM c = 12 - 9
+    NUM d = 999 / 3 * 2
+RETURN a
+
+
+END Test1
+

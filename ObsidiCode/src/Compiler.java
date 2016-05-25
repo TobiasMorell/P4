@@ -2,7 +2,10 @@
 import ASTNodes.GeneralNodes.Node;
 import TypeChecking.SymbolTable;
 import Utility.*;
+import Visitors.CodeGeneration.JvmCodeVisitor;
 import Visitors.DeclVisitor;
+import java.io.PrintWriter;
+
 
 public class Compiler {
 	public static void main( String[] args) throws Exception 
@@ -17,10 +20,10 @@ public class Compiler {
             System.out.println("Attempting to find OS.");
             if(OS.startsWith("Windows"))
             {
-                System.out.println("Running on Windows - compiling esben_test.oc");
+                System.out.println("Running on Windows - compiling Simpletest1.txt");
                 if(!path.endsWith("\\ObsidiCode"))
-                    path += "\\ObsidiCode";
-                path += "\\Test\\ex.oc";
+                    path += "/ObsidiCode";
+                path += "\\Test\\Simpletest1.txt";
             }
             else if (OS.startsWith("Linux")) {
                 System.out.println("Running on Linux - compiling esben_test.oc");
@@ -42,12 +45,20 @@ public class Compiler {
         AntlrASTBuilder astBuilder = new AntlrASTBuilder();
         Node root = astBuilder.Compile(args[0]); //<-- write file to compile here!
 
+
         if(root != null) {
             //Build the symbol table
             SymbolTable st = new SymbolTable(root);
 
             DeclVisitor smv = new DeclVisitor(st);
             smv.visit(root);
+            JvmCodeVisitor jvmv = new JvmCodeVisitor();
+            jvmv.visit(root);
+            String filename = jvmv.GetrobotName();
+            PrintWriter writer = new PrintWriter(String.format("%sRobot", filename), "UTF-8");
+            writer.println(jvmv.GetSource());
+            writer.close();
+
         } else {
             System.out.println("The root was null; could not compile!");
         }

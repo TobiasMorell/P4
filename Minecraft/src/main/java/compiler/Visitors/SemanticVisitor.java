@@ -48,10 +48,11 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(BoolDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.bool, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.bool) {
+            Node.Type RHS = (Node.Type) visit(node.GetRightChild());
+            if(RHS == Node.Type.bool) {
                 return Node.Type.bool;
-            }else{
-                ErrorHandling.Error("Trying to initialize boolean with unmatching type ",node.line);
+            }else if(RHS == Node.Type.List){
+                ErrorHandling.Error("Trying to initialize boolean with unmatching type",node.line);
             }
         }
         return null;
@@ -61,10 +62,11 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(CoordDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.Coord, node.line);
         if(node.GetRightChild()!= null) {
-            if(visit(node.GetRightChild()) == Node.Type.Coord) {
+            Node.Type RHS = (Node.Type) visit(node.GetRightChild());
+            if(RHS == Node.Type.Coord) {
                 return Node.Type.Coord;
-            }else{
-                ErrorHandling.Error("Trying to initialize coordinate with unmatching type ",node.line);
+            }else if(RHS != Node.Type.List){
+                ErrorHandling.Error("Trying to initialize coordinate with unmatching type",node.line);
             }
         }
         return null;
@@ -98,7 +100,7 @@ public class SemanticVisitor extends AbstractVisitor {
             }
         }
         if ( method.getT() != Node.Type.Void && !foundReturn){
-            ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable ",method.line);
+            ErrorHandling.Error("Method "+method.id+" needs to have a return statement that is always reachable.");
         }
         _table.CloseScope();
     }
@@ -107,10 +109,11 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(NumDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.num, node.line);
         if(node.GetRightChild()!= null) {
-            if(visit(node.GetRightChild()) == Node.Type.num) {
+            Node.Type RHS = (Node.Type) visit(node.GetRightChild());
+            if(RHS == Node.Type.num) {
                 return Node.Type.num;
-            }else{
-                ErrorHandling.Error("Trying to initialize number with unmatching type ", node.line);
+            }else if(RHS != Node.Type.List){
+                ErrorHandling.Error("Trying to initialize number with unmatching type", node.line);
             }
         }
         return null;
@@ -134,10 +137,11 @@ public class SemanticVisitor extends AbstractVisitor {
     public Object visit(StringDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.string, node.line);
         if(node.GetRightChild()!= null) {
-            if((Node.Type)visit(node.GetRightChild()) == Node.Type.string) {
+            Node.Type RHS = (Node.Type) visit(node.GetRightChild());
+            if(RHS == Node.Type.string) {
                 return Node.Type.string;
-            }else{
-                ErrorHandling.Error("Trying to initialize string with unmatching type ",node.line);
+            }else if(RHS != Node.Type.List){
+                ErrorHandling.Error("Trying to initialize string with unmatching type",node.line);
             }
         }
         return null;
@@ -147,13 +151,11 @@ public class SemanticVisitor extends AbstractVisitor {
     @Override
     public Object visit(ListDcl node) {
         _table.EnterSymbol(((IDNode) node.GetLeftChild()).GetID(), Node.Type.List, node.line);
-        if(node.GetRightChild()!= null) {
-            if(node.GetRightChild() instanceof CollectionNode) {
-                return Node.Type.List;
-            }else{
-                ErrorHandling.Error("Trying to initialize List with unmatching type ",node.line);
-            }
-        }
+        node.setT(Node.Type.List);
+        if(node.GetRightChild() instanceof CollectionNode)
+            return Node.Type.List;
+        else
+            ErrorHandling.Error("Trying to initialize List with unmatching type",node.line);
         return null;
     }
 
@@ -165,7 +167,7 @@ public class SemanticVisitor extends AbstractVisitor {
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Only numbers can be compared with the Greater than Or Equal operator", node.line);
+            ErrorHandling.Error("Only numbers can be compared with the GREATER_THAN_EQUAL operator", node.line);
         }
         return null;
     }
@@ -178,7 +180,7 @@ public class SemanticVisitor extends AbstractVisitor {
             node.setT(Node.Type.bool);//todo check shit;
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Only numbers can be compared with the Less than Or Equal operator", node.line);
+            ErrorHandling.Error("Only numbers can be compared with the LESS_THAN_EQUAL operator", node.line);
         }
         return null;
     }
@@ -201,13 +203,15 @@ public class SemanticVisitor extends AbstractVisitor {
             if (s!= null)
                 t1 = s.getType();
             else{
+                ErrorHandling.Error("Variable "+refID+" does not exist in current scope",node.line);
                 return null;
             }
             if(t1 == t2) {
                 ((ReferenceNode) node.GetLeftChild()).set_isValue(false);
                 return t1;
             }else{
-                ErrorHandling.Error("Trying to assign value of type " + t2 + " to variable of type " + t1,node.line);
+                if(t2 != Node.Type.List)
+                    ErrorHandling.Error("Trying to assign value of type " + t2 + " to variable of type " + t1, node.line);
             }
         }
 
@@ -220,7 +224,7 @@ public class SemanticVisitor extends AbstractVisitor {
         t1 = (Node.Type)visit(node.GetLeftChild());
         t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == null || t2 == null)
-            ErrorHandling.Error("Element in Division has no type",node.line);
+            ErrorHandling.Error("Element in division has no type",node.line);
         switch (t1){
             case num:
                 switch (t2){
@@ -234,7 +238,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         ErrorHandling.Error("Numbers can only be divided with numbers and coords",node.line);
                         break;
                     default:
-                        ErrorHandling.Error("Shouldn't happen",node.line);
+                        ErrorHandling.Error("Shouldn't happen.",node.line);
                 }
                 break;
             case bool:
@@ -280,23 +284,23 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.num && t2 == Node.Type.num){
-            node.setT(Node.Type.bool);//todo check shit;
+            node.setT(Node.Type.bool);
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Only numbers can be compared with the Greater than operator", node.line);
+            ErrorHandling.Error("Only numbers can be compared with the GREATER_THAN operator", node.line);
         }
         return null;
     }
 
     @Override
-    public Object visit(IsNode node) {//todo: discuss weather Is is a good representation of ==<
+    public Object visit(IsNode node) {
         node.setT(Node.Type.bool);
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1==t2){
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Error: Is expression on line "+node.line+" compares values of different types");
+            ErrorHandling.Error("IS expression on line "+node.line+" cannot compare values of different types");
             return Node.Type.bool;
         }
     }
@@ -306,10 +310,10 @@ public class SemanticVisitor extends AbstractVisitor {
         Node.Type t1 = (Node.Type)visit(node.GetLeftChild());
         Node.Type t2 = (Node.Type)visit(node.GetRightChild());
         if(t1 == Node.Type.num && t2 == Node.Type.num){
-            node.setT(Node.Type.bool);//todo check shit;
+            node.setT(Node.Type.bool);
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Only numbers can be compared with the less than operator", node.line);
+            ErrorHandling.Error("Only numbers can be compared with the LESS_THAN operator", node.line);
         }
         return null;
     }
@@ -334,7 +338,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         ErrorHandling.Error("Cannot subtract Lists, Booleans or strings from numbers",node.line);
                         break;
                     default:
-                        ErrorHandling.Error("Shouldn't happen",node.line);
+                        ErrorHandling.Error("Shouldn't happen, line ",node.line);
                 }
                 break;
             case bool:
@@ -342,7 +346,7 @@ public class SemanticVisitor extends AbstractVisitor {
                     node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
-                ErrorHandling.Error("nothing but boolean can be subtracted from boolean",node.line);
+                ErrorHandling.Error("Nothing but boolean can be subtracted from boolean",node.line);
                 break;
             case string:
                 switch (t2){
@@ -350,7 +354,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         node.setT( Node.Type.string);
                         return Node.Type.string;
                     default:
-                        ErrorHandling.Error("nothing but strings can be subtracted form string",node.line);
+                        ErrorHandling.Error("Nothing but strings can be subtracted form string",node.line);
                 }
                 break;
             case Coord:
@@ -362,14 +366,13 @@ public class SemanticVisitor extends AbstractVisitor {
                         node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     default:
-                        ErrorHandling.Error("only coordinates and numbers can be subtracted from coordinate",node.line);
+                        ErrorHandling.Error("Only coordinates and numbers can be subtracted from coordinates",node.line);
                 }
                 break;
             case List:
-                switch (t2){
-                    case num:case bool:case string:case Coord:
-                        node.setT(Node.Type.string);
-                        return Node.Type.string;
+                if(node.GetRightChild() != null) {
+                    node.setT(Node.Type.List);
+                    return Node.Type.List;
                 }
                 break;
             default:
@@ -396,10 +399,10 @@ public class SemanticVisitor extends AbstractVisitor {
                         node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     case List:case bool:case string:
-                        ErrorHandling.Error("Cannot multiply Lists, Booleans or strings with numbers",node.line);
+                        ErrorHandling.Error("Cannot multiply Lists, booleans or strings with numbers",node.line);
                         break;
                     default:
-                        ErrorHandling.Error("Shouldn't happen",node.line);
+                        ErrorHandling.Error("Shouldn't happen ",node.line);
                 }
                 break;
             case bool:
@@ -407,7 +410,7 @@ public class SemanticVisitor extends AbstractVisitor {
                     node.setT(Node.Type.bool);
                     return Node.Type.bool;
                 }
-                ErrorHandling.Error("nothing but boolean can be multiplied with boolean",node.line);
+                ErrorHandling.Error("Only booleans may be multiplied with booleans",node.line);
                 break;
             case string:
                 switch (t2){
@@ -418,7 +421,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         node.setT(Node.Type.string);
                         return Node.Type.string;
                     default:
-                        ErrorHandling.Error("nothing but strings and numbers can be multiplied with string",node.line);
+                        ErrorHandling.Error("Nothing but strings and numbers can be multiplied with strings",node.line);
                 }
                 break;
             case Coord:
@@ -430,7 +433,7 @@ public class SemanticVisitor extends AbstractVisitor {
                         node.setT(Node.Type.Coord);
                         return Node.Type.Coord;
                     default:
-                        ErrorHandling.Error("only coordinates and numbers can be multiplied with coordinate",node.line);
+                        ErrorHandling.Error("Only coordinates and numbers may be multiplied with coordinates",node.line);
                 }
                 break;
             case List:
@@ -450,7 +453,7 @@ public class SemanticVisitor extends AbstractVisitor {
         if(t1== Node.Type.bool){
             return Node.Type.bool;
         }else{
-            ErrorHandling.Error("Trying to negate non boolean expression",node.line);
+            ErrorHandling.Error("Negation of non-boolean expressions are not allowed",node.line);
             return null;
         }
     }
@@ -556,7 +559,7 @@ public class SemanticVisitor extends AbstractVisitor {
             case List:case string:
                 ErrorHandling.Error("Lists and strings can not be negative",node.line);
             default:
-                ErrorHandling.Error("This cannot happn'",node.line);
+                ErrorHandling.Error("This cannot happen",node.line);
         }
         return null;
     }
@@ -666,7 +669,7 @@ public class SemanticVisitor extends AbstractVisitor {
         if(visit(node.GetLeftChild()) == Node.Type.bool){
             visit(node.GetRightChild());
         }else{
-            ErrorHandling.Error("Condition in if statement is not boolean",node.line);
+            ErrorHandling.Error("Condition in loop statement is not boolean",node.line);
         }
         breakable--;
         return null;
@@ -718,7 +721,7 @@ public class SemanticVisitor extends AbstractVisitor {
                 return null;
             }
         }
-        ErrorHandling.Error("Error: Program " + node._id + " Has no start method");
+        ErrorHandling.Error("Program " + node._id + " must specify a 'VOID START()'-method");
         return null;
     }
 
@@ -751,7 +754,7 @@ public class SemanticVisitor extends AbstractVisitor {
         if(t1 == Node.Type.bool && t1 == t2){
             return t1;
         }
-        ErrorHandling.Error(String.format("both sides %s expression must be of type boolean", typename),node.line);
+        ErrorHandling.Error(String.format("Both sides %s expression must be of type boolean", typename),node.line);
         return null;
     }
 }
