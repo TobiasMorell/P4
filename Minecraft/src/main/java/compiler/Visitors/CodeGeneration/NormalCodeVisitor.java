@@ -362,7 +362,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetLeftChild());
             codeBuilder.append(".removeAll("); //Can be replaced with removeAll depending on the semantics
             visit(node.GetRightChild());
-            codeBuilder.append(");\n");
+            codeBuilder.append(")\n");
         }
         else {visitExpressionGeneric(node, keywords.MINUS); }
         return null;
@@ -382,7 +382,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetLeftChild());
             codeBuilder.append(", ");
             visit(node.GetRightChild());
-            codeBuilder.append(");\n");
+            codeBuilder.append(")\n");
         }
 
         else if(left == Node.Type.Coord)
@@ -504,7 +504,7 @@ public abstract class NormalCodeVisitor extends AbstractVisitor {
             visit(node.GetLeftChild());
             codeBuilder.append(".add(");
             visit(node.GetRightChild());
-            codeBuilder.append(");\n");
+            codeBuilder.append(")\n");
         }
         else { visitExpressionGeneric(node, keywords.PLUS); }
         return null;

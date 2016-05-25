@@ -701,8 +701,7 @@ public class SemanticVisitor extends AbstractVisitor {
                     if(grandchild instanceof CollectionNode){
                         visit(grandchild);
                     }else if(grandchild instanceof MethodDcl){
-                        Func f = new Func((MethodDcl)grandchild);
-                        _table.functions.add(f);
+                        _table.EnterMethod((MethodDcl)grandchild);
                     }else{
                         ErrorHandling.Error("Error: This should not happen!",node.line);
                     }

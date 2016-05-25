@@ -1,6 +1,7 @@
 package compiler.TypeChecking;
 
 
+import compiler.ASTNodes.Declarations.MethodDcl;
 import compiler.ASTNodes.GeneralNodes.Node;
 import compiler.ASTNodes.SyntaxNodes.IDNode;
 import compiler.ASTNodes.SyntaxNodes.MethodInvocationNode;
@@ -94,6 +95,17 @@ public class SymbolTable {
         return null;
     }
 
+    public void EnterMethod(MethodDcl method){
+        Func func = new Func(method);
+        for (Func f:functions) {
+            if(f.name.equals(method.id)){
+                ErrorHandling.Error("Method, "+f.name+", has already been defined",method.line);
+                return;
+            }
+        }
+        functions.add(func);
+    }
+
     public Func RetrieveMethod(MethodInvocationNode refNode, ArrayList<Node.Type> types){
         String name = ((IDNode)refNode.GetLeftChild())._id;
         for (Func F : functions) {
@@ -101,7 +113,7 @@ public class SymbolTable {
                 for (int i = 0; i < F.parameters.size(); i++) {
                     if (F.parameters.get(i) != types.get(i)){
                         ErrorHandling.Error("Invalid parameter in method invocation '" + name+"', expected "+F.parameters.get(i)
-                        +"but found"+types.get(i));
+                        +"but found"+types.get(i), refNode.line);
                         return null;
                     }
                 }
