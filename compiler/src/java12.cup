@@ -1,0 +1,320 @@
+// Test CUP for P4
+import java_cup.*;
+
+//Den er ikke glad for EOL på nuværende tidspunkt
+//TypeName produktionen virker ikke
+
+parser code  {:
+  public void report_error(String message, Object info) {
+    StringBuilder m = new StringBuilder("Error ");
+ 
+    if (info instanceof java_cup.runtime.Symbol)
+      m.append( "("+info.toString()+")" );
+     
+    m.append(" : "+message);
+   
+    System.out.println(m);
+  }
+   
+  public void report_fatal_error(String message, Object info) {
+    report_error(message, info);
+    throw new RuntimeException("Fatal Syntax Error");
+  }
+:};
+
+non terminal         Type, ReferenceType, PrimitiveType, TypeName, Program, Load, RoboDcl,
+    MemberDcl, RoboBodyDcl, FieldDcl, MethodDcl, VariableDclList, VariableDcl, VariableInitializer,
+    ListInitializer, Expression, Literal, LitList, AssignmentExpression, ConditionalExpression, Assignment,
+    LeftHandSide, ListOpt, ConditionOrExpression, ConditionAndExpression, XORExpression, EqualityExpression,
+    EqualityExpressionEnd, RelationalExpression, RelationalExpressionEnd, AdditiveExpression, MultiExpr,
+    AdditiveExpressionEnd, UnaryExpr, MultiExprEnd, Primary, MethodInvocation, FormalArgs, ArgsList,
+    ParamsList, Param, MethodHeader, HearDecl, MethodBody, MethodDeclarator, FormalParams, Block,
+    BlockStmtList, BlockStmt, LocalVariableDcl, Statement, StmtNoSubstmt, IfStmt, LoopStmt,
+    EmptyStmt, SignalStmt, ExprStmt, BreakStmt, ReturnStmt, StmtExpr, ElseIfStmt, ElseStmt, RepeatStmt,
+    ForeverStmt, BoolLit;
+
+//Types and id's
+terminal            Identifier, NUM, BOOL, STRING, COORD, LIST, NumLit, VOID;
+
+//Symbols
+terminal            DOT, COMMA, LPAREN, RPAREN, EOL, COLON, XOR, PLUS, MINUS, MULT, DIV, ASSIGN,
+                    SQUARE_LEFT, SQUARE_RIGHT;
+
+//Boolean Operators
+terminal            AND, OR, IS, NOT, LT, GT, LTE, GTE, TRUE, FALSE, StringLit, CoordLit;
+
+//Keywords
+terminal            LOAD, END, HEAR, SIGNAL, BREAK, RETURN, IF, ELSE, ELSEIF, REPEAT, FOREVER, UNTIL;
+
+// Program start
+Program
+::=	RoboDcl Load RoboBodyDcl
+;
+
+Literal
+::= NumLit
+|   BoolLit
+|   StringLit
+|   CoordLit
+;
+
+BoolLit
+::= TRUE
+| FALSE
+;
+
+Type
+::=	ReferenceType
+|	PrimitiveType
+;
+PrimitiveType
+::=	NUM
+|	BOOL
+;
+ReferenceType
+::=	STRING
+|	COORD
+|	LIST
+;
+
+//Name
+TypeName
+::=	Identifier
+|	TypeName DOT Identifier
+;
+
+Load
+::=	LOAD LPAREN StringLit RPAREN  EOL
+|	Load LOAD LPAREN StringLit RPAREN EOL
+;
+RoboDcl
+::=	Identifier COLON EOL
+;
+
+// Declarations
+RoboBodyDcl
+::=	RoboBodyDcl MemberDcl
+|	MemberDcl
+;
+MemberDcl
+::=	FieldDcl
+|	MethodDcl
+|	EOL
+;
+FieldDcl
+::=	Type VariableDclList EOL
+	;
+VariableDclList
+::=	VariableDcl
+|	VariableDclList COMMA VariableDcl
+;
+VariableDcl
+::=     VariableInitializer
+|	Identifier ListInitializer
+;
+VariableInitializer
+::=	Expression
+;
+ListInitializer
+::=	LitList END Identifier
+//| 	// lambda
+;
+LitList
+::=	LitList COMMA Primary
+|	Primary
+;
+
+// Expressions
+Expression
+::=	AssignmentExpression
+;
+AssignmentExpression
+::=	ConditionalExpression
+|	Assignment
+;
+Assignment
+::=	LeftHandSide ASSIGN Expression
+;
+LeftHandSide
+::=	TypeName ListOpt
+;
+ListOpt
+::=	SQUARE_LEFT Expression SQUARE_RIGHT
+|   //lambda
+;
+ConditionalExpression
+::=	ConditionOrExpression
+;
+ConditionOrExpression
+::=	ConditionAndExpression
+| 	ConditionOrExpression OR ConditionAndExpression
+;
+ConditionAndExpression
+::=	XORExpression
+| 	ConditionAndExpression AND XORExpression
+;
+XORExpression
+::=	EqualityExpression
+| 	XORExpression XOR EqualityExpression
+;
+EqualityExpression
+::=	RelationalExpression
+| 	EqualityExpression EqualityExpressionEnd
+;
+EqualityExpressionEnd
+	::=	IS RelationalExpression
+	|	NOT RelationalExpression
+	;
+RelationalExpression
+ ::=	AdditiveExpression
+ | 	    RelationalExpression RelationalExpressionEnd
+;
+RelationalExpressionEnd
+	::=	LT AdditiveExpression
+	|	GT AdditiveExpression
+	|	LTE AdditiveExpression
+	|	GTE AdditiveExpression
+	;
+AdditiveExpression
+::=	MultiExpr
+ 	| 	AdditiveExpression AdditiveExpressionEnd
+;
+AdditiveExpressionEnd
+	::=	PLUS MultiExpr
+	|	MINUS MultiExpr
+	;
+MultiExpr
+::=	UnaryExpr
+	 | 	MultiExpr MultiExprEnd
+;
+MultiExprEnd
+	::=	MULT UnaryExpr
+	|	DIV UnaryExpr
+	;
+UnaryExpr
+	::=	PLUS UnaryExpr
+	|	MINUS UnaryExpr
+	| 	Primary
+	;
+
+// Values and ID’s
+Primary
+	::=	Literal
+	| 	LPAREN Expression RPAREN
+	| 	MethodInvocation
+	| 	TypeName ListOpt
+	;
+MethodInvocation
+	::=	TypeName LPAREN FormalArgs RPAREN       
+	;
+FormalArgs
+::=	ArgsList
+| 	//lambda
+;
+
+// Methods (params, args and declarations)
+ArgsList
+	::=	ArgsList COMMA Expression
+|	Expression
+;
+
+FormalParams
+	::=	ParamsList
+	| 	// lambda
+	;
+ParamsList
+::=	ParamsList COMMA Param
+	|	Param
+	;
+Param
+	::=	Type Identifier
+	;
+
+MethodDcl
+	::=	MethodHeader MethodBody
+	|	HearDecl
+	;
+MethodHeader
+	::= Type MethodDeclarator
+	|   VOID MethodDeclarator
+	;
+MethodDeclarator
+	::=	Identifier LPAREN FormalParams RPAREN
+	;
+MethodBody
+	::=	Block END Identifier
+	;
+HearDecl
+	::=	HEAR Identifier LPAREN FormalParams RPAREN Block END HEAR
+	;
+
+//If, loop and statements
+Block
+	::=	BlockStmtList
+	| 	// lambda
+	;
+BlockStmtList
+	::=	BlockStmtList BlockStmt
+        |       BlockStmt
+	;
+BlockStmt
+	::=	LocalVariableDcl
+	| 	Statement
+	;
+LocalVariableDcl
+	::=	Type VariableDclList EOL
+	;
+
+Statement
+	::=	StmtNoSubstmt
+	| 	IfStmt
+	| 	LoopStmt
+	;
+StmtNoSubstmt
+	::=	EmptyStmt
+	|	SignalStmt
+	|	ExprStmt
+	|	BreakStmt
+	|	ReturnStmt
+	;
+EmptyStmt
+	::=	EOL
+	;
+SignalStmt
+	::=	SIGNAL Identifier LPAREN ArgsList RPAREN EOL
+        ;
+ExprStmt
+	::=	StmtExpr EOL
+	;
+StmtExpr
+	::=	Assignment
+	|	MethodInvocation
+	;
+BreakStmt
+	::=	BREAK EOL
+	;
+ReturnStmt
+	::=	RETURN Expression EOL
+	;
+
+IfStmt
+	::=	IF LPAREN Expression RPAREN EOL Block END IF ElseIfStmt ElseStmt
+	;
+ElseIfStmt
+::=	ElseIfStmt ELSE IF LPAREN Expression RPAREN EOL Block END ELSEIF
+| 	// lambda
+;
+ElseStmt
+::=	ELSE EOL Block END ELSE
+| 	// lambda
+;
+LoopStmt
+	::=	RepeatStmt
+	|	ForeverStmt
+	;
+RepeatStmt
+	::=	REPEAT UNTIL LPAREN Expression RPAREN EOL Block END REPEAT
+	;
+ForeverStmt
+	::=	FOREVER EOL Block END FOREVER
+	;

@@ -1,0 +1,31 @@
+Test_robo:
+LOAD("Attack-bot")
+LOAD("Bow-bot")
+
+BOOL works = true
+
+//This be le tests con many!
+/*Whattup maite!?*/
+
+VOID Start()
+  NUM c = 10
+  a = b + c
+  SIGNAL guardian (a, b)
+END Start
+
+NUM TestNumMethod(NUM x, STRING s)
+  RETURN s + x
+END TestNumMethod
+
+VOID AnotherTestMethod(BOOL atHome)
+  FOREVER
+    COORD currentPos = (1,23,45)
+    
+    IF(currentPos.x GREATER_THAN 10)
+      BREAK
+    END IF
+    ELSE IF (atHome)
+      //Something to find chest mayby
+    END ELSEIF
+  END FOREVER
+END AnotherTestMethod
